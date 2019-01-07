@@ -1,28 +1,82 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react';
+import {Fragment} from 'react';
+import Main from "./base/Main";
+import withRoot from './withRoot';
+import {ToastContainer} from "react-toastify";
+import {HashRouter} from 'react-router-dom';
+import {remoteRoutes} from "./data/constants";
+import Loading from "./widgets/Loading";
+import {get} from "./utils/ajax";
+import {IUser} from "./data/types";
+import Loginx from "./base/Loginx";
+import {connect} from "react-redux";
+import {doLogin, doLogout} from "./data/coreActions";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+interface IProps {
+    token?: string,
+    user?: IUser
+    handleLogin: (data: any) => any
+    handleLogout: () => any
 }
 
-export default App;
+
+class App extends React.Component<IProps> {
+    public state = {
+        isLoading: true
+    }
+
+    public componentWillMount() {
+        const token = this.props.token
+        get(remoteRoutes.profile,
+            user => {
+                console.log("On profile got", {token, user})
+                this.props.handleLogin({token, user})
+            },
+            (error) => {
+                console.log("On Error", {error})
+                this.props.handleLogout()
+            },
+            () => {
+                this.setState(() => ({isLoading: false}))
+            }
+        )
+    }
+
+    public render() {
+        const {isLoading} = this.state
+        const {user} = this.props
+        if (isLoading) {
+            return <Loading/>
+        }
+        if (user) {
+            return (
+                <HashRouter>
+                    <Fragment>
+                        <ToastContainer/>
+                        <Main handleLogout={this.props.handleLogout}/>
+                    </Fragment>
+                </HashRouter>
+            );
+        } else {
+            return <Loginx onLogin={this.props.handleLogin}/>
+        }
+    }
+
+
+}
+
+export default connect(
+    (store: any) => {
+        return {
+            token: store.core.token,
+            user: store.core.user
+        }
+    },
+    (dispatch: any) => {
+        return {
+            handleLogin: (data: any) => dispatch(doLogin(data)),
+            handleLogout: () => dispatch(doLogout())
+        }
+    }
+)(withRoot(App))
+
