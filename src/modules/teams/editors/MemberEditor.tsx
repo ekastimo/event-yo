@@ -14,15 +14,15 @@ const styles = (theme: Theme) =>
 interface IProps extends WithStyles<typeof styles> {
 }
 
-const NewTeamEditor = (props: IProps) => {
+const MemberEditor = (props: IProps) => {
     return (
-        <div style={{padding: 10}}>
+        <div style={{padding: 20}}>
             <Grid className={props.classes.root} container spacing={24}>
                 <Grid item xs={12} sm={12}>
-                    <TextInput type='text' name='name' label='Name'/>
+                    <TextInput type='text' name='contactId' label='Name'/>
                 </Grid>
                 <Grid item xs={12} sm={12}>
-                    <TextInput type='text' name='description' label='Description'/>
+                    <TextInput type='text' name='role' label='Description'/>
                 </Grid>
             </Grid>
         </div>
@@ -30,5 +30,4 @@ const NewTeamEditor = (props: IProps) => {
     )
 }
 
-
-export default withStyles(styles)(NewTeamEditor)
+export default withStyles(styles)(MemberEditor)

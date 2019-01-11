@@ -43,7 +43,6 @@ class ContactItem extends React.Component<IProps> {
 
     private onItemSelected = (item: any) => {
         const {data, onView, onEdit, onDelete} = this.props
-        console.log("Item selected", item)
         switch (item) {
             case 'View':
                 onView(data)

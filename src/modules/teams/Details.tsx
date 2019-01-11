@@ -108,11 +108,6 @@ class Details extends React.Component<IProps, IState> {
                     </CardContent>
                 </Card>
                 <TabbedDetails data={data}/>
-                <Grid container spacing={8}>
-                    <Grid item xs={12} sm={4}>
-                        <MyDebug data={data}/>
-                    </Grid>
-                </Grid>
             </BasePanel>
         );
     }

@@ -41,7 +41,7 @@ function TabContainer(props: any) {
 
 class TabbedDetails extends React.Component<IProps> {
     public render() {
-        const {classes} = this.props;
+        const {classes,data} = this.props;
         return (
             <div className={classes.root}>
                 <TabbedView
@@ -50,7 +50,7 @@ class TabbedDetails extends React.Component<IProps> {
                             id: '2',
                             title: "Members",
                             icon: <PeopleIcon/>,
-                            component: <Members/>
+                            component: <Members team={data}/>
                         },
                         {
                             id: '3',

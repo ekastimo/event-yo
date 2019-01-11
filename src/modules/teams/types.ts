@@ -10,6 +10,8 @@ export interface ITeamMember {
     id: string
     teamId: string
     contactId: string
+    contactName: string
+    contactAvatar: string
     role: string
     status: string
 }

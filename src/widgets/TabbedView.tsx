@@ -50,7 +50,7 @@ class TabbedView extends React.Component<IProps> {
                         onChange={this.handleChange}
                         indicatorColor='primary'
                         textColor='primary'
-                        centered
+                        variant='fullWidth'
                     >
                         {
                         data.map((it: ITabElement)=>(

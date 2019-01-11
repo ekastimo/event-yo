@@ -17,20 +17,20 @@ type ErrorCallback = (err: any, res: superagent.Response) => void;
 type EndCallback = (data?: any) => void;
 
 export const handleError = (err: any = {}, res: superagent.Response) => {
-    // console.error("Ajax Error", {err, res})
     const defaultMessage = "Invalid request, please contact admin";
-    if (res && res.forbidden || res.unauthorized) {
+    if (res && res.forbidden || res && res.unauthorized) {
         Toast.error("Authentication Error")
     } else if (res && res.badRequest) {
         const message = res.body.message
         Toast.error(message || defaultMessage)
-    } else if (res && res.clientError || res.notAcceptable || res.error) {
+    } else if (res && res.clientError || res && res.notAcceptable || res && res.error) {
         Toast.error(defaultMessage)
     } else if (res && res.body && res.body.message) {
         Toast.error(res.body.message)
     } else {
-        const {message = 'Unknown error, contact admin'} = err
-        const finalMessage = message.indexOf("offline") ? "Can't reach server, Check network connection"
+        const message = err.message || 'Unknown error, contact admin'
+        const finalMessage = message.indexOf("offline") !== -1
+            ? "Can't reach server, Check connectivity"
             : message
         Toast.error(finalMessage)
     }
@@ -67,7 +67,7 @@ export const search = (url: string, data: any, callBack: CallbackFunction, error
     superagent.get(url)
         .set('Authorization', `Bearer ${getToken()}`)
         .set('Accept', 'application/json')
-        .query(data)
+        //.query(data)
         .end(handleResponse(callBack, errorCallBack, endCallBack))
 }
 

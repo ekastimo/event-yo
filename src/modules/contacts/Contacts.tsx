@@ -1,19 +1,18 @@
 import * as React from 'react';
-import {List, TextField, Theme, WithStyles} from "@material-ui/core";
+import {List, Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {localRoutes, remoteRoutes} from "../../data/constants";
 import {search} from "../../utils/ajax";
 import {withStyles} from "@material-ui/core/styles";
-import Button from '@material-ui/core/Button';
 import {RouteComponentProps, withRouter} from 'react-router'
 import ContactItem from "./ContactItem";
-import Grid from '@material-ui/core/Grid';
 
 import {IContact} from "./types";
 import Loading from "../../widgets/Loading";
 import {newPersonSchema} from "./config";
 import FormHolder from "./editors/FormHolder";
 import NewPersonEditor from "./editors/NewPersonEditor";
+import XToolBar from "../../widgets/XToolBar";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -63,26 +62,11 @@ class Contacts extends React.Component<IProps, IState> {
         const {isLoading, data} = this.state
         return (
             <div>
-                <div style={{padding: 16}}>
-                    <Grid container spacing={16}>
-                        <Grid item xs>
-                            <TextField
-                                id="outlined-search"
-                                label="Search field"
-                                type="search"
-                                margin="none"
-                                variant="outlined"
-                                fullWidth
-                                onChange={this.onQuery}
-                            />
-                        </Grid>
-                        <Grid item xs={1}>
-                            <Button variant="outlined" onClick={this.handleNewContact}>
-                                Add New
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </div>
+                <XToolBar
+                    handleChange={this.handleChange}
+                    title='Contacts'
+                    handleNew={this.handleNewContact}
+                />
                 {
                     isLoading ?
                         <Loading/>
@@ -139,7 +123,7 @@ class Contacts extends React.Component<IProps, IState> {
         this.setState(() => ({showDialog: false}))
     }
 
-    private onQuery = (e: any) => {
+    private handleChange = (e: any) => {
         const value = e.target.value
         const shouldSearch = !value || value.length > 2
         this.setState((prevState: any) => {

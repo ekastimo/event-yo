@@ -1,30 +1,59 @@
 import * as React from 'react';
-import {Theme, WithStyles} from "@material-ui/core";
-import createStyles from "@material-ui/core/styles/createStyles";
-
-import {withStyles} from "@material-ui/core/styles";
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import MoreMenu from "../../../widgets/MoreMenu";
 import {ITeamMember} from "../types";
 
-const styles = (theme: Theme) =>
-    createStyles({
-        root: {
+const options = [
+    'View',
+    'Edit',
+    'Delete'
+];
 
-        }
-    });
-
-interface IProps extends WithStyles<typeof styles>{
-    data:ITeamMember
+interface IProps {
+    data: ITeamMember,
+    onView: (data: any) => any
+    onEdit: (data: any) => any
+    onDelete: (data: any) => any
 }
 
 class MemberItem extends React.Component<IProps> {
+
     public render() {
-        const {classes,data} = this.props
+        const {data, onView} = this.props
+        const {contactName, contactAvatar, status, role} = data
+        const handleView = () => onView({...data})
         return (
-            <div className={classes.root}>
-                {data.contactId}
-            </div>
+            <ListItem dense button onClick={handleView}>
+                <Avatar alt={contactName} src={contactAvatar}/>
+                <ListItemText
+                    primary={contactName}
+                    secondary={`${role}, ${status}`}
+                />
+                <ListItemSecondaryAction>
+                    <MoreMenu options={options} onItemSelected={this.onItemSelected}/>
+                </ListItemSecondaryAction>
+            </ListItem>
         );
+    }
+
+    private onItemSelected = (item: any) => {
+        const {data, onView, onEdit, onDelete} = this.props
+        switch (item) {
+            case 'View':
+                onView(data)
+                break;
+            case 'Edit':
+                onEdit(data)
+                break;
+            case 'Delete':
+                onDelete(data)
+                break;
+        }
     }
 }
 
-export default withStyles(styles)(MemberItem)
+
+export default MemberItem;

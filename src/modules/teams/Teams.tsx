@@ -1,19 +1,18 @@
 import * as React from 'react';
-import {List, TextField, Theme, WithStyles} from "@material-ui/core";
+import {List, Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {localRoutes, remoteRoutes} from "../../data/constants";
 import {search} from "../../utils/ajax";
 import {withStyles} from "@material-ui/core/styles";
-import Button from '@material-ui/core/Button';
 import {RouteComponentProps, withRouter} from 'react-router'
 import TeamItem from "./TeamItem";
-import Grid from '@material-ui/core/Grid';
 
 import {ITeam} from "./types";
 import Loading from "../../widgets/Loading";
 import {teamSchema} from "./config";
 import FormHolder from "../contacts/editors/FormHolder";
 import NewTeamEditor from "./editors/NewTeamEditor";
+import XToolBar from "../../widgets/XToolBar";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -55,34 +54,17 @@ class Contacts extends React.Component<IProps, IState> {
         }
     }
 
-    public componentDidMount() {
-        this.reloadData(this.state.search)
-    }
+
 
     public render() {
         const {isLoading, data} = this.state
         return (
             <div>
-                <div style={{padding: 16}}>
-                    <Grid container spacing={16}>
-                        <Grid item xs>
-                            <TextField
-                                id="outlined-search"
-                                label="Search field"
-                                type="search"
-                                margin="none"
-                                variant="outlined"
-                                fullWidth
-                                onChange={this.onQuery}
-                            />
-                        </Grid>
-                        <Grid item xs={1}>
-                            <Button variant="outlined" onClick={this.handleNewContact}>
-                                Add New
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </div>
+                <XToolBar
+                    handleChange={this.handleChange}
+                    title='Teams'
+                    handleNew={this.handleNewContact}
+                />
                 {
                     isLoading ?
                         <Loading/>
@@ -109,7 +91,6 @@ class Contacts extends React.Component<IProps, IState> {
                     url={remoteRoutes.teams}
                     isNew={true}
                     schema={teamSchema}
-                    debug={true}
                 >
                     <NewTeamEditor/>
                 </FormHolder>
@@ -117,6 +98,9 @@ class Contacts extends React.Component<IProps, IState> {
         )
     }
 
+    public componentDidMount() {
+        this.reloadData(this.state.search)
+    }
     private reloadData(request: any) {
         search(remoteRoutes.teams, request, data => {
             this.setState(() => ({data, isLoading: false}))
@@ -139,7 +123,7 @@ class Contacts extends React.Component<IProps, IState> {
         this.setState(() => ({showDialog: false}))
     }
 
-    private onQuery = (e: any) => {
+    private handleChange = (e: any) => {
         const value = e.target.value
         const shouldSearch = !value || value.length > 2
         this.setState((prevState: any) => {

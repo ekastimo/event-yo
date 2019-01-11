@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import {ITeamMember} from "./types";
-
+import * as faker from 'faker';
 
 export const defaultData = {
     person: {
@@ -67,6 +67,8 @@ export const teamSchema = yup.object().shape(
 export const sampleMembers: ITeamMember[] = [
     {
         contactId: "20",
+        contactName:`${faker.name.firstName(1)} ${faker.name.lastName(1)}`,
+        contactAvatar:faker.internet.avatar(),
         teamId: "50",
         id: "40",
         status: "Active",
@@ -74,6 +76,8 @@ export const sampleMembers: ITeamMember[] = [
     },
     {
         contactId: "21",
+        contactName:`${faker.name.firstName(1)} ${faker.name.lastName(1)}`,
+        contactAvatar:faker.internet.avatar(),
         teamId: "51",
         id: "41",
         status: "Active",
@@ -81,6 +85,8 @@ export const sampleMembers: ITeamMember[] = [
     },
     {
         contactId: "212",
+        contactName:`${faker.name.firstName(1)} ${faker.name.lastName(1)}`,
+        contactAvatar:faker.internet.avatar(),
         teamId: "52",
         id: "42",
         status: "Active",
