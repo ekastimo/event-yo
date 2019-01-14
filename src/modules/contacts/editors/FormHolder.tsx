@@ -34,9 +34,9 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 class FormHolder extends React.Component<IProps> {
-    private form?: Formik=undefined
+    form?: Formik=undefined
 
-    public render() {
+    render() {
         const {width, classes, data, title, children, open, onClose, schema, debug} = this.props
         const isMobile = width === 'xs'
         const isSmall = width === 'sm'
@@ -97,14 +97,14 @@ class FormHolder extends React.Component<IProps> {
         )
     }
 
-    public submitForm = () => {
+    submitForm = () => {
         if(this.form){
             this.form.submitForm()
         }
 
     }
 
-    private onSubmit = (values: any, actions: FormikActions<any>) => {
+    onSubmit = (values: any, actions: FormikActions<any>) => {
         const {isNew, url} = this.props
         console.log('isSubmiting', values)
         if (isNew) {

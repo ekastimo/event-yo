@@ -1111,7 +1111,7 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.1.tgz#48fd98c1561fe718b61733daed46ff115b496e18"
   integrity sha512-eqz8c/0kwNi/OEHQfvIuJVLTst3in0e7uTKeuY+WL/zfKn0xVujOTp42bS/vUUokhK5P2BppLd9JXMOMHcgbjA==
 
-"@types/react-dom@16.0.11":
+"@types/react-dom@*", "@types/react-dom@16.0.11":
   version "16.0.11"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.11.tgz#bd10ccb0d9260343f4b9a49d4f7a8330a5c1f081"
   integrity sha512-x6zUx9/42B5Kl2Vl9HlopV8JF64wLpX3c+Pst9kc1HgzrsH+mkehe/zmHMQTplIrR48H2gpU7ZqurQolYu8XBA==
@@ -1142,6 +1142,15 @@
   dependencies:
     "@types/history" "*"
     "@types/react" "*"
+
+"@types/react-select@^2.0.11":
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/@types/react-select/-/react-select-2.0.11.tgz#9b2b1fdb12b67a5a617c5f572e15617636cc65af"
+  integrity sha512-kITn4R50eUJCi2YT3JFZS4z5M2SJJqqYiVUX1HyLSFWbHbF6J25ZPKCCXANQrsnQzSrac2XiNpR5oYBif6l93g==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-dom" "*"
+    "@types/react-transition-group" "*"
 
 "@types/react-toastify@^4.0.1":
   version "4.0.1"

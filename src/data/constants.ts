@@ -29,6 +29,8 @@ export const remoteRoutes = {
     resetPass: url + '/reset',
 
     contacts: url + '/api/crm/contact',
+    contactSearch: url + '/api/crm/contact/search',
+    contactById: url + '/api/crm/contact/byid',
     contactsPerson: url + '/api/crm/contact/person',
     contactsEmail: url + '/api/crm/email',
     contactsPhone: url + '/api/crm/phone',

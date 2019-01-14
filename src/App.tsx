@@ -3,7 +3,7 @@ import {Fragment} from 'react';
 import Main from "./base/Main";
 import withRoot from './withRoot';
 import {ToastContainer} from "react-toastify";
-import {HashRouter} from 'react-router-dom';
+import {BrowserRouter as HashRouter} from 'react-router-dom';
 import {remoteRoutes} from "./data/constants";
 import Loading from "./widgets/Loading";
 import {get} from "./utils/ajax";
