@@ -5,13 +5,11 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import * as _ from 'lodash';
 import {hasValue} from "../../utils/validators";
 
 interface IOption {
     label: string
     value: string
-
 }
 
 interface IProps {
@@ -33,18 +31,14 @@ const MultiSelectInput = (props: IProps) => {
         const showError = hasValue(error) && (isTouched || wasSubmitted)
 
         function handleClose() {
-            const touched = {...form.touched};
-            _.set(touched, name, true)
-            form.setTouched(touched)
+            form.setFieldTouched(name)
         }
 
         function handleBlur() {
-            const touched = {...form.touched};
-            _.set(touched, name, true)
-            form.setTouched(touched)
+            form.setFieldTouched(name)
         }
 
-        return <FormControl error={!!showError} fullWidth>
+        return <FormControl error={showError} fullWidth>
             <InputLabel htmlFor={name}>{label}</InputLabel>
             <Select
                 multiple

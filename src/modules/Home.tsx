@@ -3,10 +3,12 @@ import {Form, Formik, FormikActions} from 'formik';
 import {Theme, withStyles} from '@material-ui/core/styles';
 import createStyles from "@material-ui/core/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
-import RemoteSelect from "../widgets/inputs/RemoteSelect";
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import XMultiSelect from "../widgets/inputs/XMultiSelect";
+import * as yup from "yup";
+import XRemoteSelect from "../widgets/inputs/XRemoteSelect";
+import {remoteRoutes} from "../data/constants";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -31,6 +33,13 @@ interface IProps extends WithStyles<typeof styles> {
     data: any
 }
 
+
+export const inputSchema = yup.object().shape(
+    {
+        countries: yup.array().min(1).required("Countries required").nullable(false),
+    }
+)
+
 class TextFields extends React.Component<IProps> {
     form?: Formik = undefined
 
@@ -41,11 +50,22 @@ class TextFields extends React.Component<IProps> {
                     initialValues={{}}
                     onSubmit={this.onSubmit}
                     enableReinitialize={true}
+                    validationSchema={inputSchema}
                 >
                     {(formState) => (
                         <Form>
                             <div>
-                                <XMultiSelect suggestions={suggestions}/>
+                                <XMultiSelect
+                                    name='countries' label='Countries'
+                                    options={suggestions}
+                                />
+                                <XRemoteSelect
+                                    name='contacts' label='Contacts'
+                                    remote={remoteRoutes.contactSearch}
+                                    parser={(it: any) => ({label: it.fullName, value: it.id})}
+                                    isMulti={true}
+                                />
+                                <div>{JSON.stringify(formState, null, 2)}</div>
                                 <Button
                                     type='submit'
                                     aria-label='Save'

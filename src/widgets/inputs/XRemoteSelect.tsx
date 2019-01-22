@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import Select from 'react-select';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -11,6 +10,8 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import {emphasize} from '@material-ui/core/styles/colorManipulator';
 import {Theme, WithStyles, WithTheme} from '@material-ui/core';
 import createStyles from '@material-ui/core/styles/createStyles';
+import {handleError, search} from '../../utils/ajax'
+import AsyncSelect from 'react-select/lib/Async';
 import {Field, FieldProps, getIn} from 'formik';
 import {hasValue} from "../../utils/validators";
 
@@ -52,7 +53,7 @@ const styles = (theme: Theme) =>
         },
         paper: {
             position: 'absolute',
-            zIndex: 1,
+            zIndex: 1350,
             marginTop: theme.spacing.unit,
             left: 0,
             right: 0,
@@ -153,7 +154,7 @@ function MultiValue(props: any) {
 
 function Menu(props: any) {
     return (
-        <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
+        <Paper square className={props.selectProps.classes.paper} {...props.innerProps} >
             {props.children}
         </Paper>
     );
@@ -178,10 +179,12 @@ interface IOption {
 interface IProps extends WithStyles<typeof styles>, WithTheme {
     label: string
     name: string
-    options: IOption[]
+    remote: string
+    isMulti: boolean
+    parser: (data: any) => IOption
 }
 
-class XMultiSelect extends React.Component<IProps> {
+class XRemoteSelect extends React.Component<IProps> {
     state = {
         single: null,
         multi: null,
@@ -194,8 +197,21 @@ class XMultiSelect extends React.Component<IProps> {
         }))
     }
 
+    fetchData = (textIn: any, callback: any) => {
+        console.log("Fetching...")
+        const url = this.props.remote
+        const query = this.state.textIn;
+        search(url, {query}, data => {
+            const fine = data.map(this.props.parser)
+            callback(fine)
+        }, (err, res) => {
+            handleError(err, res)
+            callback([])
+        })
+    }
+
     render() {
-        const {classes, theme, options = [], label = '', ...rest} = this.props;
+        const {classes, theme, label = '', ...rest} = this.props;
         const selectStyles = {
             input: (base: any) => ({
                 ...base,
@@ -226,16 +242,18 @@ class XMultiSelect extends React.Component<IProps> {
             }
 
             return <div className={classes.root}>
-                <Select
-                    options={options}
+                <AsyncSelect
+                    cacheOptions
+                    loadOptions={this.fetchData}
+                    defaultOptions
+                    onInputChange={this.handleInputChange}
                     styles={selectStyles}
                     components={components}
                     value={value}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder='Select multiple countries'
+                    placeholder='Select..'
                     isMulti
-                    onInputChange={this.handleInputChange}
                     {...props}
                 />
                 {showError && <div style={{color: "red", marginTop: ".5rem"}}>{error}</div>}
@@ -250,4 +268,4 @@ class XMultiSelect extends React.Component<IProps> {
 }
 
 
-export default withStyles(styles, {withTheme: true})(XMultiSelect);
+export default withStyles(styles, {withTheme: true})(XRemoteSelect);

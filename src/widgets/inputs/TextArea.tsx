@@ -1,8 +1,7 @@
-import * as React from 'react'
+import React from 'react'
 import {Field, FieldProps, getIn} from 'formik';
 import TextField from '@material-ui/core/TextField';
-import {hasValue} from "../../utils/validators";
-
+import {hasValue} from '../../utils/validators';
 
 interface IProps {
     label: string
@@ -12,7 +11,6 @@ interface IProps {
 
 const TextArea = (props: IProps) => {
     const {label = '', ...rest} = props
-
     const render = (fieldProps: FieldProps) => {
         const {field, form} = fieldProps
         const name = field.name;
@@ -26,7 +24,7 @@ const TextArea = (props: IProps) => {
             label={label}
             multiline
             fullWidth
-            rowsMax="4"
+            rowsMax='4'
             helperText={showError ? error : undefined}
             value={field.value || ''}
         />
@@ -36,7 +34,6 @@ const TextArea = (props: IProps) => {
             {render}
         </Field>
     )
-
 }
 
 export default TextArea

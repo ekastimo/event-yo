@@ -9,16 +9,12 @@ import * as _ from 'lodash';
 import {hasValue} from "../../utils/validators";
 import {IOption} from "../../data/types";
 
-
-
-
 interface IProps {
     label: string
     name: string
     options: IOption[]
     isFast?: boolean
 }
-
 
 const SelectInput = (props: IProps) => {
     const {label = '', options = [], isFast, ...rest} = props

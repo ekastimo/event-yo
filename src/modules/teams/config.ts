@@ -43,7 +43,7 @@ export const contactTags = [
     {value: 'Visited', label: 'Visited'},
 ]
 
-export const contactCategory = ['Person', 'Company']
+export const teamMemberCategory = ['Member', 'Leader']
 export const identificationCategory = ['Nin', 'Passport', 'DrivingPermit', 'VillageCard', 'Nssf', 'Other']
 export const gender = ['Male', 'Female']
 export const salutation = ['Mr', 'Mrs', 'Ms', 'Dr', 'Prof']
@@ -61,6 +61,13 @@ export const teamSchema = yup.object().shape(
     {
         name: reqString,
         description: reqString,
+    }
+)
+
+export const teamMembersSchema = yup.object().shape(
+    {
+        role: reqString,
+        members: reqString,
     }
 )
 

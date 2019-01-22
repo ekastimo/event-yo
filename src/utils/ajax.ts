@@ -67,7 +67,7 @@ export const search = (url: string, data: any, callBack: CallbackFunction, error
     superagent.get(url)
         .set('Authorization', `Bearer ${getToken()}`)
         .set('Accept', 'application/json')
-        //.query(data)
+        .query(data)
         .end(handleResponse(callBack, errorCallBack, endCallBack))
 }
 

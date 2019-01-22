@@ -27,7 +27,7 @@ const DateTimeInput = (props: IProps) => {
         }
 
         function handleClose() {
-            return form.setTouched({...form.touched, [name]: true});
+            form.setFieldTouched(name)
         }
 
         const extras = {

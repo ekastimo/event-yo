@@ -50,11 +50,11 @@ const RadioInput = (props: IProps) => {
         const showError = hasValue(error) && (isTouched || wasSubmitted)
 
         function handleBlur() {
-            return form.setTouched({...form.touched, [name]: true});
+            form.setFieldTouched(name)
         }
 
         return <FormControl error={showError} className={classes.formControl}>
-            <FormLabel  htmlFor={name}>{label}</FormLabel>
+            <FormLabel htmlFor={name}>{label}</FormLabel>
             <RadioGroup
                 className={classes.group}
                 {...field}

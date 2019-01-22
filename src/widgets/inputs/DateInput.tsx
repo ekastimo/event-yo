@@ -2,7 +2,6 @@ import * as React from 'react'
 import {FastField, Field, FieldProps, getIn} from 'formik';
 import DatePicker from 'material-ui-pickers/DatePicker';
 import {hasValue} from "../../utils/validators";
-import * as _ from "lodash";
 
 
 interface IProps {
@@ -24,9 +23,7 @@ const DateInput = (props: IProps) => {
         const showError = hasValue(error) && (isTouched || wasSubmitted)
 
         function handleClose() {
-            const touched = {...form.touched};
-            _.set(touched, name, true)
-            form.setTouched(touched)
+            form.setFieldTouched(name)
         }
 
         function handleChange(date: any) {

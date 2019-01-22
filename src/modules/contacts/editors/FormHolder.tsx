@@ -61,7 +61,7 @@ class FormHolder extends React.Component<IProps> {
                             >
                                 <DialogTitle id='form-dialog-title'>{title}</DialogTitle>
 
-                                <DialogContent>
+                                <DialogContent >
                                     {children}
                                 </DialogContent>
 
@@ -98,15 +98,16 @@ class FormHolder extends React.Component<IProps> {
     }
 
     submitForm = () => {
+
         if(this.form){
+            console.log("Trigger Submiting>>>>")
             this.form.submitForm()
         }
-
     }
 
     onSubmit = (values: any, actions: FormikActions<any>) => {
+        console.log("Submiting>>>>",values)
         const {isNew, url} = this.props
-        console.log('isSubmiting', values)
         if (isNew) {
             post(url, values,
                 (data) => {
