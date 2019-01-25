@@ -31,6 +31,7 @@ const styles = (theme: Theme) =>
 
 interface IProps extends WithStyles<typeof styles> {
     data: IContact
+    handleReload: () => any
 }
 
 function TabContainer(props: any) {
@@ -43,17 +44,17 @@ function TabContainer(props: any) {
 
 
 class TabbedDetails extends React.Component<IProps> {
-     public render() {
+    public render() {
         const {classes, data} = this.props;
         const contactInfo = <Grid container spacing={8} className={classes.tabContent}>
             <Grid item xs={12} sm={6} lg={4}>
-                <EmailView data={data}/>
+                <EmailView data={data} handleReload={this.props.handleReload}/>
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-                <PhoneView data={data}/>
+                <PhoneView data={data} handleReload={this.props.handleReload}/>
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-                <AddressView data={data}/>
+                <AddressView data={data} handleReload={this.props.handleReload}/>
             </Grid>
         </Grid>
         return (
@@ -61,21 +62,21 @@ class TabbedDetails extends React.Component<IProps> {
                 <TabbedView
                     data={[
                         {
-                            id:'0',
-                            title:"Details",
-                            icon:<ContactsIcon/>,
+                            id: '0',
+                            title: "Details",
+                            icon: <ContactsIcon/>,
                             component: contactInfo
                         },
                         {
-                            id:'1',
-                            title:"Teams",
-                            icon:<PeopleIcon/>,
+                            id: '1',
+                            title: "Teams",
+                            icon: <PeopleIcon/>,
                             component: <TabContainer>Item Two</TabContainer>
                         },
                         {
-                            id:'2',
-                            title:"More",
-                            icon:<DomainIcon/>,
+                            id: '2',
+                            title: "More",
+                            icon: <DomainIcon/>,
                             component: <TabContainer>Item Three</TabContainer>
                         }
 

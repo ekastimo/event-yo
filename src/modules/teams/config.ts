@@ -8,49 +8,12 @@ export const defaultData = {
         otherNames: '',
         dateOfBirth: undefined,
     },
-    emails: [
-        {
-            xId: '1',
-            isPrimary: true,
-            category: 'Personal',
-            address: '',
-        }
-    ],
-    phones: [
-        {
-            xId: '1',
-            isPrimary: true,
-            category: 'Mobile'
-        }
-    ],
-    addresses: [
-        {
-            xId: '1',
-            isPrimary: true,
-            category: 'Home',
-            number: '',
-        }
-    ],
     tags: []
 }
 
-
-export const contactTags = [
-    {value: 'Lovely', label: 'Lovely'},
-    {value: 'Friendly', label: 'Friendly'},
-    {value: 'Customer', label: 'Customer'},
-    {value: 'Leader', label: 'Leader'},
-    {value: 'Visited', label: 'Visited'},
-]
-
 export const teamMemberCategory = ['Member', 'Leader']
-export const identificationCategory = ['Nin', 'Passport', 'DrivingPermit', 'VillageCard', 'Nssf', 'Other']
-export const gender = ['Male', 'Female']
-export const salutation = ['Mr', 'Mrs', 'Ms', 'Dr', 'Prof']
-export const civilStatus = ['Other', 'Single', 'Married', 'Divorced', 'Other']
-export const emailCategories = ['Personal', 'Work', 'Other']
-export const phoneCategories = ['Mobile', 'Office', 'Home', 'Fax', 'Other']
-export const addressCategories = ['Home', 'Work', 'Other']
+export const teamMemberStatus = ['Active', 'Blocked']
+
 export const invalidInputs = [null, 'null', 'undefined', undefined, '']
 const reqMsg = 'Field is required'
 
@@ -64,10 +27,17 @@ export const teamSchema = yup.object().shape(
     }
 )
 
+export const teamMemberEditSchema = yup.object().shape(
+    {
+        role: reqString,
+        status: reqString,
+    }
+)
+
 export const teamMembersSchema = yup.object().shape(
     {
         role: reqString,
-        members: reqString,
+        contactIds: yup.array().required("Please add team members"),
     }
 )
 

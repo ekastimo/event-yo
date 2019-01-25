@@ -29,12 +29,14 @@ interface IProps extends WithStyles<typeof styles> {
     debug?: boolean
     title: string
     onClose: () => any
+    dataParser?: (data: any) => any
     schema: any
     width: false | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+    onAjaxComplete: (data: any) => any
 }
 
 class FormHolder extends React.Component<IProps> {
-    form?: Formik=undefined
+    form?: Formik = undefined
 
     render() {
         const {width, classes, data, title, children, open, onClose, schema, debug} = this.props
@@ -61,7 +63,7 @@ class FormHolder extends React.Component<IProps> {
                             >
                                 <DialogTitle id='form-dialog-title'>{title}</DialogTitle>
 
-                                <DialogContent >
+                                <DialogContent>
                                     {children}
                                 </DialogContent>
 
@@ -99,21 +101,23 @@ class FormHolder extends React.Component<IProps> {
 
     submitForm = () => {
 
-        if(this.form){
-            console.log("Trigger Submiting>>>>")
+        if (this.form) {
             this.form.submitForm()
         }
     }
 
-    onSubmit = (values: any, actions: FormikActions<any>) => {
-        console.log("Submiting>>>>",values)
+    onSubmit = (rawValues: any, actions: FormikActions<any>) => {
+        const values = this.props.dataParser ? this.props.dataParser(rawValues) : rawValues
+        console.log("Submiting>>>>", values)
         const {isNew, url} = this.props
         if (isNew) {
             post(url, values,
                 (data) => {
                     Toast.info('Contact created')
                     this.setState(() => ({data}))
+                    this.props.onAjaxComplete(data)
                     this.props.onClose()
+
                 },
                 (err, resp) => {
                     handleError(err, resp)
@@ -122,14 +126,14 @@ class FormHolder extends React.Component<IProps> {
                 () => {
                     this.setState(() => ({isLoading: false}))
                     actions.setSubmitting(false);
-
                 }
             )
         } else {
             put(url, values,
                 (data) => {
-                    Toast.info('Contact updated')
+                    Toast.info('Update successful')
                     this.setState(() => ({data}))
+                    this.props.onAjaxComplete(data)
                     this.props.onClose()
                 },
                 (err, resp) => {
@@ -139,7 +143,6 @@ class FormHolder extends React.Component<IProps> {
                 () => {
                     this.setState(() => ({isLoading: false, data: values}))
                     actions.setSubmitting(false);
-
                 }
             )
         }

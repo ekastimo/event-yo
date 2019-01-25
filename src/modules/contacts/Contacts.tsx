@@ -94,6 +94,7 @@ class Contacts extends React.Component<IProps, IState> {
                     isNew={true}
                     schema={newPersonSchema}
                     debug={true}
+                    onAjaxComplete={this.handleCompletion}
                 >
                     <NewPersonEditor/>
                 </FormHolder>
@@ -101,7 +102,11 @@ class Contacts extends React.Component<IProps, IState> {
         )
     }
 
-    private reloadData(request: any) {
+    handleCompletion = () => {
+        this.reloadData()
+    }
+
+    private reloadData(request: any = {}) {
         search(remoteRoutes.contacts, request, data => {
             this.setState(() => ({data, isLoading: false}))
         }, undefined, () => {

@@ -47,6 +47,7 @@ const styles = () =>
 
 interface IProps extends WithStyles<typeof styles> {
     data: IContact
+    handleReload: () => any
 }
 
 interface IState {
@@ -116,6 +117,7 @@ class AddressView extends React.Component<IProps, IState> {
                         isNew={!this.state.data}
                         schema={addressSchema}
                         debug={true}
+                        onAjaxComplete={this.props.handleReload}
                     >
                         <AddressEditor/>
                     </FormHolder>

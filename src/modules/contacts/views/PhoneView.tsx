@@ -47,6 +47,7 @@ const styles = () =>
 
 interface IProps extends WithStyles<typeof styles> {
     data: IContact
+    handleReload: () => any
 }
 
 interface IState {
@@ -114,6 +115,7 @@ class PhoneView extends React.Component<IProps, IState> {
                         url={`${remoteRoutes.contactsPhone}/${data.id}`}
                         isNew={!this.state.data}
                         schema={phoneSchema}
+                        onAjaxComplete={this.props.handleReload}
                     >
                         <PhoneEditor/>
                     </FormHolder>

@@ -47,6 +47,7 @@ const styles = () =>
 
 interface IProps extends WithStyles<typeof styles> {
     data: IContact
+    handleReload: () => any
 }
 
 interface IState {
@@ -115,6 +116,7 @@ class EmailView extends React.Component<IProps, IState> {
                         url={`${remoteRoutes.contactsEmail}/${data.id}`}
                         isNew={!this.state.data}
                         schema={emailSchema}
+                        onAjaxComplete={this.props.handleReload}
                     >
                         <EmailEditor/>
                     </FormHolder>

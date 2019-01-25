@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Theme, WithStyles} from "@material-ui/core";
+import {WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {withStyles} from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
@@ -15,7 +15,7 @@ import ImageView from "./views/ImageView";
 import PersonView from "./views/PersonView";
 import TabbedDetails from "./TabbedDetails";
 
-const styles = (theme: Theme) =>
+const styles = () =>
     createStyles({
         root: {flexGrow: 1}
     });
@@ -33,7 +33,6 @@ interface IState {
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<IPrams> {
 
 }
-
 
 class Details extends React.Component<IProps, IState> {
     constructor(props: IProps) {
@@ -58,10 +57,10 @@ class Details extends React.Component<IProps, IState> {
                         <ImageView data={data}/>
                     </Grid>
                     <Grid item xs={12} sm={8}>
-                        <PersonView data={data}/>
+                        <PersonView data={data} handleReload={this.reloadData}/>
                     </Grid>
                     <Grid item xs={12}>
-                        <TabbedDetails data={data}/>
+                        <TabbedDetails data={data} handleReload={this.reloadData}/>
                     </Grid>
                 </Grid>
             </BasePanel>
@@ -69,6 +68,10 @@ class Details extends React.Component<IProps, IState> {
     }
 
     public componentWillMount() {
+        this.reloadData()
+    }
+
+    private reloadData = () => {
         const {match} = this.props
         const {params: {contactId}} = match
         if (validate.isDefined(contactId)) {

@@ -28,7 +28,8 @@ const styles = (theme: Theme) =>
 
 interface IProps extends WithStyles<typeof styles> {
     data: IContact
-    width: string
+    width: string,
+    handleReload: () => any
 }
 
 interface IDProps {
@@ -116,6 +117,7 @@ class PersonView extends React.Component<IProps, any> {
                     url={`${remoteRoutes.contactsPerson}/${data.id}`}
                     isNew={false}
                     schema={personSchema}
+                    onAjaxComplete={this.props.handleReload}
                 >
                     <PersonEditor/>
                 </FormHolder>

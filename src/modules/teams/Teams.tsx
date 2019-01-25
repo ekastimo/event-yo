@@ -91,6 +91,7 @@ class Contacts extends React.Component<IProps, IState> {
                     url={remoteRoutes.teams}
                     isNew={true}
                     schema={teamSchema}
+                    onAjaxComplete={this.handleCompletion}
                 >
                     <NewTeamEditor/>
                 </FormHolder>
@@ -101,12 +102,17 @@ class Contacts extends React.Component<IProps, IState> {
     public componentDidMount() {
         this.reloadData(this.state.search)
     }
-    private reloadData(request: any) {
+
+    private reloadData(request: any={}) {
         search(remoteRoutes.teams, request, data => {
             this.setState(() => ({data, isLoading: false}))
         }, undefined, () => {
             this.setState(() => ({isLoading: false}))
         })
+    }
+
+    handleCompletion = () => {
+        this.reloadData()
     }
 
     private handleEdit = (data: any) => {

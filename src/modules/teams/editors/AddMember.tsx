@@ -19,14 +19,13 @@ const styles = (theme: Theme) =>
 interface IProps extends WithStyles<typeof styles> {
 }
 
-const MemberEditor = (props: IProps) => {
+const AddMember = (props: IProps) => {
     return (
         <div style={{padding: 20}}>
             <Grid className={props.classes.root} container spacing={24}>
-
                 <Grid item xs={12} sm={12}>
                     <XRemoteSelect
-                        name='contactId' label='Members'
+                        name='contactIds' label='Members'
                         remote={remoteRoutes.contactSearch}
                         parser={(it: any) => ({label: it.fullName, value: it.id})}
                         isMulti={true}
@@ -41,4 +40,4 @@ const MemberEditor = (props: IProps) => {
     )
 }
 
-export default withStyles(styles)(MemberEditor)
+export default withStyles(styles)(AddMember)

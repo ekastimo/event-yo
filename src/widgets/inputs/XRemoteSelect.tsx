@@ -8,7 +8,7 @@ import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
 import {emphasize} from '@material-ui/core/styles/colorManipulator';
-import {Theme, WithStyles, WithTheme} from '@material-ui/core';
+import {FormHelperText, Theme, WithStyles, WithTheme} from '@material-ui/core';
 import createStyles from '@material-ui/core/styles/createStyles';
 import {handleError, search} from '../../utils/ajax'
 import AsyncSelect from 'react-select/lib/Async';
@@ -83,6 +83,7 @@ function inputComponent(props: any) {
 function Control(props: any) {
     return (
         <TextField
+            error={props.selectProps.error}
             fullWidth
             InputProps={{
                 inputComponent,
@@ -241,6 +242,7 @@ class XRemoteSelect extends React.Component<IProps> {
                 form.setFieldTouched(field.name)
             }
 
+            const  extraProps = {...props,error:showError}
             return <div className={classes.root}>
                 <AsyncSelect
                     cacheOptions
@@ -254,9 +256,9 @@ class XRemoteSelect extends React.Component<IProps> {
                     onBlur={handleBlur}
                     placeholder='Select..'
                     isMulti
-                    {...props}
+                    {...extraProps}
                 />
-                {showError && <div style={{color: "red", marginTop: ".5rem"}}>{error}</div>}
+                {showError && <FormHelperText error={true}>{error}</FormHelperText>}
             </div>
         }
         return (

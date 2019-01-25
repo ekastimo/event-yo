@@ -2,18 +2,20 @@ import * as React from 'react';
 import {List, Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {remoteRoutes} from "../../../data/constants";
-import {search} from "../../../utils/ajax";
+import {del, search} from "../../../utils/ajax";
 import {withStyles} from "@material-ui/core/styles";
 import {RouteComponentProps, withRouter} from 'react-router'
 
 import {ITeam, ITeamMember} from "../types";
 import Loading from "../../../widgets/Loading";
-import {teamSchema} from "../config";
+import {teamMemberEditSchema, teamMembersSchema} from "../config";
 import FormHolder from "../../contacts/editors/FormHolder";
-import NewTeamEditor from "../editors/NewTeamEditor";
 import XToolBar from "../../../widgets/XToolBar";
 import MemberItem from "./MemberItem";
-import MemberEditor from "../editors/MemberEditor";
+import {default as EditMember} from "../editors/EditMember";
+import AddMember from "../editors/AddMember";
+import uiConfirm from "../../../widgets/confirm";
+import Toast from "../../../utils/Toast";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -34,6 +36,9 @@ interface IState {
     data: ITeamMember[]
     search: ISearch
     showDialog: boolean
+    isNew: boolean
+    confirmingDelete: boolean
+    selected: any
 }
 
 interface ISearch {
@@ -42,13 +47,18 @@ interface ISearch {
     name?: string
 }
 
+const defaultData = {status: 'Active'}
+
 class Contacts extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props)
         this.state = {
             isLoading: true,
             showDialog: false,
+            confirmingDelete: false,
+            isNew: true,
             data: [],
+            selected: {...defaultData},
             search: {
                 limit: 10,
                 skip: 0
@@ -58,7 +68,7 @@ class Contacts extends React.Component<IProps, IState> {
 
     public render() {
         const {team} = this.props
-        const {isLoading, data} = this.state
+        const {isLoading, data, isNew} = this.state
         return (
             <div>
                 <XToolBar
@@ -78,7 +88,7 @@ class Contacts extends React.Component<IProps, IState> {
                                         data={{...it}}
                                         onView={this.handleEdit}
                                         onEdit={this.handleEdit}
-                                        onDelete={this.handleEdit}
+                                        onDelete={this.handleDelete}
                                     />
                                 ))
                             }
@@ -88,24 +98,38 @@ class Contacts extends React.Component<IProps, IState> {
                     title='New Member'
                     open={this.state.showDialog}
                     onClose={this.handleClose}
-                    data={{teamId: team.id, status: 'Active'}}
-                    url={remoteRoutes.teams}
-                    isNew={true}
-                    schema={teamSchema}
+                    data={{...this.state.selected, teamId: team.id}}
+                    url={remoteRoutes.teamsMembers}
+                    isNew={isNew}
+                    schema={isNew ? teamMembersSchema : teamMemberEditSchema}
+                    dataParser={isNew ? this.parseData : undefined}
+                    onAjaxComplete={this.handleCompletion}
                 >
-                    <MemberEditor/>
+                    {isNew ? <AddMember/> : <EditMember/>}
                 </FormHolder>
             </div>
         )
+    }
+
+
+    private handleCompletion = () => {
+        this.reloadData()
+    }
+
+    private parseData = (data: any): any => {
+        const contactIds = data.contactIds.map((it: any) => it.value)
+        return {
+            ...data, contactIds
+        }
     }
 
     public componentDidMount() {
         this.reloadData(this.state.search)
     }
 
-    private reloadData(request: any) {
+    private reloadData(request: any = {}) {
         const url = `${remoteRoutes.teamsMembers}/${this.props.team.id}`
-        console.log("URL",url)
+        console.log("URL", url)
         search(url, request, (data: ITeamMember[]) => {
             this.setState(() => ({data, isLoading: false}))
         }, undefined, () => {
@@ -113,18 +137,26 @@ class Contacts extends React.Component<IProps, IState> {
         })
     }
 
-    private handleEdit = (data: ITeamMember) => {
-        // const path = `${localRoutes.teamsMembers}/${data.id}`
-        // const {history} = this.props
-        // history.push(path)
+    private handleEdit = (selected: ITeamMember) => {
+        this.setState(() => ({showDialog: true, isNew: false, selected}))
+    }
+
+    private handleDelete = (selected: ITeamMember) => {
+        uiConfirm("Please confirm that you want to delete this member").then(() => {
+            const url = `${remoteRoutes.teamsMembers}/${selected.id}`
+            del(url, (resp: any) => {
+                Toast.info(resp.message)
+                this.reloadData()
+            })
+        });
     }
 
     private handleNewContact = () => {
-        this.setState(() => ({showDialog: true}))
+        this.setState(() => ({showDialog: true, isNew: true, selected: defaultData}))
     }
 
     private handleClose = () => {
-        this.setState(() => ({showDialog: false}))
+        this.setState(() => ({showDialog: false, isNew: true, selected: defaultData}))
     }
 
     private handleChange = (e: any) => {
