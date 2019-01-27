@@ -75,7 +75,7 @@ class Details extends React.Component<IProps, IState> {
         const {match} = this.props
         const {params: {contactId}} = match
         if (validate.isDefined(contactId)) {
-            const url = `${remoteRoutes.contacts}/${contactId}`
+            const url = `${remoteRoutes.contactById}/${contactId}`
             get(url, (data: IContact) => {
                 console.log("Fetched contact", data)
                 this.setState(() => ({data}))
