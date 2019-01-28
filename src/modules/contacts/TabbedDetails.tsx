@@ -12,6 +12,7 @@ import EmailView from "./views/EmailView";
 import PhoneView from "./views/PhoneView";
 import AddressView from "./views/AddressView";
 import TabbedView from "../../widgets/TabbedView";
+import ContactTeams from "./views/ContactTeams";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -71,7 +72,7 @@ class TabbedDetails extends React.Component<IProps> {
                             id: '1',
                             title: "Teams",
                             icon: <PeopleIcon/>,
-                            component: <TabContainer>Item Two</TabContainer>
+                            component: <ContactTeams contactId={data.id}/>
                         },
                         {
                             id: '2',

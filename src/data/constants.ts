@@ -41,6 +41,6 @@ export const remoteRoutes = {
 
     uploadUrl: url + '/api/docs/upload',
     teams: url + '/api/teams',
-    teamsMembers: url + '/api/teammembers',
-    contactTeams: url + '/api/teams/contact',
+    teamsMembers: url + '/api/teammembers/team',
+    contactTeams: url + '/api/teammembers/contact',
 }

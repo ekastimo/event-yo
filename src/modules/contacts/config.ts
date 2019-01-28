@@ -190,17 +190,6 @@ export const fakeContact = (): IContact => {
 
 
 export const renderName = (person: IPerson): string => {
-    const isNOE = (str: string): boolean => !str || typeof str === 'undefined' || str.length < 0
-    const noMddNm = isNOE(person.middleName)
-    if (isNOE(person.salutation)) {
-        return noMddNm ?
-            `${person.firstName} ${person.lastName}` :
-            `${person.firstName} ${person.middleName} ${person.lastName}`
-    }
-    else {
-        return noMddNm ?
-            `${person.salutation} ${person.firstName} ${person.lastName}` :
-            `${person.salutation} ${person.firstName} ${person.middleName} ${person.lastName}`
-    }
-
+    const name: string = `${person.salutation || ''} ${person.firstName || ''} ${person.middleName || ''} ${person.lastName || ''}`
+    return name.trim().replace(/\s+/g, ' ')
 }
