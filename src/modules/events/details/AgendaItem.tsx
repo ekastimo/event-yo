@@ -10,7 +10,8 @@ import withWidth from "@material-ui/core/withWidth/index";
 import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import {IAgendaItem} from "../types";
+import {IEventItem} from "../types";
+import {getImage} from "../../../utils/TK";
 
 const height = 150
 const styles = (theme: Theme) =>
@@ -74,7 +75,7 @@ const styles = (theme: Theme) =>
     });
 
 interface IProps extends WithStyles<typeof styles> {
-    data: IAgendaItem
+    data: IEventItem
     width?: any
     handleClick: () => any
 }
@@ -104,7 +105,7 @@ class AgendaItem extends React.Component<IProps> {
                             <Grid container spacing={8} className={classes.contentGrid} alignItems='center'>
                                 <Grid item xs={3} sm={2}>
                                     <Grid container justify="center" alignItems='center' className={classes.imageView}>
-                                        <img src={data.avatar} alt={data.title} className={classes.profileImage}/>
+                                        <img src={getImage(data.images[0])} alt={data.name} className={classes.profileImage}/>
                                     </Grid>
                                 </Grid>
                                 <Grid item xs={9} sm={10}>
@@ -117,10 +118,10 @@ class AgendaItem extends React.Component<IProps> {
                                         </Hidden>
                                         <Grid xs={12} item>
                                             <Typography variant="title" component='h1'
-                                                        className={classes.titleStyle}>{data.title}</Typography>
+                                                        className={classes.titleStyle}>{data.name}</Typography>
                                         </Grid>
                                         <Grid xs={10} item>
-                                            <Typography variant="subheading">{data.assignee}</Typography>
+                                            <Typography variant="subheading">{data.assignees[0]}</Typography>
                                         </Grid>
                                         <Grid xs={2} item>
                                             <Grid container justify="flex-end">

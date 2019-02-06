@@ -12,7 +12,6 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import EventIcon from '@material-ui/icons/Event';
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid';
-import {events} from '../fakeData';
 import {Theme, withStyles} from '@material-ui/core/styles';
 import moment from 'moment';
 import createStyles from "@material-ui/core/styles/createStyles";
@@ -68,19 +67,14 @@ interface IState {
 
 class InfoView extends React.Component<IProps, IState> {
     public state = {
-        open: {},expanded:false,data:undefined
+        open: {},
+        expanded:false,
+        data:undefined
     };
-    public componentDidMount() {
-        setTimeout(() => {
-            const data = events[0]
-            this.setState({data})
-        }, 500)
-    }
+
 
     public render() {
-        const {classes} = this.props;
-
-        const data = this.state.data;
+        const {classes,data} = this.props;
         const shortDate = (dt: any) => moment(dt).format('MMM Do');
         const shortTime = (dt: any) => moment(dt).format('LT');
         if (!data) {
@@ -98,15 +92,15 @@ class InfoView extends React.Component<IProps, IState> {
                         <Card className={classes.card}>
                             <CardMedia
                                 className={classes.media}
-                                image={event.image}
+                                image={event.images[0]}
                                 title='Event Image'
                             />
                             <CardContent>
                                 <Typography gutterBottom variant='title'>
-                                    {event.title}
+                                    {event.name}
                                 </Typography>
                                 <Typography component='p'>
-                                    {event.subHeader}
+                                    {event.startDate}
                                 </Typography>
                             </CardContent>
                             <CardActions className={classes.actions} disableActionSpacing>
@@ -157,7 +151,7 @@ class InfoView extends React.Component<IProps, IState> {
                                                 {event.venue}
                                             </Typography>
                                             <Typography variant='caption'>
-                                                {event.address}
+                                                {event.freeFormAddress}
                                             </Typography>
                                         </div>
                                     </Grid>
@@ -165,7 +159,7 @@ class InfoView extends React.Component<IProps, IState> {
 
                             </CardContent>
                             <CardContent>
-                                <Typography component='p'>{event.description}</Typography>
+                                <Typography component='p'>{event.details}</Typography>
                             </CardContent>
 
                         </Card>
@@ -174,8 +168,6 @@ class InfoView extends React.Component<IProps, IState> {
 
             </div>
         );
-
-
     }
 
     // private handleExpandClick = () => {

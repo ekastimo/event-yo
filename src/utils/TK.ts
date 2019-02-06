@@ -3,6 +3,7 @@ import {format, isValid} from 'date-fns'
 import Toast from "./Toast";
 import * as _ from 'lodash';
 import {IOption} from "../data/types";
+import {images} from "../assets/images";
 
 // <pre>{JSON.stringify(data, null, 2)}</pre>
 export function isDefined(value: any) {
@@ -18,6 +19,18 @@ export const printDate = (value: any): string => {
         return format(value, 'MM/dd/yyyy')
     else
         return ''
+}
+
+export const parseRange = (rec: any) => {
+    const {startDate, endDate} = rec
+    return `${moment(startDate).format('LT')} - ${moment(endDate).format('LT')}`
+}
+
+export const getImage = (value: string): string => {
+    if(value && value.length>0){
+        return value
+    }
+    return images.everything
 }
 
 export const printDateTime = (value: any): string => {

@@ -12,9 +12,12 @@ import InfoIcon from '@material-ui/icons/Info';
 import MapIcon from '@material-ui/icons/Map';
 import InfoView from "./InfoView";
 import Agenda from "./Agenda";
-import {agenda} from '../fakeData'
+import * as validate from "validate.js";
 import {RouteComponentProps} from "react-router";
-import {IContact} from "../../contacts/types";
+import {remoteRoutes} from "../../../data/constants";
+import {get} from "../../../utils/ajax";
+import {IEvent} from "../types";
+import Loading from "../../../widgets/Loading";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -35,18 +38,19 @@ function TabContainer(props: any) {
         </Typography>
     );
 }
+
 interface IPrams {
     eventId: string
 }
+
 interface IProps extends WithStyles<typeof styles> {
-    data: any
     width?: any
 }
 
 interface IState {
     isLoading: boolean
     value: number
-    data?: IContact
+    data?: IEvent
     error?: string
 }
 
@@ -55,17 +59,24 @@ interface IProps extends WithStyles<typeof styles>, RouteComponentProps<IPrams> 
 }
 
 
-class EventDetails extends React.Component<IProps,IState> {
+class EventDetails extends React.Component<IProps, IState> {
     public state = {
         isLoading: true,
         value: 1,
+        data: undefined,
     };
 
+    componentDidMount() {
+        this.reloadData();
+    }
 
     public render() {
         const {classes, width} = this.props;
-        const {value} = this.state;
+        const {value, data} = this.state;
         const isNotMobile = width !== 'xs'
+
+        if (!data)
+            return <Loading/>
         return (
             <div className={classes.root}>
                 <AppBar position="static" color="default">
@@ -82,8 +93,8 @@ class EventDetails extends React.Component<IProps,IState> {
                         <Tab label="Venue" icon={isNotMobile ? <MapIcon/> : undefined}/>
                     </Tabs>
                 </AppBar>
-                {value === 0 && <InfoView/>}
-                {value === 1 && <Agenda data={agenda} handleClick={this.killEvent}/>}
+                {value === 0 && <InfoView data={data}/>}
+                {value === 1 && <Agenda data={data} handleClick={this.killEvent}/>}
                 {value === 2 && <TabContainer>Someting</TabContainer>}
             </div>
         );
@@ -93,8 +104,23 @@ class EventDetails extends React.Component<IProps,IState> {
         this.setState({value});
     };
     private killEvent = () => null;
-}
 
+    private reloadData = () => {
+        const {match} = this.props
+        const {params: {eventId}} = match
+        if (validate.isDefined(eventId)) {
+            const url = `${remoteRoutes.events}/${eventId}`
+            get(url, (data: IEvent) => {
+                console.log("Fetched event", data)
+                this.setState(() => ({data}))
+            }, undefined, () => {
+                this.setState(() => ({isLoading: false}))
+            })
+        } else {
+            this.setState(() => ({isLoading: false, error: 'Invalid path'}))
+        }
+    }
+}
 
 const Styled = withStyles(styles, {withTheme: true})(EventDetails);
 

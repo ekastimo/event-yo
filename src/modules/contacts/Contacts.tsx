@@ -34,7 +34,7 @@ interface IState {
     showDialog: boolean
 }
 
-interface ISearch {
+export interface ISearch {
     limit: number,
     skip: number,
     name?: string

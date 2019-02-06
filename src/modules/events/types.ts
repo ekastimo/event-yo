@@ -1,26 +1,25 @@
 
-export interface IAgendaItem {
+export interface IEventItem {
     id: string
-    type: string,
-    title: string,
-    avatar: string,
-    image: string,
-    description: string,
+    name: string,
+    details: string,
     startDate: Date,
     endDate: Date,
     venue: string,
-    address: string
-    assignee: string
+    assignees: string[]
+    images: string[],
+    tags: string[],
 }
 
 export interface IEvent {
     id: string
-    title: string,
-    subHeader: string,
-    image: string,
-    description: string,
+    name: string,
+    details: string,
     startDate: Date,
     endDate: Date,
     venue: string,
-    address: string,
+    freeFormAddress: string,
+    images: string[],
+    tags: string[],
+    items: IEventItem[],
 }

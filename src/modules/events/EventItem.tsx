@@ -14,6 +14,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import createStyles from "@material-ui/core/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
+import {IEvent} from "./types";
 
 
 const styles = (theme: Theme) =>
@@ -44,7 +45,7 @@ const styles = (theme: Theme) =>
     });
 
 interface IProps extends WithStyles<typeof styles> {
-    data: any
+    data: IEvent
     handleClick: ()=>any
 }
 
@@ -53,7 +54,7 @@ class EventItem extends React.Component<IProps> {
 
     public render() {
         const {classes, data} = this.props;
-        const subHeaderText = data.subHeader
+        const subHeaderText = data.startDate
         return (
             <div>
                 <Card className={classes.card}>
@@ -68,16 +69,16 @@ class EventItem extends React.Component<IProps> {
                                 <MoreVertIcon/>
                             </IconButton>
                         }
-                        title={data.title}
+                        title={data.name}
                         subheader={<Typography variant="caption">{subHeaderText}</Typography>}
                     />
                     <CardMedia
                         className={classes.media}
-                        image={data.image}
+                        image={data.images[0]}
                         title="Event Image"
                     />
                     <CardContent>
-                        <Typography component="p">{data.description}</Typography>
+                        <Typography component="p">{data.details}</Typography>
                     </CardContent>
                     <CardActions className={classes.actions} disableActionSpacing>
                         <IconButton aria-label="Add to favorites">

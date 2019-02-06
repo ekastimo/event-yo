@@ -44,4 +44,7 @@ export const remoteRoutes = {
     teamsMembers: url + '/api/teams/members',
     teamsMembersByTeam: url + '/api/teams/members/team',
     teamsMembersByContact: url + '/api/teams/members/contact',
+
+    events: url + '/api/evt/event',
+    eventsAgenda: url + '/api/evt/items',
 }
