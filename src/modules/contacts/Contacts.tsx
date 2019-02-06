@@ -93,7 +93,6 @@ class Contacts extends React.Component<IProps, IState> {
                     url={remoteRoutes.contactsPerson}
                     isNew={true}
                     schema={newPersonSchema}
-                    debug={true}
                     onAjaxComplete={this.handleCompletion}
                 >
                     <NewPersonEditor/>

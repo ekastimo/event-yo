@@ -40,7 +40,8 @@ export const remoteRoutes = {
     contactsAvatar: url + '/api/crm/contact/avatar',
 
     uploadUrl: url + '/api/docs/upload',
-    teams: url + '/api/teams',
-    teamsMembers: url + '/api/teammembers/team',
-    contactTeams: url + '/api/teammembers/contact',
+    teams: url + '/api/teams/team',
+    teamsMembers: url + '/api/teams/members',
+    teamsMembersByTeam: url + '/api/teams/members/team',
+    teamsMembersByContact: url + '/api/teams/members/contact',
 }

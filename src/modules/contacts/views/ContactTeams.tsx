@@ -52,8 +52,6 @@ class Contacts extends React.Component<IProps, IState> {
         }
     }
 
-
-
     public render() {
         const {isLoading, data} = this.state
         return (
@@ -85,7 +83,7 @@ class Contacts extends React.Component<IProps, IState> {
     }
 
     private reloadData() {
-        const url = `${remoteRoutes.contactTeams}/${this.props.contactId}`
+        const url = `${remoteRoutes.teamsMembersByContact}/${this.props.contactId}`
         get(url, data => {
             this.setState(() => ({data, isLoading: false}))
         }, undefined, () => {

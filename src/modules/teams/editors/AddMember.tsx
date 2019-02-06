@@ -8,6 +8,8 @@ import XRemoteSelect from "../../../widgets/inputs/XRemoteSelect";
 import {toOptions} from "../../../utils/TK";
 import {teamMemberCategory} from "../config";
 import SelectInput from "../../../widgets/inputs/SelectInput";
+import {ITeamMember} from "../types";
+import {IOption} from "../../../data/types";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -17,9 +19,14 @@ const styles = (theme: Theme) =>
     });
 
 interface IProps extends WithStyles<typeof styles> {
+    members: ITeamMember[]
 }
 
 const AddMember = (props: IProps) => {
+    const {members} = props
+    const ids = members.map(it => it.contactId)
+    const filter = (it: IOption) => ids.indexOf(it.value)=== -1
+    const parser = (it: any) => ({label: it.fullName, value: it.id})
     return (
         <div style={{padding: 20}}>
             <Grid className={props.classes.root} container spacing={24}>
@@ -27,7 +34,8 @@ const AddMember = (props: IProps) => {
                     <XRemoteSelect
                         name='contactIds' label='Members'
                         remote={remoteRoutes.contactSearch}
-                        parser={(it: any) => ({label: it.fullName, value: it.id})}
+                        parser={parser}
+                        filter={filter}
                         isMulti={true}
                     />
                 </Grid>

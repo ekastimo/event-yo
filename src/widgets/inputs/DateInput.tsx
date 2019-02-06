@@ -11,6 +11,7 @@ const Component = (fieldProps: FieldProps) => {
                 keyboard
                 clearable
                 disablePast
+                fullWidth
                 name={field.name}
                 value={field.value||null}
                 format="dd/MM/yyyy"

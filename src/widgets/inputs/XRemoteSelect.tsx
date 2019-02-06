@@ -182,7 +182,8 @@ interface IProps extends WithStyles<typeof styles>, WithTheme {
     name: string
     remote: string
     isMulti: boolean
-    parser: (data: any) => IOption
+    parser?: (data: any) => IOption
+    filter?: (data: IOption) => boolean
 }
 
 class XRemoteSelect extends React.Component<IProps> {
@@ -202,9 +203,11 @@ class XRemoteSelect extends React.Component<IProps> {
         console.log("Fetching...")
         const url = this.props.remote
         const query = this.state.textIn;
+        const {parser, filter} = this.props
         search(url, {query}, data => {
-            const fine = data.map(this.props.parser)
-            callback(fine)
+            const fine = parser ? data.map(parser) : data
+            const options = filter ? fine.filter(filter) : fine
+            callback(options)
         }, (err, res) => {
             handleError(err, res)
             callback([])
@@ -242,7 +245,7 @@ class XRemoteSelect extends React.Component<IProps> {
                 form.setFieldTouched(field.name)
             }
 
-            const  extraProps = {...props,error:showError}
+            const extraProps = {...props, error: showError}
             return <div className={classes.root}>
                 <AsyncSelect
                     cacheOptions

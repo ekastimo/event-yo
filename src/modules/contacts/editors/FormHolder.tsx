@@ -100,7 +100,6 @@ class FormHolder extends React.Component<IProps> {
     }
 
     submitForm = () => {
-
         if (this.form) {
             this.form.submitForm()
         }

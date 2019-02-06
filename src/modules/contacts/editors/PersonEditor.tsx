@@ -2,8 +2,7 @@ import * as React from 'react';
 import {Theme, WithStyles, withStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import Grid from '@material-ui/core/Grid';
-//import DateInput from '../../../widgets/inputs/DateInput';
-import DateField from '../../../widgets/inputs/DatePickerField';
+import DateInput from '../../../widgets/inputs/DateInput';
 import TextInput from '../../../widgets/inputs/TextInput';
 import SelectInput from '../../../widgets/inputs/SelectInput';
 import {civilStatus, gender, salutation} from "../config";
@@ -38,7 +37,7 @@ const PersonEditor = (props: IProps) => {
                     <TextInput type='text' name='middleName' label='Middle Name'/>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <DateField name='dateOfBirth' label='Birthday'/>
+                    <DateInput name='dateOfBirth' label='Birthday'/>
                 </Grid>
                 <Grid item xs={12} sm={3}>
                     <SelectInput name='gender' label='Gender' options={toOptions(gender)}/>

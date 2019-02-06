@@ -105,7 +105,7 @@ class Contacts extends React.Component<IProps, IState> {
                     dataParser={isNew ? this.parseData : undefined}
                     onAjaxComplete={this.handleCompletion}
                 >
-                    {isNew ? <AddMember/> : <EditMember/>}
+                    {isNew ? <AddMember members={data}/> : <EditMember/>}
                 </FormHolder>
             </div>
         )
@@ -128,7 +128,7 @@ class Contacts extends React.Component<IProps, IState> {
     }
 
     private reloadData(request: any = {}) {
-        const url = `${remoteRoutes.teamsMembers}/${this.props.team.id}`
+        const url = `${remoteRoutes.teamsMembersByTeam}/${this.props.team.id}`
         console.log("URL", url)
         search(url, request, (data: ITeamMember[]) => {
             this.setState(() => ({data, isLoading: false}))
@@ -143,7 +143,7 @@ class Contacts extends React.Component<IProps, IState> {
 
     private handleDelete = (selected: ITeamMember) => {
         uiConfirm("Please confirm that you want to delete this member").then(() => {
-            const url = `${remoteRoutes.teamsMembers}/${selected.id}`
+            const url = `${remoteRoutes.teams}/${selected.id}`
             del(url, (resp: any) => {
                 Toast.info(resp.message)
                 this.reloadData()
