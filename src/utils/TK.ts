@@ -1,4 +1,5 @@
 import moment from 'moment'
+import {format, isValid} from 'date-fns'
 import Toast from "./Toast";
 import * as _ from 'lodash';
 import {IOption} from "../data/types";
@@ -12,6 +13,26 @@ export function printLn(value: any) {
     console.log(isDefined(value) ? JSON.stringify(value) : value)
 }
 
+export const printDate = (value: any): string => {
+    if (isValid(value))
+        return format(value, 'MM/dd/yyyy')
+    else
+        return ''
+}
+
+export const printDateTime = (value: any): string => {
+    if (isValid(value))
+        return format(value, 'MM/dd/yyyy p')
+    else
+        return ''
+}
+
+export const printBirthday = (value: any): string => {
+    if (isValid(value))
+        return format(value, 'MMM/dd')
+    else
+        return ''
+}
 
 export function isValidDate(value: any) {
     if (value === null || typeof value !== 'object') {
@@ -180,6 +201,7 @@ export function guid() {
         const p = (Math.random().toString(16) + "000000000").substr(2, 8);
         return s ? "-" + p.substr(0, 4) + "-" + p.substr(4, 4) : p;
     }
+
     return _p8() + _p8(true) + _p8(true) + _p8();
 }
 

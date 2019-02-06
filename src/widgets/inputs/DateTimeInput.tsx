@@ -1,66 +1,36 @@
-import * as React from 'react'
-import {FastField, Field, FieldProps, getIn} from 'formik';
-import DateTimePicker from 'material-ui-pickers/DateTimePicker';
-
-import {hasValue} from "../../utils/validators";
+import React from 'react';
+import {Field, FieldProps} from 'formik';
+import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
+import DateFnsUtils from '@date-io/date-fns';
+const Component = (fieldProps: FieldProps) => {
+    const {field, form, ...other} = fieldProps
+    const currentError = form.errors[field.name];
+    return (
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <DateTimePicker
+                keyboard
+                clearable
+                disablePast
+                name={field.name}
+                value={field.value||null}
+                format="dd/MM/yyyy"
+                helperText={currentError}
+                error={Boolean(currentError)}
+                onError={(_, error: any) => form.setFieldError(field.name, error)}
+                onChange={date => form.setFieldValue(field.name, date, true)}
+                mask={value => (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])}
+                {...other}
+            /></MuiPickersUtilsProvider>
+    );
+};
 
 interface IProps {
-    label: string
     name: string
-    isFast?: boolean
+    label: string
 }
 
 const DateTimeInput = (props: IProps) => {
-    const {label = '', isFast, ...rest} = props
-
-    const render = (fieldProps: FieldProps) => {
-        const {field, form} = fieldProps
-        const name = field.name;
-        const value = field.value;
-        const error = getIn(form.errors, name);
-        const isTouched = getIn(form.touched, name);
-        const wasSubmitted = form.submitCount > 0;
-        const showError = hasValue(error) && (isTouched || wasSubmitted)
-
-        function handleChange(date: any) {
-            form.setFieldValue(name, date);
-        }
-
-        function handleClose() {
-            form.setFieldTouched(name)
-        }
-
-        const extras = {
-            fullWidth: true,
-            label,
-            placeholder: '10/10/2018',
-            error: showError,
-            helperText: showError ? error : undefined
-        }
-        return <DateTimePicker
-                clearable
-                animateYearScrolling={false}
-                value={value || null}
-                onChange={handleChange}
-                onClose={handleClose}
-                autoOk
-                {...extras}
-            />
-    }
-    if (isFast) {
-        return (
-            <FastField {...rest}>
-                {render}
-            </FastField>
-        )
-    } else {
-        return (
-            <Field {...rest}>
-                {render}
-            </Field>
-        )
-    }
+    return <Field name={props.name} label={props.label} component={Component}/>
 }
-
 
 export default DateTimeInput;
