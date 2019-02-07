@@ -3,6 +3,7 @@ import {Theme, WithStyles} from '@material-ui/core';
 import createStyles from '@material-ui/core/styles/createStyles';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+
 import Grid from '@material-ui/core/Grid';
 import ContactsIcon from '@material-ui/icons/Contacts';
 import PeopleIcon from '@material-ui/icons/People';

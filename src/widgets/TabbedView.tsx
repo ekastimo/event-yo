@@ -1,14 +1,17 @@
 import * as React from 'react';
-import {Theme, WithStyles} from '@material-ui/core';
+import {Theme, WithStyles,WithTheme} from '@material-ui/core';
 import createStyles from '@material-ui/core/styles/createStyles';
 import {withStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Paper from '@material-ui/core/Paper';
-export interface ITabElement{
+
+import SwipeableViews from 'react-swipeable-views';
+
+export interface ITabElement {
     id: string
-    icon:  string | React.ReactElement<any>
+    icon: string | React.ReactElement<any>
     component: React.ReactNode
     title: React.ReactNode
 }
@@ -29,7 +32,7 @@ const styles = (theme: Theme) =>
         }
     });
 
-interface IProps extends WithStyles<typeof styles> {
+interface IProps extends WithStyles<typeof styles>,WithTheme {
     data: ITabElement[]
 }
 
@@ -38,8 +41,12 @@ class TabbedView extends React.Component<IProps> {
         value: 0,
     }
 
+    handleChangeIndex = (index:number) => {
+        this.setState({ value: index });
+    };
+
     public render() {
-        const {classes, data} = this.props;
+        const {classes, data,theme} = this.props;
         const {value} = this.state;
         const item: ITabElement = data[value]
         return (
@@ -53,18 +60,24 @@ class TabbedView extends React.Component<IProps> {
                         variant='fullWidth'
                     >
                         {
-                        data.map((it: ITabElement)=>(
-                            <Tab
-                                key={it.id}
-                                label={it.title}
-                                icon={it.icon}
-                            />
-                        ))
-                    }
+                            data.map((it: ITabElement) => (
+                                <Tab
+                                    key={it.id}
+                                    label={it.title}
+                                    icon={it.icon}
+                                />
+                            ))
+                        }
                     </Tabs>
                 </AppBar>
                 <Paper>
-                    {item.component}
+                    <SwipeableViews
+                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                        index={this.state.value}
+                        onChangeIndex={this.handleChangeIndex}
+                    >
+                        {data.map(it=>it.component)}
+                    </SwipeableViews>
                 </Paper>
 
             </div>
@@ -76,4 +89,4 @@ class TabbedView extends React.Component<IProps> {
     }
 }
 
-export default withStyles(styles)(TabbedView)
+export default withStyles(styles,{ withTheme: true })(TabbedView)

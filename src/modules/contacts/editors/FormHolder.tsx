@@ -112,7 +112,7 @@ class FormHolder extends React.Component<IProps> {
         if (isNew) {
             post(url, values,
                 (data) => {
-                    Toast.info('Contact created')
+                    Toast.info('Operation successful')
                     this.setState(() => ({data}))
                     this.props.onAjaxComplete(data)
                     this.props.onClose()

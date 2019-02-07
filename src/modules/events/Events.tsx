@@ -137,7 +137,7 @@ class Events extends React.Component<IProps, IState> {
         const value = e.target.value
         const shouldSearch = !value || value.length > 2
         this.setState((prevState: any) => {
-            const searchData: ISearch = {...prevState.search, name: value}
+            const searchData: ISearch = {...prevState.search, query: value}
             if (shouldSearch) {
                 this.reloadData(searchData)
                 return {...prevState, search: searchData, isLoading: true}

@@ -9,7 +9,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import MoreMenu from "../../../widgets/MoreMenu";
 import AgendaItem from "./AgendaItem";
 import {IEvent, IEventItem} from "../types";
 import {getImage, parseRange} from "../../../utils/TK";
@@ -23,6 +26,11 @@ const styles = (theme: Theme) =>
         },
         inline: {
             display: 'inline',
+        },
+        fab: {
+            position: 'absolute',
+            bottom: theme.spacing.unit * 2,
+            right: theme.spacing.unit * 2,
         },
     });
 
@@ -70,20 +78,21 @@ class Agenda extends React.Component<IProps, any> {
                                             </React.Fragment>
                                         }
                                     />
+                                    <ListItemSecondaryAction>
+                                        <MoreMenu
+                                            options={["Edit", "Delete"]}
+                                            onItemSelected={this.onItemSelected}
+                                        />
+                                    </ListItemSecondaryAction>
                                 </ListItem>
                             })
                         }
 
                     </List>
-                    <List>
-                        {
-                            data.items.map((it: IEventItem) => {
-                                const {id} = it
-                                return <AgendaItem key={id} data={it} handleClick={this.handleClick.bind(this, it.id)}/>
-                            })
-                        }
-                    </List>
                 </Grid>
+                <Fab className={classes.fab} color='primary'>
+                    <AddIcon/>
+                </Fab>
             </Grid>
         );
     }
@@ -95,6 +104,21 @@ class Agenda extends React.Component<IProps, any> {
             return {open}
         });
     };
+
+    private onItemSelected = (item: any) => {
+        const {data} = this.props
+        switch (item) {
+            case 'View':
+                //onView(data)
+                break;
+            case 'Edit':
+                //onEdit(data)
+                break;
+            case 'Delete':
+                ///onDelete(data)
+                break;
+        }
+    }
 
 
 }
