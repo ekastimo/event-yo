@@ -20,8 +20,6 @@ import {getImage, parseRange} from "../../../utils/TK";
 const styles = (theme: Theme) =>
     createStyles({
         root: {
-            width: '100%',
-            maxWidth: 700,
             backgroundColor: theme.palette.background.paper,
         },
         inline: {
@@ -46,18 +44,18 @@ class Agenda extends React.Component<IProps, any> {
     };
 
 
+
     public render() {
         const {classes, data} = this.props;
         const itemProps = {alignItems: "flex-start"}
         return (
-            <Grid container justify="center" className={classes.root}>
-                <Grid item xs={12} sm={10}>
+            <Grid container  justify='center' spacing={8} className={classes.root}>
+                <Grid item xs={12} sm={8}>
                     <List className={classes.root}>
-
                         {
                             data.items.map((it: IEventItem) => {
                                 const {id} = it
-                                return <ListItem {...itemProps} key={id}>
+                                return <ListItem alignItems='flex-start' key={id}>
                                     <ListItemAvatar>
                                         <Avatar alt={it.name} src={getImage(it.images[0])}/>
                                     </ListItemAvatar>
@@ -69,10 +67,10 @@ class Agenda extends React.Component<IProps, any> {
                                         }
                                         secondary={
                                             <React.Fragment>
-                                                <Typography component="span" variant="body1" gutterBottom>
+                                                <Typography component="span" variant="subtitle1" gutterBottom>
                                                     {it.name}
                                                 </Typography>
-                                                <Typography component="span" variant="body2" gutterBottom>
+                                                <Typography component="span" variant="subtitle2" gutterBottom>
                                                     {it.details}
                                                 </Typography>
                                             </React.Fragment>
@@ -87,7 +85,6 @@ class Agenda extends React.Component<IProps, any> {
                                 </ListItem>
                             })
                         }
-
                     </List>
                 </Grid>
                 <Fab className={classes.fab} color='primary'>
@@ -108,9 +105,6 @@ class Agenda extends React.Component<IProps, any> {
     private onItemSelected = (item: any) => {
         const {data} = this.props
         switch (item) {
-            case 'View':
-                //onView(data)
-                break;
             case 'Edit':
                 //onEdit(data)
                 break;

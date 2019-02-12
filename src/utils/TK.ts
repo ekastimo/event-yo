@@ -222,3 +222,13 @@ export function guid() {
 export const toOptions = (data: string[]): IOption[] => {
     return data.map(it => ({label: it, value: it}))
 }
+
+export const trimSentence = (data: string,number: number): string => {
+    // const results = ''
+    // const words = data.split(" ")
+    // for (const word of words){
+    //     const temp = `${word}`
+    //     if(results.length
+    // }
+    return ""
+}

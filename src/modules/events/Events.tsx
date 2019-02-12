@@ -14,6 +14,8 @@ import {newPersonSchema} from "../contacts/config";
 import NewPersonEditor from "../contacts/editors/NewPersonEditor";
 import FormHolder from "../contacts/editors/FormHolder";
 import XToolBar from "../../widgets/XToolBar";
+import EventForm from "./EventForm";
+import {eventSchema} from "./config";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -87,16 +89,17 @@ class Events extends React.Component<IProps, IState> {
                         </Grid>
                 }
                 <FormHolder
-                    title='New Contact'
+                    title='New Event'
                     open={this.state.showDialog}
                     onClose={this.handleClose}
                     data={{}}
-                    url={remoteRoutes.contactsPerson}
+                    url={remoteRoutes.events}
                     isNew={true}
-                    schema={newPersonSchema}
+                    schema={eventSchema}
                     onAjaxComplete={this.handleCompletion}
+                    debug
                 >
-                    <NewPersonEditor/>
+                    <EventForm/>
                 </FormHolder>
             </div>
         );

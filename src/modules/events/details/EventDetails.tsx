@@ -62,7 +62,7 @@ interface IProps extends WithStyles<typeof styles>, RouteComponentProps<IPrams> 
 class EventDetails extends React.Component<IProps, IState> {
     public state = {
         isLoading: true,
-        value: 1,
+        value: 0,
         data: undefined,
     };
 

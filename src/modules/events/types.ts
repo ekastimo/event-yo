@@ -15,6 +15,7 @@ export interface IEvent {
     id: string
     name: string,
     details: string,
+    publicity: string,
     startDate: Date,
     endDate: Date,
     venue: string,

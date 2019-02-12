@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 import {ITeamMember} from "./types";
 import * as faker from 'faker';
+import {reqString} from "../../data/validations";
 
 export const defaultData = {
     person: {
@@ -14,11 +15,7 @@ export const defaultData = {
 export const teamMemberCategory = ['Member', 'Leader']
 export const teamMemberStatus = ['Active', 'Blocked']
 
-export const invalidInputs = [null, 'null', 'undefined', undefined, '']
-const reqMsg = 'Field is required'
 
-const nullableString = yup.string().nullable(true)
-const reqString = nullableString.required(reqMsg).notOneOf(invalidInputs, reqMsg)
 
 export const teamSchema = yup.object().shape(
     {

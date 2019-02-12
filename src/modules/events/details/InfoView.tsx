@@ -11,12 +11,14 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import EventIcon from '@material-ui/icons/Event';
 import Button from '@material-ui/core/Button'
+import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import {Theme, withStyles} from '@material-ui/core/styles';
 import moment from 'moment';
 import createStyles from "@material-ui/core/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import {IEvent} from "../types";
+import {printDate} from "../../../utils/TK";
 
 
 const styles = (theme: Theme) =>
@@ -25,9 +27,16 @@ const styles = (theme: Theme) =>
             // maxWidth: 400,
         },
         media: {
-            height: 0,
-            paddingTop: '56.25%', // 16:9
+            objectFit: 'cover',
+            height: 150,
+            [theme.breakpoints.up('md')]: {
+                height: 350
+            }
         },
+        chip:{
+            margin: theme.spacing.unit
+        }
+        ,
         actions: {
             display: 'flex',
             backgroundColor: ''
@@ -54,6 +63,11 @@ const styles = (theme: Theme) =>
         extendedIcon: {
             fontSize: 16,
         },
+        tags:{
+            display:'flex',
+            flexDirection:'row',
+            justifyContent:'center'
+        }
     });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -68,13 +82,13 @@ interface IState {
 class InfoView extends React.Component<IProps, IState> {
     public state = {
         open: {},
-        expanded:false,
-        data:undefined
+        expanded: false,
+        data: undefined
     };
 
 
     public render() {
-        const {classes,data} = this.props;
+        const {classes, data} = this.props;
         const shortDate = (dt: any) => moment(dt).format('MMM Do');
         const shortTime = (dt: any) => moment(dt).format('LT');
         if (!data) {
@@ -94,14 +108,15 @@ class InfoView extends React.Component<IProps, IState> {
                                 className={classes.media}
                                 image={event.images[0]}
                                 title='Event Image'
+                                component="img"
                             />
                             <CardContent>
-                                <Typography gutterBottom variant='title'>
+                                <Typography gutterBottom variant="h5">
                                     {event.name}
                                 </Typography>
-                                <Typography component='p'>
-                                    {event.startDate}
-                                </Typography>
+                                <div className={classes.tags}>
+                                    {event.tags.map(it=><Chip key={it} label={`#${it}`} className={classes.chip} clickable />)}
+                                </div>
                             </CardContent>
                             <CardActions className={classes.actions} disableActionSpacing>
                                 <Grid container justify='center' spacing={8}>
@@ -130,10 +145,9 @@ class InfoView extends React.Component<IProps, IState> {
                                     <Grid item xs={12} sm={6}>
                                         <div style={{display: 'inline-block'}}>
                                             <EventIcon/>
-                                        </div>
-                                        &nbsp;&nbsp;
+                                        </div>                                         &nbsp;&nbsp;
                                         <div style={{display: 'inline-block'}}>
-                                            <Typography variant='subheading'>
+                                            <Typography variant='subtitle2'>
                                                 {shortDate(event.startDate)} - {shortDate(event.endDate)}
                                             </Typography>
                                             <Typography variant='caption'>
@@ -144,10 +158,9 @@ class InfoView extends React.Component<IProps, IState> {
                                     <Grid item xs={12} sm={6}>
                                         <div style={{display: 'inline-block'}}>
                                             <MyLocationIcon/>
-                                        </div>
-                                        &nbsp;&nbsp;
+                                        </div>                                        &nbsp;&nbsp;
                                         <div style={{display: 'inline-block'}}>
-                                            <Typography variant='subheading'>
+                                            <Typography variant='subtitle2'>
                                                 {event.venue}
                                             </Typography>
                                             <Typography variant='caption'>
@@ -156,23 +169,16 @@ class InfoView extends React.Component<IProps, IState> {
                                         </div>
                                     </Grid>
                                 </Grid>
-
                             </CardContent>
                             <CardContent>
-                                <Typography component='p'>{event.details}</Typography>
+                                <Typography variant='body1'>{event.details}</Typography>
                             </CardContent>
-
                         </Card>
                     </Grid>
                 </Grid>
-
             </div>
         );
     }
-
-    // private handleExpandClick = () => {
-    //     this.setState(state => ({expanded: !state.expanded}));
-    // };
 }
 
 

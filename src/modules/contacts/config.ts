@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import {fakeRecord} from '../../utils/fakeData';
 import {IContact, IPerson} from './types';
 import {countryCodes} from "../../data/countries";
-
+import {invalidInputs, nullableString, reqDate, reqMsg, reqString} from "../../data/validations";
 
 export const defaultData = {
     person: {
@@ -53,12 +53,7 @@ export const civilStatus = ['Single', 'Married', 'Divorced', 'Other']
 export const emailCategories = ['Personal', 'Work', 'Other']
 export const phoneCategories = ['Mobile', 'Office', 'Home', 'Fax', 'Other']
 export const addressCategories = ['Home', 'Work', 'Other']
-export const invalidInputs = [null, 'null', 'undefined', undefined, '']
-const reqMsg = 'Field is required'
 
-const nullableString = yup.string().nullable(true)
-const reqString = nullableString.required(reqMsg).notOneOf(invalidInputs, reqMsg)
-const reqDate = yup.date().required(reqMsg).notOneOf(invalidInputs, reqMsg).nullable(true)
 
 export const personSchema = yup.object().shape(
     {
