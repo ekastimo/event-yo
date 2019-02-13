@@ -110,11 +110,14 @@ class Main extends React.Component<IProps> {
                         >
                             <MenuIcon/>
                         </IconButton>
-                        <Typography variant="title" color="inherit" noWrap={true} className={classes.grow}>
+                        <Typography variant="h6" color="inherit" noWrap={true} className={classes.grow}>
                             Demo
                         </Typography>
-                        <Button color="inherit" onClick={this.props.handleLogout} size={"small"}>Log
-                            out</Button>
+                        <Button
+                            color="inherit"
+                            onClick={this.props.handleLogout}
+                            size={"small"}>
+                            LOG OUT</Button>
                     </Toolbar>
                 </AppBar>
                 <Hidden mdUp={true}>

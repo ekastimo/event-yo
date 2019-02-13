@@ -15,6 +15,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import createStyles from "@material-ui/core/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import {IEvent} from "./types";
+import {trimSentence} from "../../utils/TK";
 
 
 const styles = (theme: Theme) =>
@@ -78,7 +79,7 @@ class EventItem extends React.Component<IProps> {
                         title="Event Image"
                     />
                     <CardContent>
-                        <Typography component="p">{data.details}</Typography>
+                        <Typography component="p">{trimSentence(data.details,100)}</Typography>
                     </CardContent>
                     <CardActions className={classes.actions} disableActionSpacing>
                         <IconButton aria-label="Add to favorites">

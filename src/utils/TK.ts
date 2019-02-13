@@ -224,11 +224,14 @@ export const toOptions = (data: string[]): IOption[] => {
 }
 
 export const trimSentence = (data: string,number: number): string => {
-    // const results = ''
-    // const words = data.split(" ")
-    // for (const word of words){
-    //     const temp = `${word}`
-    //     if(results.length
-    // }
-    return ""
+    let result = ''
+    const words = data.split(" ")
+    for (const word of words){
+        const temp = `${result} ${word}`
+        if(temp.length>=number){
+            return result.trim() + '...'
+        }
+        result = temp;
+    }
+    return result
 }
