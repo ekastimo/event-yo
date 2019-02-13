@@ -5,12 +5,10 @@ export interface IOption {
 
 
 export interface IUser {
-    salutation: string
-    firstName: string
-    otherNames: string
-    gender: string
-    dateOfBirth: Date,
-    civilStatus: string,
-    about: string,
+    id: string
     avatar: string
+    username: string
+    email: string
+    fullName: string
+    roles: string[]
 }

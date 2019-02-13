@@ -3,6 +3,7 @@ import {fakeRecord} from '../../utils/fakeData';
 import {IContact, IPerson} from './types';
 import {countryCodes} from "../../data/countries";
 import {invalidInputs, nullableString, reqDate, reqMsg, reqString} from "../../data/validations";
+import {IUser} from "../../data/types";
 
 export const defaultData = {
     person: {

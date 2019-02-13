@@ -117,7 +117,7 @@ class AgendaItem extends React.Component<IProps> {
                                             </Grid>
                                         </Hidden>
                                         <Grid xs={12} item>
-                                            <Typography variant="title" component='h1'
+                                            <Typography variant="h6" component='h1'
                                                         className={classes.titleStyle}>{data.name}</Typography>
                                         </Grid>
                                         <Grid xs={10} item>

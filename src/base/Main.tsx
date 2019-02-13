@@ -23,57 +23,45 @@ const drawerWidth = 240;
 const styles = (theme: Theme) =>
     createStyles({
         root: {
-            flexGrow: 1,
-            height: '100%',
-            zIndex: 1,
-            overflow: 'hidden',
-            position: 'relative',
             display: 'flex',
-            width: '100%',
+        },
+        drawer: {
+            [theme.breakpoints.up('sm')]: {
+                width: drawerWidth,
+                flexShrink: 0,
+            },
         },
         appBar: {
-            position: 'absolute',
             marginLeft: drawerWidth,
-            [theme.breakpoints.up('md')]: {
+            [theme.breakpoints.up('sm')]: {
                 width: `calc(100% - ${drawerWidth}px)`,
             },
         },
-        navIconHide: {
-            [theme.breakpoints.up('md')]: {
+        menuButton: {
+            marginRight: 20,
+            [theme.breakpoints.up('sm')]: {
                 display: 'none',
             },
         },
         toolbar: theme.mixins.toolbar,
         drawerPaper: {
             width: drawerWidth,
-            height: '100%',
-            [theme.breakpoints.up('md')]: {
-                position: 'relative',
-            },
         },
-        mainBody: {
+        content: {
             flexGrow: 1,
-            backgroundColor: theme.palette.background.default,
             [theme.breakpoints.up('sm')]: {
-                padding: theme.spacing.unit,
-            },
-            overflow: 'auto'
+                padding: theme.spacing.unit*2,
+            }
         },
-        fillHeight: {
-            height: '100%'
-        },
-        logoutButton: {
-            float: 'right'
-        }, grow: {
+        grow: {
             flexGrow: 1,
-        }
+        },
     });
 
 export interface IProps extends WithStyles<typeof styles> {
     theme: any,
     handleLogout: () => any
 }
-
 
 class Main extends React.Component<IProps> {
     public state = {
@@ -91,7 +79,7 @@ class Main extends React.Component<IProps> {
     public render() {
         const {classes, theme} = this.props;
         const drawer = (
-            <div className={classes.fillHeight}>
+            <div >
                 <NavProfile/>
                 <Divider/>
                 <NavBar onClose={this.closeDrawer}/>
@@ -100,18 +88,18 @@ class Main extends React.Component<IProps> {
 
         return (
             <div className={classes.root}>
-                <AppBar className={classes.appBar}>
+                <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
                             onClick={this.handleDrawerToggle}
-                            className={classes.navIconHide}
+                            className={classes.menuButton}
                         >
                             <MenuIcon/>
                         </IconButton>
-                        <Typography variant="h6" color="inherit" noWrap={true} className={classes.grow}>
-                            Demo
+                        <Typography variant="h6" color="inherit" noWrap className={classes.grow}>
+                            Responsive drawer
                         </Typography>
                         <Button
                             color="inherit"
@@ -120,34 +108,34 @@ class Main extends React.Component<IProps> {
                             LOG OUT</Button>
                     </Toolbar>
                 </AppBar>
-                <Hidden mdUp={true}>
-                    <Drawer
-                        variant="temporary"
-                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                        open={this.state.mobileOpen}
-                        onClose={this.handleDrawerToggle}
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                        ModalProps={{
-                            keepMounted: true, // Better open performance on mobile.
-                        }}
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
-                <Hidden smDown={true} implementation="css">
-                    <Drawer
-                        variant="permanent"
-                        open={true}
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
-                <main className={classes.mainBody}>
+                <nav className={classes.drawer}>
+                    {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+                    <Hidden smUp implementation="css">
+                        <Drawer
+                            variant="temporary"
+                            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                            open={this.state.mobileOpen}
+                            onClose={this.handleDrawerToggle}
+                            classes={{
+                                paper: classes.drawerPaper,
+                            }}
+                        >
+                            {drawer}
+                        </Drawer>
+                    </Hidden>
+                    <Hidden xsDown implementation="css">
+                        <Drawer
+                            classes={{
+                                paper: classes.drawerPaper,
+                            }}
+                            variant="permanent"
+                            open
+                        >
+                            {drawer}
+                        </Drawer>
+                    </Hidden>
+                </nav>
+                <main className={classes.content}>
                     <div className={classes.toolbar}/>
                     <ContentSwitch/>
                 </main>

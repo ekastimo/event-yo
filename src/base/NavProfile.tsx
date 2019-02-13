@@ -5,40 +5,45 @@ import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
 import * as React from 'react';
 import {images} from "../assets/images";
+import {connect} from "react-redux";
+import {doLogin, doLogout} from "../data/coreActions";
+import {IUser} from "../data/types";
+import {WithStyles} from "@material-ui/core";
+import {isNullOrEmpty} from "../utils/TK";
 
-interface IProps {
-    classes?: any
+interface IProps extends WithStyles<typeof styles>{
+    user: IUser
+    handleLogin: (data: any) => any
+    handleLogout: () => any
 }
 
 class NavProfile extends React.Component<IProps> {
 
     public render() {
-        const {classes} = this.props
+        const {classes,user} = this.props
         return (
             <div className={classes.holder}>
                 <div className={classes.row}>
                     <Avatar
                         alt="Profile"
-                        src={images.profile}
+                        src={isNullOrEmpty(user.avatar)?images.profile:user.avatar}
                         className={classNames(classes.avatar, classes.bigAvatar)}
                     />
                 </div>
                 <div className={classes.row}>
-                    <Typography component="p" className={classes.profileText}>
-                        Mujungu Eva
+                    <Typography variant='subtitle1' className={classes.profileText}>
+                        {user.fullName}
                     </Typography>
                 </div>
                 <div className={classes.row}>
-                    <Typography variant="caption" component="p" className={classes.profileText}>
-                        mujux@gmail.com
+                    <Typography variant="caption" className={classes.profileText}>
+                        {user.email}
                     </Typography>
                 </div>
             </div>
         )
-
     }
 }
-
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -62,7 +67,19 @@ const styles = (theme: Theme) =>
         }
     });
 
-
-export default withStyles(styles)(NavProfile);
+export default connect(
+    (store: any) => {
+        return {
+            token: store.core.token,
+            user: store.core.user
+        }
+    },
+    (dispatch: any) => {
+        return {
+            handleLogin: (data: any) => dispatch(doLogin(data)),
+            handleLogout: () => dispatch(doLogout())
+        }
+    }
+)(withStyles(styles)(NavProfile))
 
 

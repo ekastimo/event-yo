@@ -25,7 +25,7 @@ class Error extends React.Component<IProps> {
                 <Grid item xs={12}>
                     <Grid container justify="center">
                         <Grid item>
-                            <Typography variant="headline" gutterBottom>
+                            <Typography variant="h5" gutterBottom>
                                 {message}
                             </Typography>
                         </Grid>

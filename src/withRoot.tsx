@@ -4,13 +4,13 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import * as React from 'react';
 
 const theme = createMuiTheme({
+    typography: {
+        useNextVariants: true,
+    },
     palette: {
         //  primary: purple,
         // secondary: green,
-    },
-    typography: {
-
-    },
+    }
 });
 
 function withRoot<P>(Component: React.ComponentType<P>) {
