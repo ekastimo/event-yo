@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {List, Theme, WithStyles} from "@material-ui/core";
+import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {remoteRoutes} from "../../../data/constants";
 import {del, search} from "../../../utils/ajax";
@@ -7,15 +7,14 @@ import {withStyles} from "@material-ui/core/styles";
 import {RouteComponentProps, withRouter} from 'react-router'
 
 import {ITeam, ITeamMember} from "../types";
-import Loading from "../../../widgets/Loading";
 import {teamMemberEditSchema, teamMembersSchema} from "../config";
 import FormHolder from "../../contacts/editors/FormHolder";
-import XToolBar from "../../../widgets/XToolBar";
 import MemberItem from "./MemberItem";
 import {default as EditMember} from "../editors/EditMember";
 import AddMember from "../editors/AddMember";
 import uiConfirm from "../../../widgets/confirm";
 import Toast from "../../../utils/Toast";
+import ListView from "../../../widgets/ListView";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -71,29 +70,25 @@ class Contacts extends React.Component<IProps, IState> {
         const {isLoading, data, isNew} = this.state
         return (
             <div>
-                <XToolBar
-                    handleChange={this.handleChange}
+
+                <ListView
                     title=''
-                    handleNew={this.handleNewContact}
-                />
-                {
-                    isLoading ?
-                        <Loading/>
-                        :
-                        <List>
-                            {
-                                data.map((it: any) => (
-                                    <MemberItem
-                                        key={it.id}
-                                        data={{...it}}
-                                        onView={this.handleEdit}
-                                        onEdit={this.handleEdit}
-                                        onDelete={this.handleDelete}
-                                    />
-                                ))
-                            }
-                        </List>
-                }
+                    handleAdd={this.handleNewContact}
+                    isLoading={isLoading}
+                    handleSearch={this.handleChange}
+                >
+                    {
+                        data.map((it: any) => (
+                            <MemberItem
+                                key={it.id}
+                                data={{...it}}
+                                onView={this.handleEdit}
+                                onEdit={this.handleEdit}
+                                onDelete={this.handleDelete}
+                            />
+                        ))
+                    }
+                </ListView>
                 <FormHolder
                     title='New Member'
                     open={this.state.showDialog}

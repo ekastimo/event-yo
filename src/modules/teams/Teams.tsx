@@ -6,7 +6,8 @@ import {search} from "../../utils/ajax";
 import {withStyles} from "@material-ui/core/styles";
 import {RouteComponentProps, withRouter} from 'react-router'
 import TeamItem from "./TeamItem";
-
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import {ITeam} from "./types";
 import Loading from "../../widgets/Loading";
 import {teamSchema} from "./config";

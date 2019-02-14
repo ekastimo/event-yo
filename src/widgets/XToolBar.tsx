@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Theme, WithStyles} from "@material-ui/core";
+import {Divider, Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {lighten} from '@material-ui/core/styles/colorManipulator';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -87,6 +87,7 @@ class XToolBar extends React.Component<IProps, any> {
                                     </Tooltip>
                                 </div>
                             </div>
+                            <Divider/>
                         </Fragment>
                 }
             </Toolbar>
