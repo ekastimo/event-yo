@@ -79,8 +79,9 @@ class EventDetails extends React.Component<IProps, IState> {
             return <Loading/>
         return (
             <div className={classes.root}>
-                <AppBar position="static" color="default">
+                <AppBar position="fixed" style={{top: 65, width: "100%"}} color="inherit">
                     <Tabs
+                        variant="fullWidth"
                         value={value}
                         onChange={this.handleChange}
                         scrollButtons="on"
@@ -93,8 +94,8 @@ class EventDetails extends React.Component<IProps, IState> {
                         <Tab label="Venue" icon={isNotMobile ? <MapIcon/> : undefined}/>
                     </Tabs>
                 </AppBar>
-                {value === 0 && <InfoView data={data}/>}
-                {value === 1 && <Agenda data={data} handleClick={this.killEvent}/>}
+                {value === 0 && <TabContainer><InfoView data={data}/></TabContainer>}
+                {value === 1 && <TabContainer><Agenda data={data} handleClick={this.killEvent}/></TabContainer>}
                 {value === 2 && <TabContainer>Someting</TabContainer>}
             </div>
         );

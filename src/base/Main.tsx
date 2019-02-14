@@ -48,10 +48,7 @@ const styles = (theme: Theme) =>
             width: drawerWidth,
         },
         content: {
-            flexGrow: 1,
-            [theme.breakpoints.up('sm')]: {
-                padding: theme.spacing.unit*2,
-            }
+            flexGrow: 1
         },
         grow: {
             flexGrow: 1,
