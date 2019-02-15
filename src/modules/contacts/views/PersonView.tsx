@@ -12,7 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import {IContact} from "../types";
 import PersonEditor from "../editors/PersonEditor";
-import FormHolder from "../editors/FormHolder";
+import FormHolder from "../../../widgets/FormHolder";
 import {remoteRoutes} from "../../../data/constants";
 import {personSchema, renderName} from "../config";
 import withWidth from '@material-ui/core/withWidth';
@@ -38,10 +38,10 @@ interface IDProps {
 }
 
 const MobileDisplayRow = (props: IDProps) => <React.Fragment>
-    <Typography variant="caption">
+    <Typography variant="subtitle2" gutterBottom>
         {props.label}
     </Typography>
-    <Typography variant="subheading">
+    <Typography variant="body2">
         {props.value}
     </Typography>
 </React.Fragment>
@@ -110,7 +110,7 @@ class PersonView extends React.Component<IProps, any> {
                     </CardContent>
                 </Card>
                 <FormHolder
-                    title='Edit Personal details'
+                    title='Edit Basic Information'
                     open={this.state.showDialog}
                     onClose={this.handleClose}
                     data={data.person}

@@ -1,23 +1,23 @@
 import * as React from 'react';
-import {WithStyles, withStyles} from "@material-ui/core";
+import {Theme, WithStyles, withStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
-import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
-import PhoneIcon from '@material-ui/icons/Email';
-import CheckCircleIcon from '@material-ui/icons/CheckCircleOutline';
-import CheckCircleOutlinedIcon from '@material-ui/icons/PanoramaFishEyeOutlined';
+import EmailIcon from '@material-ui/icons/Email';
+import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import {IContact, IEmail} from "../types";
-import FormHolder from "../editors/FormHolder";
+import FormHolder from "../../../widgets/FormHolder";
 import {remoteRoutes} from "../../../data/constants";
 import {emailSchema} from "../config";
 import EmailEditor from "../editors/EmailEditor";
+import uiConfirm from "../../../widgets/confirm";
+import {del} from "../../../utils/ajax";
+import Toast from "../../../utils/Toast";
+import ItemEditor from "./ItemEditor";
 
 const styles = () =>
     createStyles({
@@ -25,24 +25,6 @@ const styles = () =>
         cardHeader: {
             paddingBottom: 0
         },
-        decoIcon: {
-            float: 'left'
-        },
-        rightFloat: {
-            float: 'right'
-        },
-        label: {
-            float: 'left',
-            display: 'inline-block',
-            paddingBottom: 5
-        },
-        labelGrid: {
-            padding: 10
-        },
-        categoryIcon: {
-            float: 'left',
-            marginTop: 10
-        }
     });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -58,11 +40,13 @@ interface IState {
 class EmailView extends React.Component<IProps, IState> {
     public state = {
         showDialog: false,
+        isLoading: false,
         data: undefined
     }
 
     public render() {
         const {classes, data} = this.props
+        const {isLoading} = this.state
         return (
             <div className={classes.root}>
                 <Card elevation={1}>
@@ -80,33 +64,23 @@ class EmailView extends React.Component<IProps, IState> {
                         }
                     />
                     <CardContent>
-                        <Grid container>
+                        <div>
                             {
+                                data.emails&&
                                 data.emails.map((it: IEmail) => {
-                                    return <React.Fragment key={it.address}>
-                                        <Grid item xs={9} sm={9} className={classes.labelGrid}>
-                                            <PhoneIcon fontSize="small" className={classes.decoIcon}/>
-                                            <Typography className={classes.label}>&nbsp;&nbsp;{it.address}</Typography>
-                                        </Grid>
-
-                                        <Grid item xs={3} sm={3}>
-                                            {
-                                                it.isPrimary ?
-                                                    <CheckCircleIcon className={classes.categoryIcon}/>
-                                                    : <CheckCircleOutlinedIcon className={classes.categoryIcon}/>
-                                            }
-                                            <IconButton
-                                                aria-label="Edit"
-                                                onClick={this.handleEdit.bind(this, {...it})}
-                                                className={classes.rightFloat}
-                                            >
-                                                <EditIcon fontSize="small"/>
-                                            </IconButton>
-                                        </Grid>
-                                    </React.Fragment>
+                                    return <ItemEditor
+                                        key={it.id}
+                                        text={it.address}
+                                        isPrimary={it.isPrimary}
+                                        isLoading={isLoading}
+                                        primary={<EmailIcon fontSize="inherit"/>}
+                                        secondaryIcon={<EmailOutlinedIcon fontSize="inherit"/>}
+                                        handleEdit={this.handleEdit.bind(this, {...it})}
+                                        handleDelete={this.handleDelete.bind(this, {...it})}
+                                    />
                                 })
                             }
-                        </Grid>
+                        </div>
                     </CardContent>
                     <FormHolder
                         title='Edit Email'
@@ -136,6 +110,18 @@ class EmailView extends React.Component<IProps, IState> {
 
     private handleClose = () => {
         this.setState(() => ({showDialog: false, data: undefined}))
+    }
+    private handleDelete = (rec: IEmail) => {
+        uiConfirm("Do you really want to delete this?").then(() => {
+            const {id} = this.props.data;
+            const url = `${remoteRoutes.contactsEmail}/${id}/${rec.id}`;
+            del(url, data => {
+                Toast.info(data.message)
+                this.props.handleReload()
+            }, undefined, () => {
+
+            });
+        }).catch(e => undefined)
     }
 }
 

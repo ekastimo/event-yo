@@ -20,7 +20,7 @@ interface IProps extends WithStyles<typeof styles> {
 
 const PhoneEditor = (props: IProps) => {
     return (
-        <div style={{padding: 20}}>
+        <div style={{padding: 12}}>
             <Grid className={props.classes.root} container spacing={24}>
                 <Grid item xs={12} sm={3}>
                     <SelectInput name='category' label='Type' options={toOptions(phoneCategories)}/>

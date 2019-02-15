@@ -11,8 +11,8 @@ import createStyles from '@material-ui/core/styles/createStyles';
 import {WithStyles} from '@material-ui/core';
 import withWidth from '@material-ui/core/withWidth';
 
-import {handleError, post, put} from '../../../utils/ajax';
-import Toast from '../../../utils/Toast';
+import {handleError, post, put} from '../utils/ajax';
+import Toast from '../utils/Toast';
 
 const styles = () =>
     createStyles({
@@ -45,7 +45,7 @@ class FormHolder extends React.Component<IProps> {
         return (
             <Formik
                 ref={(node: any) => (this.form = node)}
-                initialValues={data}
+                initialValues={data||{}}
                 validationSchema={schema}
                 onSubmit={this.onSubmit}
                 enableReinitialize={true}

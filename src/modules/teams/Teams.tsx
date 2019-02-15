@@ -2,7 +2,7 @@ import * as React from 'react';
 import {List, Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {localRoutes, remoteRoutes} from "../../data/constants";
-import {search} from "../../utils/ajax";
+import {del, search} from "../../utils/ajax";
 import {withStyles} from "@material-ui/core/styles";
 import {RouteComponentProps, withRouter} from 'react-router'
 import TeamItem from "./TeamItem";
@@ -11,9 +11,13 @@ import AddIcon from '@material-ui/icons/Add';
 import {ITeam} from "./types";
 import Loading from "../../widgets/Loading";
 import {teamSchema} from "./config";
-import FormHolder from "../contacts/editors/FormHolder";
+import FormHolder from "../../widgets/FormHolder";
 import NewTeamEditor from "./editors/NewTeamEditor";
 import XToolBar from "../../widgets/XToolBar";
+import Toast from "../../utils/Toast";
+import uiConfirm from "../../widgets/confirm";
+import {renderName} from "../contacts/config";
+import ListView from "../../widgets/lists/ListView";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -55,35 +59,29 @@ class Contacts extends React.Component<IProps, IState> {
         }
     }
 
-
-
     public render() {
         const {isLoading, data} = this.state
         return (
             <div>
-                <XToolBar
-                    handleChange={this.handleChange}
+
+                <ListView
+                    isLoading={isLoading}
                     title='Teams'
-                    handleNew={this.handleNewContact}
-                />
-                {
-                    isLoading ?
-                        <Loading/>
-                        :
-                        <List>
-                            {
-                                data.map((it: any) => (
-                                    <TeamItem
-                                        key={it.id}
-                                        data={{...it}}
-                                        onView={this.handleEdit}
-                                        onEdit={this.handleEdit}
-                                        onDelete={this.handleEdit}
-                                    />
-                                ))
-                            }
-                        </List>
-                }
+                    hasData={data && data.length > 0}
+                    handleAdd={this.handleNewContact}
+                    handleSearch={this.handleChange}
+                >
+                    {
+                        data.map((it: any) => (
+                            <TeamItem
+                                key={it.id}
+                                data={{...it}}
+                                onEdit={this.handleEdit}
+                                onDelete={this.handleDelete}
+                            />
+                        ))
+                    }
+                </ListView>
                 <FormHolder
                     title='New Team'
                     open={this.state.showDialog}
@@ -104,7 +102,7 @@ class Contacts extends React.Component<IProps, IState> {
         this.reloadData(this.state.search)
     }
 
-    private reloadData(request: any={}) {
+    private reloadData(request: any = {}) {
         search(remoteRoutes.teams, request, data => {
             this.setState(() => ({data, isLoading: false}))
         }, undefined, () => {
@@ -141,6 +139,20 @@ class Contacts extends React.Component<IProps, IState> {
             }
             return {search: searchData}
         })
+    }
+
+    private handleDelete = (data: any) => {
+        const {name, id} = data;
+        uiConfirm(`Do you really want to delete ${name}?`).then(() => {
+            const url = `${remoteRoutes.teams}/${id}`;
+            this.setState(() => ({isLoading: true}))
+            del(url, data => {
+                Toast.info(data.message)
+                this.handleCompletion()
+            }, undefined, () => {
+                this.setState(() => ({isLoading: true}))
+            });
+        }).catch(e => undefined)
     }
 }
 

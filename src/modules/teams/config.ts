@@ -31,6 +31,13 @@ export const teamMemberEditSchema = yup.object().shape(
     }
 )
 
+export const teamMemberSimpleSchema = yup.object().shape(
+    {
+        teamId: reqString,
+        role: reqString,
+    }
+)
+
 export const teamMembersSchema = yup.object().shape(
     {
         role: reqString,

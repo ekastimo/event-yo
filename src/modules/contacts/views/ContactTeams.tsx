@@ -1,15 +1,26 @@
-import * as React from 'react';
-import {List, Theme, WithStyles} from "@material-ui/core";
+import React, {Fragment} from 'react';
+import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {remoteRoutes} from "../../../data/constants";
-import {get} from "../../../utils/ajax";
+import {del, get} from "../../../utils/ajax";
 import {withStyles} from "@material-ui/core/styles";
 import {RouteComponentProps, withRouter} from 'react-router'
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
-import {ITeam} from "../../teams/types";
-import Loading from "../../../widgets/Loading";
+import {ITeam, ITeamMember} from "../../teams/types";
+import Grid from '@material-ui/core/Grid';
+import ListView from "../../../widgets/lists/ListView";
+import {toOptions} from "../../../utils/TK";
+import {teamMemberCategory, teamMemberSimpleSchema, teamMemberStatus} from "../../teams/config";
+import SelectInput from "../../../widgets/inputs/SelectInput";
+import XRemoteSelect from "../../../widgets/inputs/XRemoteSelect";
+import {IOption} from "../../../data/types";
+import PersonEditor from "../editors/PersonEditor";
+import FormHolder from "../../../widgets/FormHolder";
+import XListItem from "../../../widgets/lists/XListItem";
+import Toast from "../../../utils/Toast";
+import uiConfirm from "../../../widgets/confirm";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -22,12 +33,13 @@ const styles = (theme: Theme) =>
     });
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any> {
-    contactId :string
+    contactId: string
 }
 
 interface IState {
     isLoading: boolean,
     data: ITeam[],
+    toEdit?: ITeam,
     search: ISearch,
     showDialog: boolean
 }
@@ -38,7 +50,7 @@ interface ISearch {
     name?: string
 }
 
-class Contacts extends React.Component<IProps, IState> {
+class ContactTeams extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props)
         this.state = {
@@ -53,36 +65,74 @@ class Contacts extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const {isLoading, data} = this.state
+        const {isLoading, data, showDialog, toEdit} = this.state
+        console.log("Rendering", toEdit)
         return (
             <div>
-                {
-                    isLoading ?
-                        <Loading/>
-                        :
-                        <List>
-                            {
-                                data.map((it: any) => (
-                                    <ListItem dense >
-                                        <Avatar alt={it.name} src={''}/>
-                                        <ListItemText
-                                            primary={it.name}
-                                            secondary={it.description}
-                                        />
-                                    </ListItem>
-                                ))
-                            }
-                        </List>
-                }
+                <ListView
+                    title=''
+                    isLoading={isLoading}
+                    handleAdd={this.handleAdd}
+                    hasData={data && data.length > 0}
+                    handleSearch={this.handleSearch}
+                >
+                    {
+                        data.map((it: any) => (
+
+                            <XListItem
+                                key={it.name}
+                                data={it}
+                                onDelete={this.handleDelete}
+                                onEdit={this.handleEdit}
+                            >
+                                <Avatar alt={it.name} src={''}/>
+                                <ListItemText
+                                    primary={it.name}
+                                    secondary={it.description}
+                                />
+                            </XListItem>
+                        ))
+                    }
+                </ListView>
+
+                <FormHolder
+                    title='Add to Team'
+                    open={showDialog}
+                    onClose={this.handleClose}
+                    data={toEdit}
+                    url={remoteRoutes.teamsMembersByContact}
+                    isNew={!toEdit}
+                    schema={teamMemberSimpleSchema}
+                    onAjaxComplete={this.reloadData}
+                    dataParser={this.dataParser}
+                >
+                    <TeamForm/>
+                </FormHolder>
             </div>
         )
+    }
+
+    /*
+    Clean up data from the form
+    {
+        role: "Leader",
+        teamId: {label: "Sample team", value: "d84d0a8c-6cb5-485d-b487-80359350fef5"
+    }
+    */
+    private dataParser = (data: any) => {
+        const {contactId} = this.props
+        const {teamId} = data;
+        if (typeof teamId === 'string') {
+            return {...data, contactId}
+        }
+        return {...data, contactId, teamId: teamId.value}
     }
 
     public componentDidMount() {
         this.reloadData()
     }
 
-    private reloadData() {
+    private reloadData = () => {
         const url = `${remoteRoutes.teamsMembersByContact}/${this.props.contactId}`
         get(url, data => {
             this.setState(() => ({data, isLoading: false}))
@@ -91,6 +141,60 @@ class Contacts extends React.Component<IProps, IState> {
         })
     }
 
+    private handleSearch = (query: string) => {
+        console.log("Search Item ", query)
+    }
+
+    private handleAdd = () => {
+        this.setState(() => ({showDialog: true}))
+    }
+
+    private handleClose = () => {
+        console.log("Closing dialog")
+        this.setState(() => ({showDialog: false, toEdit: undefined}))
+    }
+
+    private handleEdit = (selected: any) => {
+        const {teamId: value, name: label} = selected
+        const toEdit = {...selected, teamId: {value, label}}
+        this.setState(() => ({showDialog: true, toEdit}))
+    }
+
+    private handleDelete = (selected: any) => {
+        uiConfirm("Please confirm that you want to delete this member").then(() => {
+            const url = `${remoteRoutes.teamsMembers}/${selected.id}`
+            del(url, (resp: any) => {
+                Toast.info(resp.message)
+                this.reloadData()
+            })
+        });
+    }
 }
 
-export default withRouter(withStyles(styles)(Contacts))
+
+const TeamForm = (props: any) => {
+    const ids: any[] = []
+    const filter = (it: IOption) => ids.indexOf(it.value) === -1
+    const parser = (it: any) => ({label: it.name, value: it.id})
+    return <Fragment>
+        <div style={{padding: 12}}>
+            <Grid container spacing={24}>
+                <Grid item xs={12} sm={12}>
+                    <XRemoteSelect
+                        name='teamId' label='Team'
+                        remote={remoteRoutes.teams}
+                        parser={parser}
+                        filter={filter}
+                        isMulti={false}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                    <SelectInput name='role' label='Type' options={toOptions(teamMemberCategory)}/>
+                </Grid>
+            </Grid>
+        </div>
+    </Fragment>
+}
+
+
+export default withRouter(withStyles(styles)(ContactTeams))

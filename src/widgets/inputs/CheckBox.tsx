@@ -17,7 +17,7 @@ const CheckBox = (props: IProps) => {
     const render = (fieldProps: FieldProps) => {
         const {field, form} = fieldProps
         const name = field.name;
-        const value = field.value;
+        const value = field.value || false;
         const error = form.errors[name];
         const isTouched = form.touched[name];
         const showError = isTouched && error

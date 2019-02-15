@@ -18,7 +18,7 @@ interface IProps extends WithStyles<typeof styles> {
 
 const NewTeamEditor = (props: IProps) => {
     return (
-        <div style={{padding: 10}}>
+        <div style={{padding: 12}}>
             <Grid className={props.classes.root} container spacing={24}>
                 <Grid item xs={12} sm={12}>
 

@@ -12,7 +12,7 @@ import {search} from "../../utils/ajax";
 import {ISearch} from "../contacts/Contacts";
 import {newPersonSchema} from "../contacts/config";
 import NewPersonEditor from "../contacts/editors/NewPersonEditor";
-import FormHolder from "../contacts/editors/FormHolder";
+import FormHolder from "../../widgets/FormHolder";
 import XToolBar from "../../widgets/XToolBar";
 import EventForm from "./EventForm";
 import {eventSchema} from "./config";

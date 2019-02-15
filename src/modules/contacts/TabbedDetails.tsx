@@ -14,6 +14,7 @@ import PhoneView from "./views/PhoneView";
 import AddressView from "./views/AddressView";
 import TabbedView from "../../widgets/TabbedView";
 import ContactTeams from "./views/ContactTeams";
+import GridWrapper from "../../widgets/GridWrapper";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -48,7 +49,8 @@ function TabContainer(props: any) {
 class TabbedDetails extends React.Component<IProps> {
     public render() {
         const {classes, data} = this.props;
-        const contactInfo = <Grid container spacing={8} className={classes.tabContent}>
+        const contactInfo = <GridWrapper>
+            <Grid container spacing={16} className={classes.tabContent}>
             <Grid item xs={12} sm={6} lg={4}>
                 <EmailView data={data} handleReload={this.props.handleReload}/>
             </Grid>
@@ -59,6 +61,7 @@ class TabbedDetails extends React.Component<IProps> {
                 <AddressView data={data} handleReload={this.props.handleReload}/>
             </Grid>
         </Grid>
+        </GridWrapper>
         return (
             <div className={classes.root}>
                 <TabbedView
@@ -73,13 +76,13 @@ class TabbedDetails extends React.Component<IProps> {
                             id: '1',
                             title: "Teams",
                             icon: <PeopleIcon/>,
-                            component: <ContactTeams contactId={data.id}/>
+                            component: <ContactTeams key='2' contactId={data.id}/>
                         },
                         {
                             id: '2',
                             title: "More",
                             icon: <DomainIcon/>,
-                            component: <TabContainer>Item Three</TabContainer>
+                            component: <TabContainer key='3'>Item Three</TabContainer>
                         }
 
                     ]}

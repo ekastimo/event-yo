@@ -2,17 +2,20 @@ import * as React from 'react';
 import {List, Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {localRoutes, remoteRoutes} from "../../data/constants";
-import {search} from "../../utils/ajax";
+import {del, search} from "../../utils/ajax";
 import {withStyles} from "@material-ui/core/styles";
 import {RouteComponentProps, withRouter} from 'react-router'
 import ContactItem from "./ContactItem";
 
-import {IContact} from "./types";
+import {IContact, IEmail} from "./types";
 import Loading from "../../widgets/Loading";
-import {newPersonSchema} from "./config";
-import FormHolder from "./editors/FormHolder";
+import {newPersonSchema, renderName} from "./config";
+import FormHolder from "../../widgets/FormHolder";
 import NewPersonEditor from "./editors/NewPersonEditor";
 import XToolBar from "../../widgets/XToolBar";
+import ListView from "../../widgets/lists/ListView";
+import Toast from "../../utils/Toast";
+import uiConfirm from "../../widgets/confirm";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -48,7 +51,7 @@ class Contacts extends React.Component<IProps, IState> {
             showDialog: false,
             data: [],
             search: {
-                limit: 10,
+                limit: 40,
                 skip: 0
             }
         }
@@ -62,29 +65,24 @@ class Contacts extends React.Component<IProps, IState> {
         const {isLoading, data} = this.state
         return (
             <div>
-                <XToolBar
-                    handleChange={this.handleChange}
+                <ListView
+                    isLoading={isLoading}
                     title='Contacts'
-                    handleNew={this.handleNewContact}
-                />
-                {
-                    isLoading ?
-                        <Loading/>
-                        :
-                        <List>
-                            {
-                                data.map((contact: any) => (
-                                    <ContactItem
-                                        key={contact.id}
-                                        data={{...contact}}
-                                        onView={this.handleEdit}
-                                        onEdit={this.handleEdit}
-                                        onDelete={this.handleEdit}
-                                    />
-                                ))
-                            }
-                        </List>
-                }
+                    hasData={data && data.length > 0}
+                    handleAdd={this.handleNewContact}
+                    handleSearch={this.handleChange}
+                >
+                    {
+                        data.map((contact: any) => (
+                            <ContactItem
+                                key={contact.id}
+                                data={{...contact}}
+                                onEdit={this.handleEdit}
+                                onDelete={this.handleDelete}
+                            />
+                        ))
+                    }
+                </ListView>
                 <FormHolder
                     title='New Contact'
                     open={this.state.showDialog}
@@ -138,6 +136,20 @@ class Contacts extends React.Component<IProps, IState> {
             }
             return {search: searchData}
         })
+    }
+
+    private handleDelete = (data: any) => {
+        const {person, id} = data;
+        uiConfirm(`Do you really want to delete ${renderName(person)}?`).then(() => {
+            const url = `${remoteRoutes.contacts}/${id}`;
+            this.setState(() => ({isLoading: true}))
+            del(url, data => {
+                Toast.info(data.message)
+                this.handleCompletion()
+            }, undefined, () => {
+                this.setState(() => ({isLoading: true}))
+            });
+        }).catch(e => undefined)
     }
 }
 

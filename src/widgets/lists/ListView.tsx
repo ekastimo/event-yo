@@ -1,20 +1,24 @@
 import * as React from 'react';
-import {List, Theme, WithStyles} from "@material-ui/core";
+import {List, ListItem, ListItemText, Theme, WithStyles} from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
 import createStyles from "@material-ui/core/styles/createStyles";
 import {withStyles} from "@material-ui/core/styles";
 import Fab from '@material-ui/core/Fab';
+import Hidden from '@material-ui/core/Hidden';
 import AddIcon from '@material-ui/icons/Add';
-import XToolBar from "./XToolBar";
-import Loading from "./Loading";
+import XToolBar from "../XToolBar";
+import Loading from "../Loading";
 
 
 const styles = (theme: Theme) =>
     createStyles({
-        root: {
+        root: {},
+        bottomPad: {
+            backgroundColor: 'blue',
+            height: theme.spacing.unit * 4
         },
         item: {
-            position: 'relative',
+            overflow: 'auto'
         },
         fab: {
             position: 'absolute',
@@ -28,15 +32,16 @@ interface IProps extends WithStyles<typeof styles> {
     handleSearch?: (query: string) => any,
     title: string,
     handleAdd: () => any,
+    hasData: boolean,
     children: React.ReactNode
 }
 
 const ListView = (props: IProps) => {
-    const {isLoading, handleSearch, title, handleAdd, children, classes} = props
+    const {isLoading, handleSearch, title, handleAdd, children, classes, hasData} = props
     return (
         <div className={classes.root}>
             <Grid container spacing={0} justify='center'>
-                <Grid item xs={12} sm={8} className={classes.item}>
+                <Grid item xs={12} sm={8} md={7} className={classes.item}>
                     {
                         handleSearch &&
                         <XToolBar
@@ -46,16 +51,24 @@ const ListView = (props: IProps) => {
                         />
                     }
                     {
-                        isLoading ?
-                            <Loading/>
-                            :
+                        isLoading ? <Loading/> :
                             <List>
                                 {children}
+                                {
+                                    !hasData &&
+                                    <ListItem dense>
+                                        <ListItemText
+                                            primary='No records found...'
+                                        />
+                                    </ListItem>
+                                }
                             </List>
                     }
-                    <Fab className={classes.fab} color='primary'>
-                        <AddIcon/>
-                    </Fab>
+                    <Hidden mdUp>
+                        <Fab className={classes.fab} color='primary' onClick={handleAdd}>
+                            <AddIcon/>
+                        </Fab>
+                    </Hidden>
                 </Grid>
             </Grid>
         </div>

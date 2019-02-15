@@ -2,13 +2,14 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import * as React from 'react';
+//import {green, purple} from "@material-ui/core/colors";
 
 const theme = createMuiTheme({
     typography: {
         useNextVariants: true,
     },
     palette: {
-        //  primary: purple,
+        // primary: purple,
         // secondary: green,
     }
 });

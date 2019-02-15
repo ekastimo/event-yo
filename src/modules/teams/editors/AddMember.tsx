@@ -28,7 +28,7 @@ const AddMember = (props: IProps) => {
     const filter = (it: IOption) => ids.indexOf(it.value)=== -1
     const parser = (it: any) => ({label: it.fullName, value: it.id})
     return (
-        <div style={{padding: 20}}>
+        <div style={{padding: 12}}>
             <Grid className={props.classes.root} container spacing={24}>
                 <Grid item xs={12} sm={12}>
                     <XRemoteSelect

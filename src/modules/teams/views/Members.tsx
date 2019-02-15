@@ -8,13 +8,13 @@ import {RouteComponentProps, withRouter} from 'react-router'
 
 import {ITeam, ITeamMember} from "../types";
 import {teamMemberEditSchema, teamMembersSchema} from "../config";
-import FormHolder from "../../contacts/editors/FormHolder";
+import FormHolder from "../../../widgets/FormHolder";
 import MemberItem from "./MemberItem";
 import {default as EditMember} from "../editors/EditMember";
 import AddMember from "../editors/AddMember";
 import uiConfirm from "../../../widgets/confirm";
 import Toast from "../../../utils/Toast";
-import ListView from "../../../widgets/ListView";
+import ListView from "../../../widgets/lists/ListView";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -75,14 +75,14 @@ class Contacts extends React.Component<IProps, IState> {
                     title=''
                     handleAdd={this.handleNewContact}
                     isLoading={isLoading}
-                    handleSearch={this.handleChange}
+                    hasData={data && data.length > 0}
+                    handleSearch={this.handleSearch}
                 >
                     {
                         data.map((it: any) => (
                             <MemberItem
                                 key={it.id}
                                 data={{...it}}
-                                onView={this.handleEdit}
                                 onEdit={this.handleEdit}
                                 onDelete={this.handleDelete}
                             />
@@ -136,9 +136,13 @@ class Contacts extends React.Component<IProps, IState> {
         this.setState(() => ({showDialog: true, isNew: false, selected}))
     }
 
+    private handleSearch = (query: string) => {
+        console.log("Searching for data")
+    }
+
     private handleDelete = (selected: ITeamMember) => {
         uiConfirm("Please confirm that you want to delete this member").then(() => {
-            const url = `${remoteRoutes.teams}/${selected.id}`
+            const url = `${remoteRoutes.teamsMembers}/${selected.id}`
             del(url, (resp: any) => {
                 Toast.info(resp.message)
                 this.reloadData()
@@ -154,18 +158,6 @@ class Contacts extends React.Component<IProps, IState> {
         this.setState(() => ({showDialog: false, isNew: true, selected: defaultData}))
     }
 
-    private handleChange = (e: any) => {
-        const value = e.target.value
-        const shouldSearch = !value || value.length > 2
-        this.setState((prevState: any) => {
-            const searchData: ISearch = {...prevState.search, name: value}
-            if (shouldSearch) {
-                this.reloadData(searchData)
-                return {...prevState, search: searchData, isLoading: true}
-            }
-            return {search: searchData}
-        })
-    }
 }
 
 export default withRouter(withStyles(styles)(Contacts))

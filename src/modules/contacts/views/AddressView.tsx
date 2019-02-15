@@ -1,47 +1,29 @@
 import * as React from 'react';
 import {WithStyles, withStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
-import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
-import PhoneIcon from '@material-ui/icons/Email';
-import CheckCircleIcon from '@material-ui/icons/CheckCircleOutline';
-import CheckCircleOutlinedIcon from '@material-ui/icons/PanoramaFishEyeOutlined';
+import LocationIcon from '@material-ui/icons/LocationCity';
+import LocationOutlinedIcon from '@material-ui/icons/LocationCityOutlined';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import {IAddress, IContact, IEmail} from "../types";
-import FormHolder from "../editors/FormHolder";
+import {IAddress, IContact} from "../types";
+import FormHolder from "../../../widgets/FormHolder";
 import {remoteRoutes} from "../../../data/constants";
 import {addressSchema} from "../config";
 import AddressEditor from "../editors/AddressEditor";
+import ItemEditor from "./ItemEditor";
+import Toast from "../../../utils/Toast";
+import {del} from "../../../utils/ajax";
+import uiConfirm from "../../../widgets/confirm";
 
 const styles = () =>
     createStyles({
         root: {},
         cardHeader: {
             paddingBottom: 0
-        },
-        decoIcon: {
-            float: 'left'
-        },
-        rightFloat: {
-            float: 'right'
-        },
-        label: {
-            float: 'left',
-            display: 'inline-block',
-            paddingBottom: 5
-        },
-        labelGrid: {
-            padding: 10
-        },
-        categoryIcon: {
-            float: 'left',
-            marginTop: 10
         }
     });
 
@@ -58,11 +40,13 @@ interface IState {
 class AddressView extends React.Component<IProps, IState> {
     public state = {
         showDialog: false,
-        data: undefined
+        data: undefined,
+        isLoading: false,
     }
 
     public render() {
         const {classes, data} = this.props
+        const {isLoading} = this.state
         return (
             <div className={classes.root}>
                 <Card>
@@ -80,33 +64,23 @@ class AddressView extends React.Component<IProps, IState> {
                         }
                     />
                     <CardContent>
-                        <Grid container>
-                            {data.addresses &&
-                            data.addresses.map((it: IAddress) => {
-                                return <React.Fragment key={it.id}>
-                                    <Grid item xs={9} sm={9} className={classes.labelGrid}>
-                                        <PhoneIcon fontSize="small" className={classes.decoIcon}/>
-                                        <Typography
-                                            className={classes.label}>&nbsp;&nbsp;{it.originalFreeform}</Typography>
-                                    </Grid>
-                                    <Grid item xs={3} sm={3}>
-                                        {
-                                            it.isPrimary ?
-                                                <CheckCircleIcon className={classes.categoryIcon}/>
-                                                : <CheckCircleOutlinedIcon className={classes.categoryIcon}/>
-                                        }
-                                        <IconButton
-                                            aria-label="Edit"
-                                            onClick={this.handleEdit.bind(this, {...it})}
-                                            className={classes.rightFloat}
-                                        >
-                                            <EditIcon fontSize="small"/>
-                                        </IconButton>
-                                    </Grid>
-                                </React.Fragment>
-                            })
+                        <div>
+                            {
+                                data.addresses &&
+                                data.addresses.map((it: IAddress) => {
+                                    return <ItemEditor
+                                        key={it.id}
+                                        text={it.originalFreeform}
+                                        isPrimary={it.isPrimary}
+                                        isLoading={isLoading}
+                                        primary={<LocationIcon fontSize="inherit"/>}
+                                        secondaryIcon={<LocationOutlinedIcon fontSize="inherit"/>}
+                                        handleEdit={this.handleEdit.bind(this, {...it})}
+                                        handleDelete={this.handleDelete.bind(this, {...it})}
+                                    />
+                                })
                             }
-                        </Grid>
+                        </div>
                     </CardContent>
                     <FormHolder
                         title='Edit Address'
@@ -137,6 +111,19 @@ class AddressView extends React.Component<IProps, IState> {
 
     private handleClose = () => {
         this.setState(() => ({showDialog: false, data: undefined}))
+    }
+
+    private handleDelete = (rec: IAddress) => {
+        uiConfirm("Do you really want to delete this?").then(() => {
+            const {id} = this.props.data;
+            const url = `${remoteRoutes.contactsAddress}/${id}/${rec.id}`;
+            del(url, data => {
+                Toast.info(data.message)
+                this.props.handleReload()
+            }, undefined, () => {
+
+            });
+        }).catch(e => undefined)
     }
 }
 

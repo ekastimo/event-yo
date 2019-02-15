@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{Fragment} from 'react';
 import {Theme, WithStyles,WithTheme} from '@material-ui/core';
 import createStyles from '@material-ui/core/styles/createStyles';
 import {withStyles} from '@material-ui/core/styles';
@@ -76,7 +76,7 @@ class TabbedView extends React.Component<IProps> {
                         index={this.state.value}
                         onChangeIndex={this.handleChangeIndex}
                     >
-                        {data.map(it=>it.component)}
+                        {data.map(it=><Fragment key={it.id}>{it.component}</Fragment>)}
                     </SwipeableViews>
                 </Paper>
 

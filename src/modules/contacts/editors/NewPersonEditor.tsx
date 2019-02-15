@@ -22,7 +22,7 @@ interface IProps extends WithStyles<typeof styles> {
 
 const NewPersonEditor = (props: IProps) => {
     return (
-        <div style={{padding: 20}}>
+        <div style={{padding: 12}}>
             <Grid className={props.classes.root} container spacing={24}>
                 <Grid item xs={12} sm={3}>
                     <SelectInput name='salutation' label='Salutation' options={toOptions(salutation)}/>

@@ -181,7 +181,7 @@ interface IProps extends WithStyles<typeof styles>, WithTheme {
     label: string
     name: string
     remote: string
-    isMulti: boolean
+    isMulti?: boolean
     parser?: (data: any) => IOption
     filter?: (data: IOption) => boolean
 }
@@ -215,7 +215,7 @@ class XRemoteSelect extends React.Component<IProps> {
     }
 
     render() {
-        const {classes, theme, label = '', ...rest} = this.props;
+        const {classes, theme, label = '',isMulti, ...rest} = this.props;
         const selectStyles = {
             input: (base: any) => ({
                 ...base,
@@ -258,7 +258,7 @@ class XRemoteSelect extends React.Component<IProps> {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     placeholder='Select..'
-                    isMulti
+                    isMulti={isMulti}
                     {...extraProps}
                 />
                 {showError && <FormHelperText error={true}>{error}</FormHelperText>}

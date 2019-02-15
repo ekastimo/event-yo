@@ -47,10 +47,10 @@ interface IDProps {
 }
 
 const MobileDisplayRow = (props: IDProps) => <React.Fragment>
-    <Typography variant="caption">
+    <Typography variant="subtitle2" gutterBottom>
         {props.label}
     </Typography>
-    <Typography variant="subheading">
+    <Typography variant="body2">
         {props.value}
     </Typography>
 </React.Fragment>
@@ -71,7 +71,7 @@ class Details extends React.Component<IProps, IState> {
             return <Loading/>
         }
         if (error || !data) {
-            return <Error message='Failed to load contact!'/>
+            return <Error message='Failed to load team data!'/>
         }
         return (
             <BasePanel>
@@ -118,7 +118,7 @@ class Details extends React.Component<IProps, IState> {
         if (validate.isDefined(teamId)) {
             const url = `${remoteRoutes.teams}/${teamId}`
             get(url, (data: ITeam) => {
-                console.log("Fetched contact", data)
+                console.log("Fetched team", data)
                 this.setState(() => ({data}))
             }, undefined, () => {
                 this.setState(() => ({isLoading: false}))
