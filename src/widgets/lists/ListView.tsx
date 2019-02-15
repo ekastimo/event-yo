@@ -8,6 +8,7 @@ import Hidden from '@material-ui/core/Hidden';
 import AddIcon from '@material-ui/icons/Add';
 import XToolBar from "../XToolBar";
 import Loading from "../Loading";
+import FabButton from '../FabButton';
 
 
 const styles = (theme: Theme) =>
@@ -19,12 +20,7 @@ const styles = (theme: Theme) =>
         },
         item: {
             overflow: 'auto'
-        },
-        fab: {
-            position: 'absolute',
-            bottom: theme.spacing.unit * 2,
-            right: theme.spacing.unit * 2,
-        },
+        }
     });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -44,11 +40,13 @@ const ListView = (props: IProps) => {
                 <Grid item xs={12} sm={8} md={7} className={classes.item}>
                     {
                         handleSearch &&
-                        <XToolBar
-                            handleChange={handleSearch}
-                            title={title}
-                            handleNew={handleAdd}
-                        />
+                        <Hidden smDown>
+                            <XToolBar
+                                handleChange={handleSearch}
+                                title={title}
+                                handleNew={handleAdd}
+                            />
+                        </Hidden>
                     }
                     {
                         isLoading ? <Loading/> :
@@ -65,9 +63,9 @@ const ListView = (props: IProps) => {
                             </List>
                     }
                     <Hidden mdUp>
-                        <Fab className={classes.fab} color='primary' onClick={handleAdd}>
+                        <FabButton color='primary' onClick={handleAdd}>
                             <AddIcon/>
-                        </Fab>
+                        </FabButton>
                     </Hidden>
                 </Grid>
             </Grid>

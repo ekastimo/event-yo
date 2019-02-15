@@ -79,7 +79,7 @@ class EventDetails extends React.Component<IProps, IState> {
             return <Loading/>
         return (
             <div className={classes.root}>
-                <AppBar position="fixed" style={{top: 65, width: "100%"}} color="inherit">
+                <AppBar position="static" color="inherit">
                     <Tabs
                         variant="fullWidth"
                         value={value}

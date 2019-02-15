@@ -118,11 +118,11 @@ class Contacts extends React.Component<IProps, IState> {
     }
 
     private handleNewContact = () => {
-        this.setState(() => ({showDialog: true}))
     }
-
+    
     private handleClose = () => {
         this.setState(() => ({showDialog: false}))
+        this.setState(() => ({showDialog: true}))
     }
 
     private handleChange = (e: any) => {

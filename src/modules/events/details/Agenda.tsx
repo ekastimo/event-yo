@@ -16,6 +16,7 @@ import MoreMenu from "../../../widgets/MoreMenu";
 import AgendaItem from "./AgendaItem";
 import {IEvent, IEventItem} from "../types";
 import {getImage, parseRange} from "../../../utils/TK";
+import FabButton from '../../../widgets/FabButton';
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -26,8 +27,8 @@ const styles = (theme: Theme) =>
             display: 'inline',
         },
         fab: {
-            position: 'absolute',
-            bottom: theme.spacing.unit * 2,
+            position: 'fixed',
+            bottom: theme.spacing.unit * 3,
             right: theme.spacing.unit * 2,
         },
     });
@@ -87,9 +88,9 @@ class Agenda extends React.Component<IProps, any> {
                         }
                     </List>
                 </Grid>
-                <Fab className={classes.fab} color='primary'>
+                <FabButton color='primary'>
                     <AddIcon/>
-                </Fab>
+                </FabButton>
             </Grid>
         );
     }
