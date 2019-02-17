@@ -75,27 +75,30 @@ class AddressView extends React.Component<IProps, IState> {
                                         isLoading={isLoading}
                                         primary={<LocationIcon fontSize="inherit"/>}
                                         secondaryIcon={<LocationOutlinedIcon fontSize="inherit"/>}
-                                        handleEdit={this.handleEdit.bind(this, {...it})}
-                                        handleDelete={this.handleDelete.bind(this, {...it})}
+                                        data={it}
+                                        handleEdit={this.handleEdit}
+                                        handleDelete={this.handleDelete}
                                     />
                                 })
                             }
                         </div>
                     </CardContent>
-                    <FormHolder
-                        title='Edit Address'
-                        open={this.state.showDialog}
-                        onClose={this.handleClose}
-                        data={this.state.data}
-                        url={`${remoteRoutes.contactsAddress}/${data.id}`}
-                        isNew={!this.state.data}
-                        schema={addressSchema}
-                        debug={true}
-                        onAjaxComplete={this.props.handleReload}
-                    >
-                        <AddressEditor/>
-                    </FormHolder>
+
                 </Card>
+
+                <FormHolder
+                    title='Edit Address'
+                    open={this.state.showDialog}
+                    onClose={this.handleClose}
+                    data={this.state.data}
+                    url={`${remoteRoutes.contactsAddress}/${data.id}`}
+                    isNew={!this.state.data}
+                    schema={addressSchema}
+                    debug={true}
+                    onAjaxComplete={this.props.handleReload}
+                >
+                    <AddressEditor/>
+                </FormHolder>
             </div>
         );
     }

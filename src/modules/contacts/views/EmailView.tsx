@@ -1,7 +1,8 @@
 import * as React from 'react';
-import {Theme, WithStyles, withStyles} from "@material-ui/core";
+import {List, Theme, WithStyles, withStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import EmailIcon from '@material-ui/icons/Email';
@@ -64,7 +65,7 @@ class EmailView extends React.Component<IProps, IState> {
                         }
                     />
                     <CardContent>
-                        <div>
+                        <List>
                             {
                                 data.emails&&
                                 data.emails.map((it: IEmail) => {
@@ -75,12 +76,13 @@ class EmailView extends React.Component<IProps, IState> {
                                         isLoading={isLoading}
                                         primary={<EmailIcon fontSize="inherit"/>}
                                         secondaryIcon={<EmailOutlinedIcon fontSize="inherit"/>}
-                                        handleEdit={this.handleEdit.bind(this, {...it})}
-                                        handleDelete={this.handleDelete.bind(this, {...it})}
+                                        data={it}
+                                        handleEdit={this.handleEdit}
+                                        handleDelete={this.handleDelete}
                                     />
                                 })
                             }
-                        </div>
+                        </List>
                     </CardContent>
                     <FormHolder
                         title='Edit Email'

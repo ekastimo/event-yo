@@ -49,18 +49,19 @@ function TabContainer(props: any) {
 class TabbedDetails extends React.Component<IProps> {
     public render() {
         const {classes, data} = this.props;
+        const sizes: any = {xs: 12, sm: 12, md: 6, lg: 4}
         const contactInfo = <GridWrapper>
             <Grid container spacing={16} className={classes.tabContent}>
-            <Grid item xs={12} sm={6} lg={4}>
-                <EmailView data={data} handleReload={this.props.handleReload}/>
+                <Grid item {...sizes}>
+                    <EmailView data={data} handleReload={this.props.handleReload}/>
+                </Grid>
+                <Grid item {...sizes}>
+                    <PhoneView data={data} handleReload={this.props.handleReload}/>
+                </Grid>
+                <Grid item {...sizes}>
+                    <AddressView data={data} handleReload={this.props.handleReload}/>
+                </Grid>
             </Grid>
-            <Grid item xs={12} sm={6} lg={4}>
-                <PhoneView data={data} handleReload={this.props.handleReload}/>
-            </Grid>
-            <Grid item xs={12} sm={6} lg={4}>
-                <AddressView data={data} handleReload={this.props.handleReload}/>
-            </Grid>
-        </Grid>
         </GridWrapper>
         return (
             <div className={classes.root}>
@@ -71,6 +72,7 @@ class TabbedDetails extends React.Component<IProps> {
                             title: "Details",
                             icon: <ContactsIcon/>,
                             component: contactInfo
+
                         },
                         {
                             id: '1',

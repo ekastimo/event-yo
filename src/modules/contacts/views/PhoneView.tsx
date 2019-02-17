@@ -75,8 +75,9 @@ class PhoneView extends React.Component<IProps, IState> {
                                         isLoading={isLoading}
                                         primary={<PhoneIcon fontSize="inherit"/>}
                                         secondaryIcon={<PhoneOutlinedIcon fontSize="inherit"/>}
-                                        handleEdit={this.handleEdit.bind(this, {...it})}
-                                        handleDelete={this.handleDelete.bind(this, {...it})}
+                                        data={it}
+                                        handleEdit={this.handleEdit}
+                                        handleDelete={this.handleDelete}
                                     />
                                 })
                             }

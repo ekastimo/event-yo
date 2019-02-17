@@ -17,7 +17,7 @@ const styles = (theme: Theme) =>
             width: 200,
             margin: '0 auto',
             borderRadius: theme.spacing.unit * 2,
-            [theme.breakpoints.only('xs')]: {
+            [theme.breakpoints.down('md')]: {
                 height: 100,
                 width: 100,
             }

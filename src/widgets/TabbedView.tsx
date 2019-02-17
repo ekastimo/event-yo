@@ -51,7 +51,7 @@ class TabbedView extends React.Component<IProps> {
         const item: ITabElement = data[value]
         return (
             <div className={classes.root}>
-                <AppBar position='static' color='inherit'>
+                <AppBar position='relative' color='inherit'>
                     <Tabs
                         value={value}
                         onChange={this.handleChange}
@@ -71,13 +71,14 @@ class TabbedView extends React.Component<IProps> {
                     </Tabs>
                 </AppBar>
                 <Paper>
-                    <SwipeableViews
-                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                        index={this.state.value}
-                        onChangeIndex={this.handleChangeIndex}
-                    >
-                        {data.map(it=><Fragment key={it.id}>{it.component}</Fragment>)}
-                    </SwipeableViews>
+                    {data[this.state.value].component}
+                    {/*<SwipeableViews*/}
+                        {/*axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}*/}
+                        {/*index={this.state.value}*/}
+                        {/*onChangeIndex={this.handleChangeIndex}*/}
+                    {/*>*/}
+                        {/*{data.map(it=><Fragment key={it.id}>{it.component}</Fragment>)}*/}
+                    {/*</SwipeableViews>*/}
                 </Paper>
 
             </div>

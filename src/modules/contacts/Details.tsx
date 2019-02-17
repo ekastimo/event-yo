@@ -14,6 +14,7 @@ import BasePanel from "../../base/BasePanel";
 import ImageView from "./views/ImageView";
 import PersonView from "./views/PersonView";
 import TabbedDetails from "./TabbedDetails";
+import GridWrapper from "../../widgets/GridWrapper";
 
 const styles = () =>
     createStyles({
@@ -51,19 +52,19 @@ class Details extends React.Component<IProps, IState> {
             return <Error message='Failed to load contact!'/>
         }
         return (
-            <BasePanel>
-                <Grid container spacing={8}>
-                    <Grid item xs={12} sm={4}>
+            <GridWrapper>
+                <Grid container spacing={16}>
+                    <Grid item xs={12} md={4}>
                         <ImageView data={data}/>
                     </Grid>
-                    <Grid item xs={12} sm={8}>
+                    <Grid item xs={12} md={8}>
                         <PersonView data={data} handleReload={this.reloadData}/>
                     </Grid>
                     <Grid item xs={12}>
                         <TabbedDetails data={data} handleReload={this.reloadData}/>
                     </Grid>
                 </Grid>
-            </BasePanel>
+            </GridWrapper>
         );
     }
 

@@ -1,28 +1,11 @@
-import * as React from 'react';
-import {Theme, WithStyles, withStyles} from "@material-ui/core";
-import createStyles from "@material-ui/core/styles/createStyles";
+import React,{Fragment} from 'react';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
+import ListItemText from '@material-ui/core/ListItemText';
 
+import XListItem from "../../../widgets/lists/XListItem";
 
-const styles = (theme: Theme) =>
-    createStyles({
-        label: {
-            flexGrow: 1,
-            padding: theme.spacing.unit * 2
-        },
-        labelGrid: {
-            display: 'flex',
-            flexDirection: 'row'
-        },
-        iconHolder: {
-            display: 'inline-block'
-        }
-    });
-
-interface IProps extends WithStyles<typeof styles> {
+interface IProps {
+    data: any
     text: string
     isPrimary: boolean
     isLoading: boolean
@@ -33,32 +16,22 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 const ItemEditor = (props: IProps) => {
-    const {classes, isPrimary, text, isLoading, handleEdit, handleDelete, primary, secondaryIcon} = props
-    return <React.Fragment>
-        <div className={classes.labelGrid}>
-            <Typography variant='body2' className={classes.label} noWrap>
-                {isPrimary ? primary : secondaryIcon}
-                &nbsp;&nbsp;{text}
-            </Typography>
-            {
-                !isLoading &&
-                <div className={classes.iconHolder}>
-                    <IconButton
-                        aria-label="Edit"
-                        onClick={handleEdit}
-                    >
-                        <EditIcon fontSize="small"/>
-                    </IconButton>
-                    <IconButton
-                        aria-label="Delete"
-                        onClick={handleDelete}
-                    >
-                        <DeleteIcon fontSize="small"/>
-                    </IconButton>
-                </div>
-            }
-        </div>
-    </React.Fragment>
+    const {data, isPrimary, text, isLoading, handleEdit, handleDelete, primary, secondaryIcon} = props
+    return (
+        <XListItem
+            data={data}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            isLoading={isLoading}
+        >
+            <ListItemText
+                primary={<Typography variant='body2' noWrap>
+                    {isPrimary ? primary : secondaryIcon}
+                    &nbsp;&nbsp;{text}
+                </Typography>}
+            />
+        </XListItem>
+    );
 }
 
-export default withStyles(styles)(ItemEditor)
+export default ItemEditor

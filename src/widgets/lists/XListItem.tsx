@@ -8,6 +8,7 @@ interface IProps {
     data: any,
     onEdit: (data: any) => any
     onDelete: (data: any) => any
+    isLoading?: boolean
 }
 
 class XListItem extends React.Component<IProps, any> {
@@ -18,7 +19,7 @@ class XListItem extends React.Component<IProps, any> {
     hideButtons = () => this.setState(() => ({showButtons: false}))
 
     public render() {
-        const {data, onEdit, onDelete} = this.props
+        const {data, onEdit, onDelete,isLoading} = this.props
         const {showButtons} = this.state
         const handleEdit = (e: React.MouseEvent<HTMLElement>) => {
             e.stopPropagation()
@@ -40,10 +41,10 @@ class XListItem extends React.Component<IProps, any> {
                 {
                     showButtons &&
                     <React.Fragment>
-                        <IconButton aria-label="Edit" onClick={handleEdit}>
+                        <IconButton aria-label="Edit" onClick={handleEdit} disabled={isLoading}>
                             <EditIcon fontSize='small'/>
                         </IconButton>
-                        <IconButton aria-label="Delete" onClick={handleDelete}>
+                        <IconButton aria-label="Delete" onClick={handleDelete} disabled={isLoading}>
                             <DeleteIcon fontSize='small'/>
                         </IconButton>
                     </React.Fragment>
