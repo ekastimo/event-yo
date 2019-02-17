@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React,{Fragment} from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -22,7 +22,7 @@ class MoreMenu extends React.Component<IProps, any> {
         const open = Boolean(anchorEl);
 
         return (
-            <div>
+            <Fragment>
                 <IconButton
                     aria-label="More"
                     aria-owns={open ? 'long-menu' : undefined}
@@ -49,15 +49,19 @@ class MoreMenu extends React.Component<IProps, any> {
                         </MenuItem>
                     ))}
                 </Menu>
-            </div>
+            </Fragment>
         );
     }
 
-    private handleClick = (event: any) => {
-        this.setState({anchorEl: event.currentTarget})
+    private handleClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        e.preventDefault()
+        this.setState({anchorEl: e.currentTarget})
     }
 
-    private handleClose = (itemId: any) => () => {
+    private handleClose = (itemId: any) => (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        e.preventDefault()
         this.setState({anchorEl: null});
         this.props.onItemSelected(itemId)
     };
