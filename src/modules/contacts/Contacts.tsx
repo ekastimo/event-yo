@@ -1,21 +1,21 @@
 import * as React from 'react';
-import {List, Theme, WithStyles} from "@material-ui/core";
+import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {localRoutes, remoteRoutes} from "../../data/constants";
-import {del, search} from "../../utils/ajax";
+import {del} from "../../utils/ajax";
 import {withStyles} from "@material-ui/core/styles";
 import {RouteComponentProps, withRouter} from 'react-router'
 import ContactItem from "./ContactItem";
-
-import {IContact, IEmail} from "./types";
-import Loading from "../../widgets/Loading";
+import {IContact} from "./types";
 import {newPersonSchema, renderName} from "./config";
 import FormHolder from "../../widgets/FormHolder";
 import NewPersonEditor from "./editors/NewPersonEditor";
-import XToolBar from "../../widgets/XToolBar";
 import ListView from "../../widgets/lists/ListView";
 import Toast from "../../utils/Toast";
 import uiConfirm from "../../widgets/confirm";
+import {connect} from "react-redux";
+import {IStore} from "../../data/types";
+import {fetchData,createContact,updateContact} from "./redux";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -28,13 +28,15 @@ const styles = (theme: Theme) =>
     });
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any> {
+    isLoading: boolean,
+    data: IContact[],
+    loadData: (data: any) => any,
 }
 
 interface IState {
-    isLoading: boolean,
-    data: IContact[],
     search: ISearch,
-    showDialog: boolean
+    showDialog: boolean,
+
 }
 
 export interface ISearch {
@@ -47,9 +49,7 @@ class Contacts extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props)
         this.state = {
-            isLoading: true,
             showDialog: false,
-            data: [],
             search: {
                 limit: 40,
                 skip: 0
@@ -62,7 +62,7 @@ class Contacts extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const {isLoading, data} = this.state
+        const {isLoading, data} = this.props
         return (
             <div>
                 <ListView
@@ -104,11 +104,7 @@ class Contacts extends React.Component<IProps, IState> {
     }
 
     private reloadData(request: any = {}) {
-        search(remoteRoutes.contacts, request, data => {
-            this.setState(() => ({data, isLoading: false}))
-        }, undefined, () => {
-            this.setState(() => ({isLoading: false}))
-        })
+        this.props.loadData(request)
     }
 
     private handleEdit = (data: any) => {
@@ -118,11 +114,11 @@ class Contacts extends React.Component<IProps, IState> {
     }
 
     private handleNewContact = () => {
+        this.setState(() => ({showDialog: true}))
     }
-    
+
     private handleClose = () => {
         this.setState(() => ({showDialog: false}))
-        this.setState(() => ({showDialog: true}))
     }
 
     private handleChange = (e: any) => {
@@ -142,15 +138,27 @@ class Contacts extends React.Component<IProps, IState> {
         const {person, id} = data;
         uiConfirm(`Do you really want to delete ${renderName(person)}?`).then(() => {
             const url = `${remoteRoutes.contacts}/${id}`;
-            this.setState(() => ({isLoading: true}))
             del(url, data => {
                 Toast.info(data.message)
                 this.handleCompletion()
-            }, undefined, () => {
-                this.setState(() => ({isLoading: true}))
             });
         }).catch(e => undefined)
     }
 }
 
-export default withRouter(withStyles(styles)(Contacts))
+
+export default connect(
+    ({contacts}: IStore) => {
+        return {
+            data: contacts.data,
+            isLoading:contacts.isFetching
+        }
+    },
+    (dispatch: any) => {
+        return {
+            loadData: (data: any) => dispatch(fetchData(data)),
+            createContact: (data: any) => dispatch(createContact(data)),
+            updateContact: (data: any) => dispatch(updateContact(data))
+        }
+    }
+)(withRouter(withStyles(styles)(Contacts)))

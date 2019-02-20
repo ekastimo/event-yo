@@ -12,3 +12,8 @@ export interface IUser {
     fullName: string
     roles: string[]
 }
+
+export interface IStore {
+    core: any
+    contacts: any
+}

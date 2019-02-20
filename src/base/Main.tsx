@@ -96,7 +96,7 @@ class Main extends React.Component<IProps> {
                             <MenuIcon/>
                         </IconButton>
                         <Typography variant="h6" color="inherit" noWrap className={classes.grow}>
-                            Responsive drawer
+                            dEMO
                         </Typography>
                         <Button
                             color="inherit"

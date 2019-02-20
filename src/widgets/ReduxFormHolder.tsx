@@ -32,10 +32,11 @@ interface IProps extends WithStyles<typeof styles> {
     dataParser?: (data: any) => any
     schema: any
     width: false | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-    onAjaxComplete: (data: any) => any
+    onPost?: (data: any) => any
+    onPut?: (data: any) => any
 }
 
-class FormHolder extends React.Component<IProps> {
+class ReduxFormHolder extends React.Component<IProps> {
     form?: Formik = undefined
 
     render() {
@@ -45,10 +46,11 @@ class FormHolder extends React.Component<IProps> {
         return (
             <Formik
                 ref={(node: any) => (this.form = node)}
-                initialValues={data||{}}
+                initialValues={data || {}}
                 validationSchema={schema}
                 onSubmit={this.onSubmit}
                 enableReinitialize={true}
+
             >
                 {(formState) => (
                     <Form>
@@ -106,46 +108,18 @@ class FormHolder extends React.Component<IProps> {
     }
 
     onSubmit = (rawValues: any, actions: FormikActions<any>) => {
-        const values = this.props.dataParser ? this.props.dataParser(rawValues) : rawValues
+        const data = this.props.dataParser ? this.props.dataParser(rawValues) : rawValues
         //console.log("Submiting>>>>", values)
         const {isNew, url} = this.props
-        if (isNew) {
-            post(url, values,
-                (data) => {
-                    Toast.info('Operation successful')
-                    this.setState(() => ({data}))
-                    this.props.onAjaxComplete(data)
-                    this.props.onClose()
-
-                },
-                (err, resp) => {
-                    handleError(err, resp)
-                    this.setState(() => ({data: values}))
-                },
-                () => {
-                    this.setState(() => ({isLoading: false}))
-                    actions.setSubmitting(false);
-                }
-            )
-        } else {
-            put(url, values,
-                (data) => {
-                    Toast.info('Update successful')
-                    this.setState(() => ({data}))
-                    this.props.onAjaxComplete(data)
-                    this.props.onClose()
-                },
-                (err, resp) => {
-                    handleError(err, resp)
-                    this.setState(() => ({data: values}))
-                },
-                () => {
-                    this.setState(() => ({isLoading: false, data: values}))
-                    actions.setSubmitting(false);
-                }
-            )
+        const payLoad = {
+            url, data, actions
+        }
+        if (isNew && this.props.onPost) {
+            this.props.onPost(data);
+        } else if (this.props.onPut) {
+            this.props.onPut(data);
         }
     }
 }
 
-export default withStyles(styles)(withWidth()(FormHolder));
+export default withStyles(styles)(withWidth()(ReduxFormHolder));

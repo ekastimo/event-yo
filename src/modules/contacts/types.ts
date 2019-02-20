@@ -47,3 +47,13 @@ export interface IContact {
     tags: string[]
 }
 
+
+export interface IContactQuery {
+    name: string,
+}
+
+export interface IContactReduxState {
+    data: IContact
+    isFetching: boolean
+}
+

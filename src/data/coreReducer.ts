@@ -1,10 +1,6 @@
 import {hasValue} from "../utils/validators";
 import {authToken, authUser, redux} from "./constants";
 
-export interface IReduxAction {
-    type: string
-    payload: any
-}
 
 /**
  * Initial state when the application Loads
@@ -17,7 +13,7 @@ function loadUser() {
     return false
 }
 
-const initialState = {
+const initialState: any = {
     activeLink: '/',
     token: localStorage[authToken],// We use this token to load the user
     user: loadUser(),
@@ -25,7 +21,7 @@ const initialState = {
 }
 
 
-export default function reducer(state = initialState, action: IReduxAction) {
+export default function reducer(state = initialState, action: any) {
     switch (action.type) {
         case redux.doLogin: {
             const {user, token} = action.payload

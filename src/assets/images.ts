@@ -3,5 +3,5 @@ export const images = {
     everythingCool: require('./everythin.png'),
     leadership: require('./leadership.png'),
     loading: require('./ajax-loader.gif'),
-    profile: require('./profile.png'),
+    profile: './profile.png',
 }

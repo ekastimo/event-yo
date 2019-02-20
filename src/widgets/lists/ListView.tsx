@@ -37,7 +37,7 @@ const ListView = (props: IProps) => {
     return (
         <div className={classes.root}>
             <Grid container spacing={0} justify='center'>
-                <Grid item xs={12} sm={8} md={7} className={classes.item}>
+                <Grid item xs={12} sm={10} md={8} className={classes.item}>
                     {
                         handleSearch &&
                         <Hidden smDown>

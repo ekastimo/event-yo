@@ -1,13 +1,25 @@
-import {applyMiddleware, combineReducers, createStore} from "redux";
+import {applyMiddleware, combineReducers, createStore, compose} from "redux";
 import {createLogger} from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
+import {offline} from '@redux-offline/redux-offline';
+import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
 import core from "./coreReducer";
+import contacts from "../modules/contacts/redux";
 
 const myWindow = window as any;
-const toolsName = 'devToolsExtension';
+const toolsName = '__REDUX_DEVTOOLS_EXTENSION__';
 const devTools: any = myWindow[toolsName] ? myWindow[toolsName]() : (f: any) => f;
-const reducers = combineReducers({core});
-const middleware = applyMiddleware(createLogger(), thunkMiddleware);
-const store: any = middleware(devTools(createStore))(reducers);
+
+const store = createStore(
+    combineReducers({
+        core, contacts
+    }),
+    {},
+    compose(
+        applyMiddleware(createLogger(), thunkMiddleware),
+        offline(offlineConfig),
+        devTools
+    )
+);
 
 export default store
