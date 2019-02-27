@@ -2,10 +2,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
+import NaturePeopleIcon from '@material-ui/icons/NaturePeople';
+import PinDropIcon from '@material-ui/icons/PinDrop';
 import PeopleOutline from '@material-ui/icons/PeopleOutline';
 import PeopleOutlineRounded from '@material-ui/icons/PeopleOutlineRounded';
 import CalenderIcon from '@material-ui/icons/PermContactCalendar';
-import PersonIcon from '@material-ui/icons/PersonPinCircle';
+import PersonIcon from '@material-ui/icons/Person';
 import * as React from 'react'
 import {RouteComponentProps, withRouter} from 'react-router'
 import {localRoutes} from "../data/constants";
@@ -42,6 +44,18 @@ class NavBar extends React.Component<IProps> {
                     <PeopleOutlineRounded/>
                 </ListItemIcon>
                 <ListItemText primary="Teams"/>
+            </ListItem>
+            <ListItem button={true} onClick={this.onClick(localRoutes.cellGroups)}>
+                <ListItemIcon>
+                    <NaturePeopleIcon/>
+                </ListItemIcon>
+                <ListItemText primary="MCs"/>
+            </ListItem>
+            <ListItem button={true} onClick={this.onClick(localRoutes.locations)}>
+                <ListItemIcon>
+                    <PinDropIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Locations"/>
             </ListItem>
             <ListItem button={true} onClick={this.onClick(localRoutes.events)}>
                 <ListItemIcon>

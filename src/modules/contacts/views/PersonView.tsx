@@ -17,6 +17,7 @@ import {remoteRoutes} from "../../../data/constants";
 import {personSchema, renderName} from "../config";
 import withWidth from '@material-ui/core/withWidth';
 import Hidden from '@material-ui/core/Hidden';
+import {MobileDisplayRow} from "../../../widgets/elements";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -32,19 +33,6 @@ interface IProps extends WithStyles<typeof styles> {
     handleReload: () => any
 }
 
-interface IDProps {
-    label: string
-    value: string
-}
-
-const MobileDisplayRow = (props: IDProps) => <React.Fragment>
-    <Typography variant="subtitle2" gutterBottom>
-        {props.label}
-    </Typography>
-    <Typography variant="body2">
-        {props.value}
-    </Typography>
-</React.Fragment>
 
 
 class PersonView extends React.Component<IProps, any> {

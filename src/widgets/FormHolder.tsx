@@ -45,7 +45,7 @@ class FormHolder extends React.Component<IProps> {
         return (
             <Formik
                 ref={(node: any) => (this.form = node)}
-                initialValues={data||{}}
+                initialValues={data || {}}
                 validationSchema={schema}
                 onSubmit={this.onSubmit}
                 enableReinitialize={true}
@@ -62,11 +62,9 @@ class FormHolder extends React.Component<IProps> {
                                 maxWidth={isSmall ? 'sm' : 'md'}
                             >
                                 <DialogTitle id='form-dialog-title'>{title}</DialogTitle>
-
                                 <DialogContent>
                                     {children}
                                 </DialogContent>
-
                                 {
                                     debug &&
                                     <DialogContent>
@@ -98,7 +96,6 @@ class FormHolder extends React.Component<IProps> {
             </Formik>
         )
     }
-
     submitForm = () => {
         if (this.form) {
             this.form.submitForm()
@@ -107,7 +104,7 @@ class FormHolder extends React.Component<IProps> {
 
     onSubmit = (rawValues: any, actions: FormikActions<any>) => {
         const values = this.props.dataParser ? this.props.dataParser(rawValues) : rawValues
-        //console.log("Submiting>>>>", values)
+
         const {isNew, url} = this.props
         if (isNew) {
             post(url, values,
@@ -120,11 +117,8 @@ class FormHolder extends React.Component<IProps> {
                 },
                 (err, resp) => {
                     handleError(err, resp)
-                    this.setState(() => ({data: values}))
-                },
-                () => {
-                    this.setState(() => ({isLoading: false}))
                     actions.setSubmitting(false);
+                    this.setState(() => ({data: values}))
                 }
             )
         } else {
@@ -134,14 +128,12 @@ class FormHolder extends React.Component<IProps> {
                     this.setState(() => ({data}))
                     this.props.onAjaxComplete(data)
                     this.props.onClose()
+                    actions.setSubmitting(false);
                 },
                 (err, resp) => {
                     handleError(err, resp)
-                    this.setState(() => ({data: values}))
-                },
-                () => {
-                    this.setState(() => ({isLoading: false, data: values}))
                     actions.setSubmitting(false);
+                    this.setState(() => ({data: values}))
                 }
             )
         }

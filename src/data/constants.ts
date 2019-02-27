@@ -9,12 +9,22 @@ export const redux = {
 
 export const localRoutes = {
     home: '/home',
+
     contacts: '/contacts',
     contactsDetails: '/contacts/:contactId',
+
     events: '/events',
+    eventsDetails: '/events/:eventId',
+
     teams: '/teams',
     teamsDetails: '/teams/:teamId',
-    eventsDetails: '/events/:eventId',
+
+    locations: '/locations',
+    locationDetails: '/locations/:locationId',
+
+    cellGroups: '/cellGroups',
+    cellGroupDetails: '/cellGroups/:cellGroupId',
+
     users: '/users',
 }
 
@@ -47,4 +57,7 @@ export const remoteRoutes = {
 
     events: url + '/api/evt/event',
     eventsAgenda: url + '/api/evt/items',
+
+    locations: url + '/api/chc/location',
+    cellGroups: url + '/api/chc/cellgroup',
 }

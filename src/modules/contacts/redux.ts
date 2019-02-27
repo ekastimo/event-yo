@@ -7,13 +7,12 @@ const contactActions = {
     CONTACTS_GET_COMMIT: 'CONTACTS_GET_COMMIT',
     CONTACTS_GET_ROLLBACK: 'CONTACTS_GET_ROLLBACK',
 
-    CONTACTS_CREATE_REQUEST: 'CONTACTS_CREATE_REQUEST',
-    CONTACTS_CREATE_COMMIT: 'CONTACTS_CREATE_COMMIT',
-    CONTACTS_CREATE_ROLLBACK: 'CONTACTS_CREATE_ROLLBACK',
+    CONTACTS_SINGLE_REQUEST: 'CONTACTS_SINGLE_REQUEST',
+    CONTACTS_SINGLE_COMMIT: 'CONTACTS_SINGLE_COMMIT',
+    CONTACTS_SINGLE_ROLLBACK: 'CONTACTS_SINGLE_ROLLBACK',
 
-    CONTACTS_UPDATE_REQUEST: 'CONTACTS_UPDATE_REQUEST',
-    CONTACTS_UPDATE_COMMIT: 'CONTACTS_UPDATE_COMMIT',
-    CONTACTS_UPDATE_ROLLBACK: 'CONTACTS_UPDATE_ROLLBACK',
+    CONTACTS_CREATE: 'CONTACTS_CREATE',
+    CONTACTS_UPDATE: 'CONTACTS_UPDATE',
 
     CONTACTS_LOCAL_SEARCH: 'CONTACTS_LOCAL_SEARCH',
 }
@@ -31,44 +30,34 @@ export const fetchData = (query: ISearch) => ({
     }
 });
 
-
-export const createContact = (data: any) => ({
-    type: contactActions.CONTACTS_CREATE_REQUEST,
-    payload: {...data},
+export const fetchContact = (contactId: string) => ({
+    type: contactActions.CONTACTS_SINGLE_REQUEST,
+    payload: {contactId},
     meta: {
         offline: {
-            effect: fetchPost(remoteRoutes.contactsPerson, data),
-            commit: {type: contactActions.CONTACTS_CREATE_COMMIT, meta: {data}},
-            rollback: {type: contactActions.CONTACTS_CREATE_ROLLBACK, meta: {data}}
+            effect: fetchGet(`${remoteRoutes.contacts}/${contactId}`),
+            commit: {type: contactActions.CONTACTS_SINGLE_COMMIT, meta: {contactId}},
+            rollback: {type: contactActions.CONTACTS_SINGLE_ROLLBACK, meta: {contactId}}
         }
     }
 });
 
 
-export const updateContact = (data: any) => ({
-    type: contactActions.CONTACTS_UPDATE_REQUEST,
-    payload: {...data},
-    meta: {
-        offline: {
-            effect: fetchPut(remoteRoutes.contacts, data),
-            commit: {type: contactActions.CONTACTS_CREATE_COMMIT, meta: {data}},
-            rollback: {type: contactActions.CONTACTS_CREATE_ROLLBACK, meta: {data}}
-        }
-    }
-});
-
-const initialState : any= {
+const initialState: any = {
     isFetching: false,
     data: [],
     //The currently visible contact
-    selected: undefined,
+    contact: {
+        data: undefined,
+        isLoading: true
+    },
     error: '',
     main: {
         //Main contact View
         showDialog: false,
         isLoading: false
     },
-    emails:{
+    emails: {
         //state for emails
         showDialog: false,
         isLoading: false
@@ -77,29 +66,29 @@ const initialState : any= {
 
 export default function contactsReducer(state = initialState, action: any) {
     switch (action.type) {
-        case contactActions.CONTACTS_GET_COMMIT: {
-            const data = action.payload
-            return {...state, data, isFetching: false}
-        }
-        case contactActions.CONTACTS_GET_ROLLBACK: {
-            const errors = handleError(action)
-            return {...state, errors, isFetching: false}
-        }
         case contactActions.CONTACTS_LOCAL_SEARCH: {
             const {query} = action.payload
             return {...state}
         }
 
-        case contactActions.CONTACTS_CREATE_COMMIT: {
-            const contact = action.payload
-            const {data: oldData} = state
-            const data = [...oldData, contact]
-            return {...state, data, isSubmitting: false}
+        case contactActions.CONTACTS_GET_COMMIT: {
+            const data = action.payload
+            return {...state, data, isLoading: false}
+        }
+        case contactActions.CONTACTS_GET_ROLLBACK: {
+            const error = handleError(action)
+            return {...state, error, isLoading: false}
         }
 
-        case contactActions.CONTACTS_CREATE_ROLLBACK: {
-            const errors = handleError(action)
-            return {...state, errors, isSubmitting: false}
+        case contactActions.CONTACTS_SINGLE_COMMIT: {
+            const data = action.payload
+            const contact = {data, isLoading: false}
+            return {...state, contact}
+        }
+        case contactActions.CONTACTS_SINGLE_ROLLBACK: {
+            const error = handleError(action)
+            const contact = {error, isLoading: false}
+            return {...state, contact}
         }
 
         default: {

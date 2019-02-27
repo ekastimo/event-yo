@@ -1,21 +1,23 @@
 import * as React from 'react';
-import {Theme, WithStyles} from "@material-ui/core";
+import {List, Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {localRoutes, remoteRoutes} from "../../data/constants";
-import {del} from "../../utils/ajax";
+import {del, search} from "../../utils/ajax";
 import {withStyles} from "@material-ui/core/styles";
 import {RouteComponentProps, withRouter} from 'react-router'
-import ContactItem from "./ContactItem";
-import {IContact} from "./types";
-import {newPersonSchema, renderName} from "./config";
+import LocationItem from "./LocationItem";
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import {ILocation} from "./types";
+import Loading from "../../widgets/Loading";
+import {locationSchema} from "./config";
 import FormHolder from "../../widgets/FormHolder";
-import NewPersonEditor from "./editors/NewPersonEditor";
-import ListView from "../../widgets/lists/ListView";
+import LocationEditor from "./editors/LocationEditor";
+import XToolBar from "../../widgets/XToolBar";
 import Toast from "../../utils/Toast";
 import uiConfirm from "../../widgets/confirm";
-import {connect} from "react-redux";
-import {IStore} from "../../data/types";
-import { fetchData} from "./redux";
+import {renderName} from "../contacts/config";
+import ListView from "../../widgets/lists/ListView";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -28,89 +30,96 @@ const styles = (theme: Theme) =>
     });
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any> {
-    isLoading: boolean,
-    data: IContact[],
-    loadData: (data: any) => any,
 }
 
 interface IState {
+    isLoading: boolean,
+    toEdit?: ILocation
+    data: ILocation[],
     search: ISearch,
-    showDialog: boolean,
-
+    showDialog: boolean
 }
 
-export interface ISearch {
+interface ISearch {
     limit: number,
     skip: number,
     name?: string
 }
 
-class Contacts extends React.Component<IProps, IState> {
+class Locations extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props)
         this.state = {
+            isLoading: true,
             showDialog: false,
+            data: [],
             search: {
-                limit: 40,
+                limit: 10,
                 skip: 0
             }
         }
     }
 
-    public componentDidMount() {
-        this.reloadData(this.state.search)
-    }
-
     public render() {
-        const {isLoading, data} = this.props
+        const {isLoading, data, toEdit, showDialog} = this.state
         return (
             <div>
+
                 <ListView
                     isLoading={isLoading}
-                    title='Contacts'
+                    title='Church Locations'
                     hasData={data && data.length > 0}
                     handleAdd={this.handleNewContact}
                     handleSearch={this.handleChange}
                 >
                     {
-                        data.map((contact: any) => (
-                            <ContactItem
-                                key={contact.id}
-                                data={{...contact}}
+                        data.map((it: any) => (
+                            <LocationItem
+                                key={it.id}
+                                data={{...it}}
                                 onEdit={this.handleEdit}
                                 onDelete={this.handleDelete}
                             />
                         ))
                     }
                 </ListView>
+                {showDialog &&
                 <FormHolder
-                    title='New Contact'
+                    title='New Location'
                     open={this.state.showDialog}
                     onClose={this.handleClose}
-                    data={{}}
-                    url={remoteRoutes.contactsPerson}
-                    isNew={true}
-                    schema={newPersonSchema}
+                    data={toEdit ? {...toEdit} : {}}
+                    url={remoteRoutes.locations}
+                    isNew={!toEdit}
+                    schema={locationSchema}
                     onAjaxComplete={this.handleCompletion}
                 >
-                    <NewPersonEditor/>
+                    <LocationEditor/>
                 </FormHolder>
+                }
+
             </div>
         )
+    }
+
+    public componentDidMount() {
+        this.reloadData(this.state.search)
+    }
+
+    private reloadData(request: any = {}) {
+        search(remoteRoutes.locations, request, data => {
+            this.setState(() => ({data, isLoading: false}))
+        }, undefined, () => {
+            this.setState(() => ({isLoading: false}))
+        })
     }
 
     handleCompletion = () => {
         this.reloadData()
     }
 
-    private reloadData(request: any = {}) {
-        this.props.loadData(request)
-    }
-
-    private handleEdit = (data: any) => {
-        const path = `${localRoutes.contacts}/${data.id}`
-        const {history} = this.props
-        history.push(path)
+    private handleEdit = (toEdit: any) => {
+        this.setState(() => ({showDialog: true, toEdit}))
     }
 
     private handleNewContact = () => {
@@ -118,7 +127,7 @@ class Contacts extends React.Component<IProps, IState> {
     }
 
     private handleClose = () => {
-        this.setState(() => ({showDialog: false}))
+        this.setState(() => ({showDialog: false, toEdit: undefined}))
     }
 
     private handleChange = (e: any) => {
@@ -135,27 +144,18 @@ class Contacts extends React.Component<IProps, IState> {
     }
 
     private handleDelete = (data: any) => {
-        const {person, id} = data;
-        uiConfirm(`Do you really want to delete ${renderName(person)}?`).then(() => {
-            const url = `${remoteRoutes.contacts}/${id}`;
+        const {name, id} = data;
+        uiConfirm(`Do you really want to delete ${name}?`).then(() => {
+            const url = `${remoteRoutes.locations}/${id}`;
+            this.setState(() => ({isLoading: true}))
             del(url, data => {
                 Toast.info(data.message)
                 this.handleCompletion()
+            }, undefined, () => {
+                this.setState(() => ({isLoading: true}))
             });
         }).catch(e => undefined)
     }
 }
 
-export default connect(
-    ({contacts}: IStore) => {
-        return {
-            data: contacts.data,
-            isLoading:contacts.isFetching
-        }
-    },
-    (dispatch: any) => {
-        return {
-            loadData: (data: any) => dispatch(fetchData(data))
-        }
-    }
-)(withRouter(withStyles(styles)(Contacts)))
+export default withRouter(withStyles(styles)(Locations))

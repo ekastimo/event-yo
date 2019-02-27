@@ -45,6 +45,10 @@ export interface IContact {
     addresses?: IAddress[]
     company?: ICompany
     tags: string[]
+    churchLocation: string
+    cellGroup: string
+    cellGroupName: string
+    churchLocationName: string
 }
 
 

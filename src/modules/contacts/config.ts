@@ -144,6 +144,10 @@ export const fakeContact = (): IContact => {
     return {
         id: 'fakeid222S',
         category: 'Person',
+        churchLocation:'',
+        churchLocationName:'',
+        cellGroup:'',
+        cellGroupName:'',
         person: {
             firstName: fake.firstName,
             lastName: fake.lastName,

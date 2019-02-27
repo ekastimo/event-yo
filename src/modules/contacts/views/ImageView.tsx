@@ -13,8 +13,8 @@ const styles = (theme: Theme) =>
             width: '100%'
         },
         profileImage: {
-            height: 200,
-            width: 200,
+            height: 150,
+            width: 150,
             margin: '0 auto',
             borderRadius: theme.spacing.unit * 2,
             [theme.breakpoints.down('md')]: {
@@ -62,6 +62,7 @@ class ImageView extends React.Component<IProps, any> {
                     hidden={true}
                     onChange={this.handleFile}
                 />
+
             </div>
 
         )

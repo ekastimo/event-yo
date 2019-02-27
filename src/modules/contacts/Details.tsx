@@ -10,11 +10,15 @@ import * as validate from "validate.js";
 import {RouteComponentProps} from "react-router";
 import Loading from "../../widgets/Loading";
 import Error from "../../widgets/Error";
-import BasePanel from "../../base/BasePanel";
 import ImageView from "./views/ImageView";
 import PersonView from "./views/PersonView";
 import TabbedDetails from "./TabbedDetails";
 import GridWrapper from "../../widgets/GridWrapper";
+import {fetchContact} from "./redux";
+import {connect} from "react-redux";
+import {IStore} from "../../data/types";
+import Toast from "../../utils/Toast";
+import LocationView from "./views/LocationView";
 
 const styles = () =>
     createStyles({
@@ -56,6 +60,7 @@ class Details extends React.Component<IProps, IState> {
                 <Grid container spacing={16}>
                     <Grid item xs={12} md={4}>
                         <ImageView data={data}/>
+                        <LocationView data={data}/>
                     </Grid>
                     <Grid item xs={12} md={8}>
                         <PersonView data={data} handleReload={this.reloadData}/>
@@ -84,9 +89,22 @@ class Details extends React.Component<IProps, IState> {
                 this.setState(() => ({isLoading: false}))
             })
         } else {
-            this.setState(() => ({isLoading: false, error: 'Invalid path'}))
+            Toast.error("Oops Invalid contact data")
         }
     }
 }
 
-export default withStyles(styles)(Details)
+
+export default connect(
+    ({contacts:{contact}}: IStore) => {
+        return {
+            data: contact.data,
+            isLoading:contact.isLoading
+        }
+    },
+    (dispatch: any) => {
+        return {
+            loadData: (data: string) => dispatch(fetchContact(data))
+        }
+    }
+)(withStyles(styles)(Details))
