@@ -1,22 +1,18 @@
-import * as React from 'react';
-import {List, Theme, WithStyles} from "@material-ui/core";
+import React,{} from 'react';
+import { makeStyles } from '@material-ui/styles';
+import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
-import {localRoutes, remoteRoutes} from "../../data/constants";
+import {remoteRoutes} from "../../data/constants";
 import {del, search} from "../../utils/ajax";
-import {withStyles} from "@material-ui/core/styles";
+import {withStyles,} from "@material-ui/core/styles";
 import {RouteComponentProps, withRouter} from 'react-router'
 import LocationItem from "./LocationItem";
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import {ILocation} from "./types";
-import Loading from "../../widgets/Loading";
 import {locationSchema} from "./config";
 import FormHolder from "../../widgets/FormHolder";
 import LocationEditor from "./editors/LocationEditor";
-import XToolBar from "../../widgets/XToolBar";
 import Toast from "../../utils/Toast";
 import uiConfirm from "../../widgets/confirm";
-import {renderName} from "../contacts/config";
 import ListView from "../../widgets/lists/ListView";
 
 const styles = (theme: Theme) =>
