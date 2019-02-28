@@ -3,7 +3,7 @@ export interface ILocation {
     id: string
     name: string
     createdAt: Date
-    description: string
+    details: string
     createdBy: string
 }
 

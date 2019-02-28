@@ -9,13 +9,11 @@ import {WithStyles} from "@material-ui/core";
 import {RouteComponentProps, withRouter} from 'react-router'
 import {IEvent} from "./types";
 import {search} from "../../utils/ajax";
-import {ISearch} from "../contacts/Contacts";
-import {newPersonSchema} from "../contacts/config";
-import NewPersonEditor from "../contacts/editors/NewPersonEditor";
 import FormHolder from "../../widgets/FormHolder";
 import XToolBar from "../../widgets/XToolBar";
 import EventForm from "./EventForm";
 import {eventSchema} from "./config";
+import {ISearch} from "../../data/types";
 
 const styles = (theme: Theme) =>
     createStyles({

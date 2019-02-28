@@ -21,8 +21,16 @@ export const handleError = (err: any = {}, res: superagent.Response) => {
     if (res && res.forbidden || res && res.unauthorized) {
         Toast.error("Authentication Error")
     } else if (res && res.badRequest) {
-        const message = res.body.message
-        Toast.error(message || defaultMessage)
+
+        const {message, errors} = res.body
+        let msg = message + '\n'
+        for (const key in errors) {
+            if (errors.hasOwnProperty(key)) {
+                const error = errors[key][0]
+                msg += (error + '\n')
+            }
+        }
+        Toast.error(msg || defaultMessage)
     } else if (res && res.clientError || res && res.notAcceptable || res && res.error) {
         Toast.error(defaultMessage)
     } else if (res && res.body && res.body.message) {

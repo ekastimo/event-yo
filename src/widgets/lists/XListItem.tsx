@@ -13,9 +13,12 @@ interface IProps extends WithWidth {
     onEdit: (data: any) => any
     onDelete: (data: any) => any
     isLoading?: boolean
+    editOnClick?: boolean
+    onDetails?: (data: any) => any
 }
 
 class XListItem extends React.Component<IProps, any> {
+    menu:any= undefined
     state = {
         showButtons: false
     }
@@ -23,12 +26,18 @@ class XListItem extends React.Component<IProps, any> {
     hideButtons = () => this.setState(() => ({showButtons: false}))
 
     public render() {
-        const {data, onEdit, onDelete, isLoading, width} = this.props
+        const {data, onEdit, onDelete, isLoading, width,onDetails,editOnClick} = this.props
         const {showButtons} = this.state
         const handleEdit = (e: React.MouseEvent<HTMLElement>) => {
+            console.log("On Click roww")
             e.stopPropagation()
             e.preventDefault()
-            onEdit({...data})
+            if(editOnClick){
+                onEdit({...data})
+            }else if(onDetails){
+                onDetails({...data})
+            }
+            this.menu.closeMenu()
         }
 
         const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
@@ -65,7 +74,7 @@ class XListItem extends React.Component<IProps, any> {
                 </Hidden>
                 <Hidden mdUp>
                     <ListItemSecondaryAction>
-                        <MoreMenu options={items} onItemSelected={handleMenuClick}/>
+                        <MoreMenu options={items} onItemSelected={handleMenuClick} ref={ref=>this.menu=ref}/>
                     </ListItemSecondaryAction>
                 </Hidden>
             </ListItem>

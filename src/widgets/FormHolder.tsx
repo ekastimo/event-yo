@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import {Form, Formik, FormikActions} from 'formik';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';

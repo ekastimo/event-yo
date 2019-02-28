@@ -8,7 +8,6 @@ import Details from "../modules/contacts/Details";
 import Events from "../modules/events/Events";
 import Teams from "../modules/teams/Teams";
 import Locations from "../modules/locations/Locations";
-import LocationsX from "../modules/locations/LocationsX";
 import LocationDetails from "../modules/locations/Details";
 import CellGroups from "../modules/cellgroups/CellGroups";
 import CellGroupDetails from "../modules/cellgroups/Details";
@@ -33,7 +32,7 @@ export class ContentSwitch extends React.Component {
                 <Route path={localRoutes.teams} component={Teams}/>
 
                 <Route path={localRoutes.locationDetails} component={LocationDetails}/>
-                <Route path={localRoutes.locations} component={LocationsX}/>
+                <Route path={localRoutes.locations} component={Locations}/>
 
                 <Route path={localRoutes.cellGroupDetails} component={CellGroupDetails}/>
                 <Route path={localRoutes.cellGroups} component={CellGroups}/>

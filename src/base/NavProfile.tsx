@@ -9,9 +9,9 @@ import {connect} from "react-redux";
 import {doLogin, doLogout} from "../data/coreActions";
 import {IUser} from "../data/types";
 import {WithStyles} from "@material-ui/core";
-import {isNullOrEmpty} from "../utils/TK";
+import {isNullOrEmpty, parseAvatar} from "../utils/TK";
 
-interface IProps extends WithStyles<typeof styles>{
+interface IProps extends WithStyles<typeof styles> {
     user: IUser
     handleLogin: (data: any) => any
     handleLogout: () => any
@@ -20,15 +20,22 @@ interface IProps extends WithStyles<typeof styles>{
 class NavProfile extends React.Component<IProps> {
 
     public render() {
-        const {classes,user} = this.props
+        const {classes, user} = this.props
         return (
             <div className={classes.holder}>
                 <div className={classes.row}>
-                    <Avatar
-                        alt="Profile"
-                        src={isNullOrEmpty(user.avatar)?images.profile:user.avatar}
-                        className={classNames(classes.avatar, classes.bigAvatar)}
-                    />
+                    {
+                        isNullOrEmpty(user.avatar) ?
+                            <Avatar
+                                alt="Profile"
+                                className={classNames(classes.avatar, classes.bigAvatar)}
+                            >{parseAvatar(user.fullName)}</Avatar> :
+                            <Avatar
+                                alt="Profile"
+                                src={user.avatar}
+                                className={classNames(classes.avatar, classes.bigAvatar)}
+                            />
+                    }
                 </div>
                 <div className={classes.row}>
                     <Typography variant='subtitle1' className={classes.profileText}>

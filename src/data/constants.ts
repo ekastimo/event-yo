@@ -40,11 +40,13 @@ export const remoteRoutes = {
 
     contacts: url + '/api/crm/contact',
     contactSearch: url + '/api/crm/contact/search',
-    contactById: url + '/api/crm/contact/byid',
+    contactById: url + '/api/crm/contact/id',
     contactsPerson: url + '/api/crm/contact/person',
+    contactsChc: url + '/api/crm/chc',
     contactsEmail: url + '/api/crm/email',
     contactsPhone: url + '/api/crm/phone',
     contactsAddress: url + '/api/crm/address',
+
 
     contactsCompany: url + '/api/crm/contact/company',
     contactsAvatar: url + '/api/crm/contact/avatar',

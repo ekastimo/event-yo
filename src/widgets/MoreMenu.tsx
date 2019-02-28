@@ -28,6 +28,7 @@ class MoreMenu extends React.Component<IProps, any> {
                     aria-owns={open ? 'long-menu' : undefined}
                     aria-haspopup="true"
                     onClick={this.handleClick}
+
                 >
                     <MoreVertIcon/>
                 </IconButton>
@@ -42,6 +43,7 @@ class MoreMenu extends React.Component<IProps, any> {
                             width: 200,
                         },
                     }}
+                    onMouseOut={this.handleCloseX}
                 >
                     {options.map(option => (
                         <MenuItem key={option} onClick={this.handleClose(option)}>
@@ -64,6 +66,16 @@ class MoreMenu extends React.Component<IProps, any> {
         e.preventDefault()
         this.setState({anchorEl: null});
         this.props.onItemSelected(itemId)
+    }
+
+    private handleCloseX = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        e.preventDefault()
+        this.setState({anchorEl: null});
+    };
+
+    public closeMenu = () => {
+        this.setState({anchorEl: null});
     };
 }
 

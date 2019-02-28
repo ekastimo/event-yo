@@ -16,6 +16,9 @@ export interface IUser {
 export interface IStore {
     core: any
     contacts: any
+    locations: any
+    cellGroups: any
+    events: any
 }
 
 export interface ISearch {

@@ -1,6 +1,4 @@
 import * as React from 'react';
-import {Theme, WithStyles, withStyles} from "@material-ui/core";
-import createStyles from "@material-ui/core/styles/createStyles";
 import Grid from '@material-ui/core/Grid';
 import DateInput from '../../../widgets/inputs/DateInput';
 import TextInput from '../../../widgets/inputs/TextInput';
@@ -9,21 +7,13 @@ import {civilStatus, gender, salutation} from "../config";
 import {toOptions} from "../../../utils/TK";
 import TextArea from "../../../widgets/inputs/TextArea";
 
-const styles = (theme: Theme) =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-        },
-    });
-
-interface IProps extends WithStyles<typeof styles> {
+interface IProps  {
 }
-
 
 const PersonEditor = (props: IProps) => {
     return (
         <div style={{padding: 12}}>
-            <Grid className={props.classes.root} container spacing={24} >
+            <Grid  container spacing={24} >
                 <Grid item xs={12} sm={3} >
                     <SelectInput name='salutation' label='Salutation' options={toOptions(salutation)} />
                 </Grid>
@@ -54,5 +44,4 @@ const PersonEditor = (props: IProps) => {
     )
 }
 
-
-export default withStyles(styles)(PersonEditor)
+export default PersonEditor

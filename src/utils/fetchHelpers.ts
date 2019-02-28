@@ -44,3 +44,13 @@ export const fetchPut = (url: string, params: any = {}) => {
         json:params
     }
 }
+
+
+export const handleFetchError = (action: any) => {
+    const error = action.payload
+    const errors = []
+    if (error.status === 401) {
+        errors.push("User Unauthorized")
+    }
+    return errors
+}

@@ -5,6 +5,9 @@ import {offline} from '@redux-offline/redux-offline';
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
 import core from "./coreReducer";
 import contacts from "../modules/contacts/redux";
+import locations from "../modules/locations/redux";
+import cellGroups from "../modules/cellgroups/redux";
+import events from "../modules/events/redux";
 
 const myWindow = window as any;
 const toolsName = '__REDUX_DEVTOOLS_EXTENSION__';
@@ -12,7 +15,7 @@ const devTools: any = myWindow[toolsName] ? myWindow[toolsName]() : (f: any) => 
 
 const store = createStore(
     combineReducers({
-        core, contacts
+        core, contacts, locations,cellGroups,events
     }),
     {},
     compose(

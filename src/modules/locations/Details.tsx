@@ -98,7 +98,7 @@ class Details extends React.Component<IProps, IState> {
                             <Grid item xs={12} sm={4}>
                                 <MobileDisplayRow
                                     label='Details'
-                                    value={data.description}
+                                    value={data.details}
                                 />
                             </Grid>
 

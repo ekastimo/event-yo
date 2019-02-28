@@ -7,6 +7,7 @@ import {IContact} from "./types";
 import {renderName} from "./config";
 import XListItem from "../../widgets/lists/XListItem";
 import Typography from "@material-ui/core/Typography";
+import {isNullOrEmpty, parseAvatar} from "../../utils/TK";
 
 
 interface IProps {
@@ -17,12 +18,18 @@ interface IProps {
 
 const ContactItem = (props: IProps) => {
     const {data} = props
-    const {firstName, avatar} = data.person
+    const {firstName, lastName, avatar} = data.person
     const {person, emails: [email], phones: [phone]} = data
     return (
-        <XListItem {...props}
+        <XListItem
+            {...props}
+            editOnClick
         >
-            <Avatar alt={firstName} src={avatar}/>
+            {
+                isNullOrEmpty(avatar) ?
+                    <Avatar alt={lastName}>{parseAvatar(`${firstName} ${lastName}`)}</Avatar> :
+                    <Avatar alt={firstName} src={avatar}/>
+            }
             <ListItemText
                 disableTypography
                 primary={
@@ -30,8 +37,8 @@ const ContactItem = (props: IProps) => {
                         {renderName(person)}
                     </Typography>
                 }
-                secondary={<div >
-                    <Typography variant="caption"  inline>
+                secondary={<div>
+                    <Typography variant="caption" inline>
                         <EmailIcon fontSize="inherit"/>&nbsp;{email.address}
                     </Typography><br/>
                     <Typography variant="caption" inline>

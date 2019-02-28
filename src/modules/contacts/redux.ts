@@ -1,6 +1,6 @@
 import {remoteRoutes} from "../../data/constants";
-import {ISearch} from "./Contacts";
-import {fetchGet, fetchPost, fetchPut} from "../../utils/fetchHelpers";
+import {fetchGet, handleFetchError} from "../../utils/fetchHelpers";
+import {ISearch} from "../../data/types";
 
 const contactActions = {
     CONTACTS_GET_REQUEST: 'CONTACTS_GET_REQUEST',
@@ -76,7 +76,7 @@ export default function contactsReducer(state = initialState, action: any) {
             return {...state, data, isLoading: false}
         }
         case contactActions.CONTACTS_GET_ROLLBACK: {
-            const error = handleError(action)
+            const error = handleFetchError(action)
             return {...state, error, isLoading: false}
         }
 
@@ -86,7 +86,7 @@ export default function contactsReducer(state = initialState, action: any) {
             return {...state, contact}
         }
         case contactActions.CONTACTS_SINGLE_ROLLBACK: {
-            const error = handleError(action)
+            const error = handleFetchError(action)
             const contact = {error, isLoading: false}
             return {...state, contact}
         }
@@ -98,11 +98,4 @@ export default function contactsReducer(state = initialState, action: any) {
 }
 
 
-const handleError = (action: any) => {
-    const error = action.payload
-    const errors = []
-    if (error.status === 401) {
-        errors.push("User Unauthorized")
-    }
-    return errors
-}
+

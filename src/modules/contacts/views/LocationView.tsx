@@ -105,9 +105,7 @@ class LocationView extends React.Component<IProps, IState> {
 }
 
 
-const LocationForm = (props: any) => {
-    const ids: any[] = []
-    const filter = (it: IOption) => ids.indexOf(it.value) === -1
+const LocationForm = () => {
     const parser = (it: any) => ({label: it.name, value: it.id})
     return <Fragment>
         <div style={{padding: 12}}>
@@ -117,7 +115,6 @@ const LocationForm = (props: any) => {
                         name='churchLocation' label='Church Location'
                         remote={remoteRoutes.locations}
                         parser={parser}
-                        filter={filter}
                         isMulti={false}
                     />
                 </Grid>
@@ -126,7 +123,6 @@ const LocationForm = (props: any) => {
                         name='cellGroup' label='Missional Community'
                         remote={remoteRoutes.cellGroups}
                         parser={parser}
-                        filter={filter}
                         isMulti={false}
                     />
                 </Grid>

@@ -27,7 +27,7 @@ export const parseRange = (rec: any) => {
 }
 
 export const getImage = (value: string): string => {
-    if(value && value.length>0){
+    if (value && value.length > 0) {
         return value
     }
     return images.everything
@@ -223,15 +223,31 @@ export const toOptions = (data: string[]): IOption[] => {
     return data.map(it => ({label: it, value: it}))
 }
 
-export const trimSentence = (data: string,number: number): string => {
+export const trimSentence = (data: string, number: number): string => {
     let result = ''
     const words = data.split(" ")
-    for (const word of words){
+    for (const word of words) {
         const temp = `${result} ${word}`
-        if(temp.length>=number){
+        if (temp.length >= number) {
             return result.trim() + '...'
         }
         result = temp;
     }
     return result
+}
+
+
+export const parseAvatar = (value: string): string => {
+
+    if (isNullOrEmpty(value)) {
+        return ''
+    }
+    const parts = value.trim().split(" ");
+    console.log("Parts",parts)
+    if (parts.length > 1) {
+        const part1 = parts[0].trim();
+        const part2 = parts[1].trim();
+        return `${part1[0]}${part2[0]}`.toLocaleUpperCase()
+    }
+    return value.trim()[0].toLocaleUpperCase()
 }

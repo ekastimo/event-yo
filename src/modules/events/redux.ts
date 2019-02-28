@@ -2,20 +2,20 @@ import {remoteRoutes} from "../../data/constants";
 import {fetchGet, handleFetchError} from "../../utils/fetchHelpers";
 import {ISearch} from "../../data/types";
 
-const locationActions = {
-    LOCATIONS_GET_REQUEST: 'LOCATIONS_GET_REQUEST',
-    LOCATIONS_GET_COMMIT: 'LOCATIONS_GET_COMMIT',
-    LOCATIONS_GET_ROLLBACK: 'LOCATIONS_GET_ROLLBACK',
+const eventActions = {
+    EVENTS_GET_REQUEST: 'EVENTS_GET_REQUEST',
+    EVENTS_GET_COMMIT: 'EVENTS_GET_COMMIT',
+    EVENTS_GET_ROLLBACK: 'EVENTS_GET_ROLLBACK',
 }
 
 export const fetchData = (query: ISearch) => ({
-    type: locationActions.LOCATIONS_GET_REQUEST,
+    type: eventActions.EVENTS_GET_REQUEST,
     payload: {...query},
     meta: {
         offline: {
-            effect: fetchGet(remoteRoutes.locations, query),
-            commit: {type: locationActions.LOCATIONS_GET_COMMIT, meta: {...query}},
-            rollback: {type: locationActions.LOCATIONS_GET_ROLLBACK, meta: {...query}}
+            effect: fetchGet(remoteRoutes.events, query),
+            commit: {type: eventActions.EVENTS_GET_COMMIT, meta: {...query}},
+            rollback: {type: eventActions.EVENTS_GET_ROLLBACK, meta: {...query}}
         }
     }
 });
@@ -25,15 +25,15 @@ const initialState = {
     isLoading: false
 }
 
-export default function locationsReducer(state = initialState, action: any) {
+export default function eventsReducer(state = initialState, action: any) {
     switch (action.type) {
 
-        case locationActions.LOCATIONS_GET_COMMIT: {
+        case eventActions.EVENTS_GET_COMMIT: {
             const data = action.payload
             return {...state, data, isLoading: false}
         }
         
-        case locationActions.LOCATIONS_GET_ROLLBACK: {
+        case eventActions.EVENTS_GET_ROLLBACK: {
             const error = handleFetchError(action)
             return {...state, error, isLoading: false}
         }
