@@ -17,3 +17,9 @@ export interface IStore {
     core: any
     contacts: any
 }
+
+export interface ISearch {
+    limit: number,
+    skip: number,
+    query?: string
+}

@@ -1,10 +1,6 @@
-import React,{} from 'react';
-import { makeStyles } from '@material-ui/styles';
-import {Theme, WithStyles} from "@material-ui/core";
-import createStyles from "@material-ui/core/styles/createStyles";
+import React,{useEffect,useState} from 'react';
 import {remoteRoutes} from "../../data/constants";
 import {del, search} from "../../utils/ajax";
-import {withStyles,} from "@material-ui/core/styles";
 import {RouteComponentProps, withRouter} from 'react-router'
 import LocationItem from "./LocationItem";
 import {ILocation} from "./types";
@@ -15,17 +11,8 @@ import Toast from "../../utils/Toast";
 import uiConfirm from "../../widgets/confirm";
 import ListView from "../../widgets/lists/ListView";
 
-const styles = (theme: Theme) =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-            [theme.breakpoints.only('xs')]: {
-                padding: theme.spacing.unit * 2,
-            },
-        }
-    });
 
-interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any> {
+interface IProps extends RouteComponentProps<any> {
 }
 
 interface IState {
@@ -60,7 +47,6 @@ class Locations extends React.Component<IProps, IState> {
         const {isLoading, data, toEdit, showDialog} = this.state
         return (
             <div>
-
                 <ListView
                     isLoading={isLoading}
                     title='Church Locations'
@@ -154,4 +140,4 @@ class Locations extends React.Component<IProps, IState> {
     }
 }
 
-export default withRouter(withStyles(styles)(Locations))
+export default withRouter(Locations)

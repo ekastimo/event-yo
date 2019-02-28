@@ -1,6 +1,6 @@
 import {remoteRoutes} from "../../data/constants";
 import {ISearch} from "./Contacts";
-import {fetchGet, fetchPost, fetchPut} from "./fetchHelpers";
+import {fetchGet, fetchPost, fetchPut} from "../../utils/fetchHelpers";
 
 const contactActions = {
     CONTACTS_GET_REQUEST: 'CONTACTS_GET_REQUEST',

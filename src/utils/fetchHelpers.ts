@@ -1,4 +1,4 @@
-import {getToken} from "../../utils/ajax";
+import {getToken} from "./ajax";
 
 function parseUrl(url: string, params: any) {
     const paramList = Object.keys(params)
