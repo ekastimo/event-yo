@@ -42,10 +42,11 @@ class FormHolder extends React.Component<IProps> {
         const {width, classes, data, title, children, open, onClose, schema, debug} = this.props
         const isMobile = width === 'xs'
         const isSmall = width === 'sm'
+        const initialValues =data || {};
         return (
             <Formik
                 ref={(node: any) => (this.form = node)}
-                initialValues={data || {}}
+                initialValues={{...initialValues}}
                 validationSchema={schema}
                 onSubmit={this.onSubmit}
                 enableReinitialize={true}
@@ -110,30 +111,29 @@ class FormHolder extends React.Component<IProps> {
             post(url, values,
                 (data) => {
                     Toast.info('Operation successful')
-                    this.setState(() => ({data}))
+                    actions.resetForm()
                     this.props.onAjaxComplete(data)
                     this.props.onClose()
 
                 },
                 (err, resp) => {
                     handleError(err, resp)
+                },()=>{
                     actions.setSubmitting(false);
-                    this.setState(() => ({data: values}))
                 }
             )
         } else {
             put(url, values,
                 (data) => {
                     Toast.info('Update successful')
-                    this.setState(() => ({data}))
+                    actions.resetForm()
                     this.props.onAjaxComplete(data)
                     this.props.onClose()
-                    actions.setSubmitting(false);
                 },
                 (err, resp) => {
                     handleError(err, resp)
+                },()=>{
                     actions.setSubmitting(false);
-                    this.setState(() => ({data: values}))
                 }
             )
         }

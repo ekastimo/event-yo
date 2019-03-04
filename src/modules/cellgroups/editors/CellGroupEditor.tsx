@@ -13,6 +13,7 @@ const CellGroupEditor = () => {
     return (
         <div style={{padding: 12}}>
             <Grid  container spacing={24}>
+
                 <Grid item xs={12} sm={12} md={6}>
                     <XRemoteSelect
                         name='location' label='Church Location'
@@ -22,7 +23,10 @@ const CellGroupEditor = () => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={12} md={6}>
-                    <TextInput type='text' name='name' label='Name'/>
+                    <TextInput type='text' name='id' label='Unique Name'/>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6}>
+                    <TextInput type='text' name='name' label='Simpler Name'/>
                 </Grid>
                 <Grid item xs={12} sm={12} md={6}>
                     <TextInput type='text' name='venue' label='Venue'/>

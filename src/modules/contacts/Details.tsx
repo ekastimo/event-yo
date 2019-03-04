@@ -18,7 +18,7 @@ import {fetchContact} from "./redux";
 import {connect} from "react-redux";
 import {IStore} from "../../data/types";
 import Toast from "../../utils/Toast";
-import LocationView from "./views/LocationView";
+import LocationView from "./views/ChcView";
 
 const styles = () =>
     createStyles({

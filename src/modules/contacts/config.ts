@@ -120,6 +120,13 @@ export const addressSchema = yup.object().shape(
     }
 )
 
+export const contactChcSchema = yup.object().shape(
+    {
+        churchLocation: reqString,
+        cellGroup: reqString,
+    }
+)
+
 export const validationSchema = yup.object().shape(
     {
         tags: yup.array().of(
@@ -138,58 +145,12 @@ export const validationSchema = yup.object().shape(
     }
 );
 
-
-export const fakeContact = (): IContact => {
-    const fake = fakeRecord(1);
-    return {
-        id: 'fakeid222S',
-        category: 'Person',
-        churchLocation:'',
-        churchLocationName:'',
-        cellGroup:'',
-        cellGroupName:'',
-        person: {
-            firstName: fake.firstName,
-            lastName: fake.lastName,
-            middleName: fake.otherNames,
-            dateOfBirth: fake.birthDate,
-            about: fake.about,
-            avatar: fake.avatar,
-            civilStatus: fake.civilStatus,
-            gender: fake.gender,
-            salutation: fake.salutation
-        },
-        emails: [
-            {
-                id: '12',
-                isPrimary: true,
-                category: 'Personal',
-                address: fake.email
-            }
-        ],
-        phones: [
-            {
-                id: '12',
-                isPrimary: true,
-                category: 'Mobile',
-                number: fake.phone
-            }
-        ],
-        addresses: [
-            {
-                id: '12',
-                isPrimary: true,
-                category: 'Home',
-                latLon: '',
-                originalFreeform: fake.streetAddress
-            }
-        ],
-        tags: ['Lovely', 'Friendly']
-    }
-}
-
-
 export const renderName = (person: IPerson): string => {
     const name: string = `${person.salutation || ''} ${person.firstName || ''} ${person.middleName || ''} ${person.lastName || ''}`
     return name.trim().replace(/\s+/g, ' ')
+}
+
+export const contactChcFormDataParser = (data: any) => {
+    const {churchLocation, cellGroup} = data
+    return {...data, churchLocation: churchLocation.value, cellGroup: cellGroup.value}
 }

@@ -3,18 +3,16 @@ import {WithStyles, withStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {IAddress, IContact} from "../types";
 import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import FormHolder from "../../../widgets/FormHolder";
 import {remoteRoutes} from "../../../data/constants";
-import {addressSchema} from "../config";
-import {IOption} from "../../../data/types";
+import {contactChcFormDataParser, contactChcSchema} from "../config";
 import Grid from '@material-ui/core/Grid';
 import XRemoteSelect from "../../../widgets/inputs/XRemoteSelect";
 import {MobileDisplayRow} from "../../../widgets/elements";
+import {isNullOrEmpty} from "../../../utils/TK";
 
 const styles = () =>
     createStyles({
@@ -33,7 +31,7 @@ interface IState {
     locationData?: any
 }
 
-class LocationView extends React.Component<IProps, IState> {
+class ChcView extends React.Component<IProps, IState> {
     public state = {
         showDialog: false,
         locationData: undefined,
@@ -42,7 +40,14 @@ class LocationView extends React.Component<IProps, IState> {
 
     public render() {
         const {classes, data} = this.props
-        const {isLoading} = this.state
+        const {id, cellGroup, cellGroupName, churchLocation, churchLocationName} = data
+        const chcData = isNullOrEmpty(churchLocation) ?
+            {contactId: id} :
+            {
+                contactId: id,
+                cellGroup: {value: cellGroup, label: cellGroupName},
+                churchLocation: {value: churchLocation, label: churchLocationName}
+            }
         return (
             <div className={classes.root}>
                 <Card>
@@ -51,13 +56,13 @@ class LocationView extends React.Component<IProps, IState> {
                             <Grid item xs={5}>
                                 <MobileDisplayRow
                                     label='Location'
-                                    value={data.churchLocationName}
+                                    value={data.churchLocation}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <MobileDisplayRow
                                     label='Mc'
-                                    value={data.cellGroupName}
+                                    value={data.churchLocation}
                                 />
                             </Grid>
                             <Grid item xs={1}>
@@ -72,12 +77,13 @@ class LocationView extends React.Component<IProps, IState> {
                     title='Edit Church details'
                     open={this.state.showDialog}
                     onClose={this.handleClose}
-                    data={this.state.locationData}
-                    url={`${remoteRoutes.contactsAddress}/${data.id}`}
-                    isNew={false}
-                    schema={addressSchema}
+                    data={chcData}
+                    url={`${remoteRoutes.contactsChc}`}
+                    isNew={true}
+                    schema={contactChcSchema}
                     debug={true}
                     onAjaxComplete={this.onContactUpdated}
+                    dataParser={contactChcFormDataParser}
                 >
                     <LocationForm/>
                 </FormHolder>
@@ -131,4 +137,4 @@ const LocationForm = () => {
     </Fragment>
 }
 
-export default withStyles(styles)(LocationView)
+export default withStyles(styles)(ChcView)
