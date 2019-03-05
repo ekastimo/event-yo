@@ -29,7 +29,7 @@ export const localRoutes = {
 }
 
 const debug = process.env.NODE_ENV !== 'production'
-export const url = debug ? 'http://localhost:9001' :'https://eventx12.azurewebsites.net'
+export const url = debug ? 'http://localhost:9001' :'https://event-yo-server.herokuapp.com'
 
 export const remoteRoutes = {
     authServer: url,
