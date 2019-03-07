@@ -13,6 +13,11 @@ export interface IUser {
     roles: string[]
 }
 
+export interface ILoginReponse {
+    token: string
+    user: IUser
+}
+
 export interface IStore {
     core: any
     contacts: any

@@ -126,7 +126,7 @@ class AddressView extends React.Component<IProps, IState> {
             }, undefined, () => {
 
             });
-        }).catch(e => undefined)
+        },()=>{})
     }
 }
 

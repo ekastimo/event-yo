@@ -66,7 +66,7 @@ export function useDataManipulator(params: IDataParams): IDataResponse {
             }, undefined, () => {
                 setIsDeleting(false)
             });
-        }).catch(e => undefined)
+        },()=>{})
     }
 
     const handleCompletion = () => {

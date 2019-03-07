@@ -6,22 +6,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
-import {withStyles} from '@material-ui/core/styles';
-import createStyles from '@material-ui/core/styles/createStyles';
-import {WithStyles} from '@material-ui/core';
 import withWidth from '@material-ui/core/withWidth';
 
 import {handleError, post, put} from '../utils/ajax';
 import Toast from '../utils/Toast';
 
-const styles = () =>
-    createStyles({
-        root: {
-            width: '100%',
-        }
-    });
 
-interface IProps extends WithStyles<typeof styles> {
+interface IProps {
     data: any
     isNew: boolean
     url: string,
@@ -39,7 +30,7 @@ class FormHolder extends React.Component<IProps> {
     form?: Formik = undefined
 
     render() {
-        const {width, classes, data, title, children, open, onClose, schema, debug} = this.props
+        const {width,  data, title, children, open, onClose, schema, debug} = this.props
         const isMobile = width === 'xs'
         const isSmall = width === 'sm'
         const initialValues =data || {};
@@ -53,7 +44,7 @@ class FormHolder extends React.Component<IProps> {
             >
                 {(formState) => (
                     <Form>
-                        <div className={classes.root}>
+                        <div >
                             <Dialog
                                 open={open}
                                 onClose={onClose}
@@ -140,4 +131,4 @@ class FormHolder extends React.Component<IProps> {
     }
 }
 
-export default withStyles(styles)(withWidth()(FormHolder));
+export default withWidth()(FormHolder)

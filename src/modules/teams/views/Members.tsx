@@ -147,7 +147,7 @@ class Contacts extends React.Component<IProps, IState> {
                 Toast.info(resp.message)
                 this.reloadData()
             })
-        });
+        },()=>{});
     }
 
     private handleNewContact = () => {

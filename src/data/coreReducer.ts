@@ -1,38 +1,34 @@
-import {hasValue} from "../utils/validators";
-import {authToken, authUser, redux} from "./constants";
-
-
-/**
- * Initial state when the application Loads
- */
-function loadUser() {
-    const userJson = localStorage[authUser]
-    if (hasValue(userJson)) {
-        return JSON.parse(userJson)
-    }
-    return false
-}
+import {authToken, redux} from "./constants";
+import {handleFetchError} from "../utils/fetchHelpers";
+import {coreActionsDefs} from "./coreActions";
+import {ILoginReponse} from "./types";
 
 const initialState: any = {
     activeLink: '/',
-    token: localStorage[authToken],// We use this token to load the user
-    user: loadUser(),
+    token: undefined,
+    user: undefined,
+    isLoading: true,
     searchQuery: ''
 }
 
-
 export default function reducer(state = initialState, action: any) {
     switch (action.type) {
-        case redux.doLogin: {
-            const {user, token} = action.payload
+        case coreActionsDefs.LOGIN_COMMIT: {
+            const {token, user}: ILoginReponse = action.payload
             localStorage.setItem(authToken, token)
-            localStorage.setItem(authUser, JSON.stringify(user))
-            return {...state, user, token}
+            return {...state, user, token,isLoading: false}
         }
-        case redux.doLogout: {
+        case coreActionsDefs.LOGIN_ROLLBACK: {
+            console.log("Login Rollback")
+            handleFetchError(action)
+            return {...state, isLoading: false}
+        }
+        case coreActionsDefs.LOGIN_LOGOUT: {
             localStorage.removeItem(authToken)
-            localStorage.removeItem(authUser)
-            return {...state, user: false, token: false}
+            return {...state, isLoading: false, token: undefined, user: undefined,}
+        }
+        case coreActionsDefs.LOGIN_START: {
+            return {...state, isLoading: true}
         }
         case redux.doSearch: {
             const {searchQuery} = action.payload

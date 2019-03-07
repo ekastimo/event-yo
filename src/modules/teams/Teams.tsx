@@ -1,23 +1,25 @@
 import * as React from 'react';
-import {List, Theme, WithStyles} from "@material-ui/core";
+import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import {localRoutes, remoteRoutes} from "../../data/constants";
 import {del, search} from "../../utils/ajax";
 import {withStyles} from "@material-ui/core/styles";
 import {RouteComponentProps, withRouter} from 'react-router'
 import TeamItem from "./TeamItem";
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import {ITeam} from "./types";
-import Loading from "../../widgets/Loading";
 import {teamSchema} from "./config";
 import FormHolder from "../../widgets/FormHolder";
 import NewTeamEditor from "./editors/NewTeamEditor";
-import XToolBar from "../../widgets/XToolBar";
 import Toast from "../../utils/Toast";
 import uiConfirm from "../../widgets/confirm";
-import {renderName} from "../contacts/config";
 import ListView from "../../widgets/lists/ListView";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
+import CommentIcon from '@material-ui/icons/Comment';
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -143,16 +145,17 @@ class Contacts extends React.Component<IProps, IState> {
 
     private handleDelete = (data: any) => {
         const {name, id} = data;
-        uiConfirm(`Do you really want to delete ${name}?`).then(() => {
-            const url = `${remoteRoutes.teams}/${id}`;
-            this.setState(() => ({isLoading: true}))
-            del(url, data => {
-                Toast.info(data.message)
-                this.handleCompletion()
-            }, undefined, () => {
+        uiConfirm(`Do you really want to delete ${name}?`).then(
+            () => {
+                const url = `${remoteRoutes.teams}/${id}`;
                 this.setState(() => ({isLoading: true}))
-            });
-        }).catch(e => undefined)
+                del(url, data => {
+                    Toast.info(data.message)
+                    this.handleCompletion()
+                }, undefined, () => {
+                    this.setState(() => ({isLoading: true}))
+                });
+            },()=>{})
     }
 }
 

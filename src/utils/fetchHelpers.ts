@@ -1,4 +1,5 @@
 import {getToken} from "./ajax";
+import Toast from "./Toast";
 
 function parseUrl(url: string, params: any) {
     const paramList = Object.keys(params)
@@ -48,9 +49,11 @@ export const fetchPut = (url: string, params: any = {}) => {
 
 export const handleFetchError = (action: any) => {
     const error = action.payload
-    const errors = []
     if (error.status === 401) {
-        errors.push("User Unauthorized")
+        Toast.error("User Unauthorized")
+        window.location.reload()
     }
-    return errors
+    if(error.message === 'Failed to fetch'){
+        Toast.warn("No network Connectivity")
+    }
 }

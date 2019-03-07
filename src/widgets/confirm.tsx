@@ -40,3 +40,5 @@ const defaultConfirmation = createConfirmation(confirmable(ConfirmDialog));
 export default function uiConfirm(confirmation: string, options = {}) {
     return defaultConfirmation({confirmation, ...options});
 }
+
+

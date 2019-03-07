@@ -3,10 +3,13 @@ import ListItem from '@material-ui/core/ListItem';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Hidden from '@material-ui/core/Hidden';
 import MoreMenu from "../MoreMenu";
 import withWidth, {WithWidth} from '@material-ui/core/withWidth';
-import {ListItemSecondaryAction} from "@material-ui/core";
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
+import CommentIcon from '@material-ui/icons/Comment';
 
 interface IProps extends WithWidth {
     data: any,
@@ -18,7 +21,7 @@ interface IProps extends WithWidth {
 }
 
 class XListItem extends React.Component<IProps, any> {
-    menu: any = undefined
+    // menu: any = undefined
     state = {
         showButtons: false
     }
@@ -27,17 +30,16 @@ class XListItem extends React.Component<IProps, any> {
 
     public render() {
         const {data, onEdit, onDelete, isLoading, width, onDetails, editOnClick = true} = this.props
+        const isSmall = width === 'sm' || width === 'xs'
         const {showButtons} = this.state
         const handleEdit = (e: React.MouseEvent<HTMLElement>) => {
+            console.log("Handle edit")
             e.stopPropagation()
             e.preventDefault()
             if (editOnClick) {
                 onEdit({...data})
             } else if (onDetails) {
                 onDetails({...data})
-            }
-            if (this.menu) {
-                this.menu.closeMenu()
             }
         }
 
@@ -54,14 +56,18 @@ class XListItem extends React.Component<IProps, any> {
                 onDelete({...data})
             }
         }
+
         return (
-            <ListItem dense={width === 'sm'} button onClick={handleEdit}
+            <ListItem dense={width === 'sm'} button onClick={handleEdit} role={undefined}
                       onMouseOver={this.showButtons}
                       onMouseLeave={this.hideButtons}
             >
                 {this.props.children}
-                <Hidden smDown>
-                    {
+                {
+                    isSmall?
+                        <ListItemSecondaryAction>
+                            <MoreMenu options={items} onItemSelected={handleMenuClick}/>
+                        </ListItemSecondaryAction>:
                         showButtons &&
                         <React.Fragment>
                             <IconButton aria-label="Edit" onClick={handleEdit} disabled={isLoading}>
@@ -71,13 +77,7 @@ class XListItem extends React.Component<IProps, any> {
                                 <DeleteIcon fontSize='small'/>
                             </IconButton>
                         </React.Fragment>
-                    }
-                </Hidden>
-                <Hidden mdUp>
-                    <ListItemSecondaryAction>
-                        <MoreMenu options={items} onItemSelected={handleMenuClick} ref={ref => this.menu = ref}/>
-                    </ListItemSecondaryAction>
-                </Hidden>
+                }
             </ListItem>
         );
     }

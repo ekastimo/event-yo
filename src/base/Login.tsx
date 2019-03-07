@@ -1,83 +1,119 @@
-import * as React from 'react';
+import React from 'react';
 import {Button, Theme, WithStyles} from "@material-ui/core";
-import Grid from '@material-ui/core/Grid';
-import {Form, Formik, FormikActions} from 'formik';
-import createStyles from "@material-ui/core/styles/createStyles";
-import SaveIcon from '@material-ui/icons/Save';
-import {withStyles} from "@material-ui/core/styles";
-
-import {post} from "../utils/ajax";
-import {remoteRoutes} from "../data/constants";
+import Avatar from '@material-ui/core/Avatar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import LockIcon from '@material-ui/icons/LockOutlined';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import {Form, Formik} from 'formik';
+import {doLogin, startLogin} from "../data/coreActions";
 import TextInput from "../widgets/inputs/TextInput";
 import * as yup from "yup";
+import {connect} from "react-redux";
+import {IStore} from "../data/types";
+import createStyles from "@material-ui/core/styles/createStyles";
+import withStyles from "@material-ui/core/styles/withStyles";
 
 const styles = (theme: Theme) =>
     createStyles({
-        root: {
-            width: '100%'
+        main: {
+            width: 'auto',
+            display: 'block', // Fix IE 11 issue.
+            marginLeft: theme.spacing.unit * 3,
+            marginRight: theme.spacing.unit * 3,
+            [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+                width: 400,
+                marginLeft: 'auto',
+                marginRight: 'auto',
+            },
         },
-        mainForm: {}
+        paper: {
+            marginTop: theme.spacing.unit * 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+        },
+        avatar: {
+            margin: theme.spacing.unit,
+            backgroundColor: theme.palette.secondary.main,
+        },
+        form: {
+            width: '100%', // Fix IE 11 issue.
+            marginTop: theme.spacing.unit,
+        },
+        submit: {
+            marginTop: theme.spacing.unit * 3,
+        },
     });
 
+
 interface IProps extends WithStyles<typeof styles> {
-    handleLogin: (data: any) => any
+    doLogin: (data: any) => any
+    startLogin: () => any
+    isLoading: boolean
 }
 
-class Login extends React.Component<IProps> {
-    public render() {
-        const {classes} = this.props
-
-        return (
-            <Grid container spacing={8}>
-                <Grid item xs={12} sm={8} md={6}>
-                    <Formik
-                        initialValues={{
-                            "email": "ekastimo@gmail.com",
-                            "password": "Xpass@123"
-                        }}
-                        validationSchema={validationSchema}
-                        onSubmit={this.onSubmit}
-                    >
-                        {({values, touched, errors, isSubmitting}) => (
-                            <Form>
-                                <div className={classes.mainForm}>
-                                    <Grid item xs={12}>
-                                        <TextInput type='email' name='email' label='Email'/>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextInput type='password' name='password' label='Password'/>
-                                    </Grid>
-                                    <Grid container spacing={16}>
-                                        <Grid item xs={12}>
-                                            <Button
-                                                type='submit'
-                                                aria-label='Login'
-                                                disabled={isSubmitting}
-                                            >
-                                                <SaveIcon/>
-                                                &nbsp;Submit
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                </div>
-                            </Form>
-                        )}
-                    </Formik>
-                </Grid>
-            </Grid>
-        );
+function Login(props: IProps) {
+    const {isLoading, classes} = props
+    const onSubmit = (data: any) => {
+        props.startLogin()
+        props.doLogin(data)
     }
+    return (
+        <main className={classes.main}>
+            <CssBaseline/>
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockIcon/>
+                </Avatar>
+                <Typography component="h1">
+                    Sign in
+                </Typography>
+                <Formik
+                    initialValues={{
+                        "email": "ekastimo@gmail.com",
+                        "password": "Xpass@123"
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={onSubmit}
+                >
+                    {() => (
+                        <Form className={classes.form}>
+                            <TextInput
+                                type='email'
+                                name='email'
+                                label='Email Address'
+                                autoComplete="email"
+                                autoFocus
+                                margin="normal"
+                            />
 
-    private onSubmit = (data: any, actions: FormikActions<any>) => {
-        const url = remoteRoutes.login
-        post(url, data,
-            (resp) => {
-                this.props.handleLogin(resp)
-            }, undefined, () => {
-                actions.setSubmitting(false)
-            }
-        )
-    }
+                            <TextInput
+                                type='password'
+                                name='password'
+                                label='Password'
+                                autoComplete="email"
+                                margin="normal"
+                            />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                                disabled={isLoading}
+                            >
+                                Sign in
+                            </Button>
+                        </Form>
+                    )}
+                </Formik>
+            </Paper>
+        </main>
+    );
+
+
 }
 
 const reqMsg = 'Field is required'
@@ -88,4 +124,19 @@ export const validationSchema = yup.object().shape(
     }
 );
 
-export default withStyles(styles)(Login)
+export default connect(
+    ({core}: IStore) => {
+        return {
+            data: core.user,
+            isLoading: core.isLoading
+        }
+    },
+    (dispatch: any) => {
+        return {
+            doLogin: (data: any) => dispatch(doLogin(data)),
+            startLogin: () => dispatch(startLogin())
+        }
+    }
+)(withStyles(styles)(Login))
+
+
