@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Fragment} from 'react';
 import Main from "./base/Main";
 import withRoot from './withRoot';
@@ -8,6 +8,7 @@ import {IUser} from "./data/types";
 import Login from "./base/Login";
 import {connect} from "react-redux";
 import {doLogin, doLogout} from "./data/coreActions";
+import Loading from "./widgets/Loading";
 
 interface IProps {
     user?: IUser
@@ -17,8 +18,17 @@ interface IProps {
 
 
 function App(props: IProps) {
+    const [slash, setSplash] = useState(true)
     const {user} = props
-    if (user) {
+    useEffect(() => {
+        setTimeout(() => {
+            setSplash(false)
+        }, 1000)
+    })
+
+    if (slash) {
+        return <Loading/>
+    } else if (user) {
         return (
             <HashRouter>
                 <Fragment>

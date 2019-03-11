@@ -1,7 +1,7 @@
 import * as React from "react"
 import {Route, Switch} from 'react-router-dom'
 import {localRoutes} from "../data/constants";
-import Home from "../modules/Home2";
+import Home from "../modules/home/Home";
 import NoMatch from "./NoMatch";
 import Contacts from "../modules/contacts/Contacts";
 import Details from "../modules/contacts/Details";

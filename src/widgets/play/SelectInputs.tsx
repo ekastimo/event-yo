@@ -5,10 +5,10 @@ import createStyles from "@material-ui/core/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
-import XMultiSelect from "../widgets/inputs/XMultiSelect";
+import XMultiSelect from "../inputs/XMultiSelect";
 import * as yup from "yup";
-import XRemoteSelect from "../widgets/inputs/XRemoteSelect";
-import {remoteRoutes} from "../data/constants";
+import XRemoteSelect from "../inputs/XRemoteSelect";
+import {remoteRoutes} from "../../data/constants";
 
 const styles = (theme: Theme) =>
     createStyles({

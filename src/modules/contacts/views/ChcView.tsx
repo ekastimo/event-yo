@@ -62,7 +62,7 @@ class ChcView extends React.Component<IProps, IState> {
                             <Grid item xs={6}>
                                 <MobileDisplayRow
                                     label='Mc'
-                                    value={data.churchLocation}
+                                    value={data.cellGroup}
                                 />
                             </Grid>
                             <Grid item xs={1}>
@@ -81,7 +81,6 @@ class ChcView extends React.Component<IProps, IState> {
                     url={`${remoteRoutes.contactsChc}`}
                     isNew={true}
                     schema={contactChcSchema}
-                    debug={true}
                     onAjaxComplete={this.onContactUpdated}
                     dataParser={contactChcFormDataParser}
                 >
