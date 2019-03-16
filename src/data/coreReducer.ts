@@ -7,7 +7,7 @@ const initialState: any = {
     activeLink: '/',
     token: undefined,
     user: undefined,
-    isLoading: true,
+    isLoading: false,
     searchQuery: ''
 }
 

@@ -45,9 +45,12 @@ const styles = (theme: Theme) =>
     });
 
 interface IProps extends WithStyles<typeof styles> {
-    handleChange: (query: string) => any
+    onFilter: (data: any) => any
     title: string
     handleNew: () => any
+    filter?: any
+    advancedForm?: any
+    dataParser?: (data: any) => any
 }
 
 class XToolBar extends React.Component<IProps, any> {
@@ -56,7 +59,7 @@ class XToolBar extends React.Component<IProps, any> {
     }
 
     public render() {
-        const {classes, handleChange, handleNew, title} = this.props;
+        const {classes, onFilter, handleNew, title,...rest} = this.props;
         const {isSearching} = this.state;
         return (
             <Toolbar
@@ -64,7 +67,7 @@ class XToolBar extends React.Component<IProps, any> {
             >
                 {
                     isSearching ?
-                        <SearchInput onChange={handleChange} onBack={this.handleEndSearch} withBack={true}/>
+                        <SearchInput onFilter={onFilter} onBack={this.handleEndSearch} withBack={true} {...rest}/>
                         :
                         <Fragment>
                             <div className={classes.title}>

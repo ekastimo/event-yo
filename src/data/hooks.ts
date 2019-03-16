@@ -17,7 +17,7 @@ interface IDataResponse {
     handleEdit: (data: any) => any
     handleNewContact: () => any
     handleClose: () => any
-    handleChange: (data: any) => any
+    handleSearch: (data: any) => any
     handleCompletion: (data: any) => any
 }
 
@@ -26,21 +26,19 @@ export function useDataManipulator(params: IDataParams): IDataResponse {
     const [isDeleting, setIsDeleting] = useState(true)
     const [showDialog, setShowDialog] = useState(false)
     const [toEdit, setToEdit] = useState(undefined)
-    const [query, setQuery] = useState("")
+    const [filter, setFilter] = useState({limit: 10, skip: 0})
 
     const handleClose = () => {
         setShowDialog(false)
     }
 
-    const handleChange = (e: any) => {
-        const value = e.target.value
-        setQuery(value)
+    const handleSearch = (data: any) => {
+        setFilter(data)
     }
 
     useEffect(() => {
-        const request = {limit: 10, skip: 0, query}
-        params.loadData(request)
-    }, [query])
+        params.loadData(filter)
+    }, [filter])
 
     const handleNewContact = () => {
         const empty: any = {};
@@ -56,7 +54,7 @@ export function useDataManipulator(params: IDataParams): IDataResponse {
     }
 
     const handleDelete = (data: any) => {
-        const {name, id} = data;
+        const {id} = data;
         uiConfirm(`Do you really want to delete this record?`).then(() => {
             const url = `${params.deleteUrl}/${id}`;
             setIsDeleting(false)
@@ -66,7 +64,8 @@ export function useDataManipulator(params: IDataParams): IDataResponse {
             }, undefined, () => {
                 setIsDeleting(false)
             });
-        },()=>{})
+        }, () => {
+        })
     }
 
     const handleCompletion = () => {
@@ -74,7 +73,7 @@ export function useDataManipulator(params: IDataParams): IDataResponse {
     }
 
     return {
-        isNew,isDeleting, showDialog, toEdit,
-        handleDelete, handleEdit, handleNewContact, handleClose, handleChange, handleCompletion
+        isNew, isDeleting, showDialog, toEdit,
+        handleDelete, handleEdit, handleNewContact, handleClose, handleSearch, handleCompletion
     }
 }

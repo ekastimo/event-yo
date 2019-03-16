@@ -8,6 +8,8 @@ import TextInput from '../../../widgets/inputs/TextInput';
 import SelectInput from '../../../widgets/inputs/SelectInput';
 import {civilStatus, gender, salutation} from "../config";
 import {toOptions} from "../../../utils/TK";
+import {remoteRoutes} from "../../../data/constants";
+import XRemoteSelect from "../../../widgets/inputs/XRemoteSelect";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -21,9 +23,26 @@ interface IProps extends WithStyles<typeof styles> {
 
 
 const NewPersonEditor = (props: IProps) => {
+    const parser = (it: any) => ({label: it.name, value: it.id})
     return (
         <div style={{padding: 12}}>
             <Grid className={props.classes.root} container spacing={24}>
+                <Grid item xs={12} sm={12} md={6}>
+                    <XRemoteSelect
+                        name='churchLocation' label='Church Location'
+                        remote={remoteRoutes.locations}
+                        parser={parser}
+                        isMulti={false}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={12} md={6}>
+                    <XRemoteSelect
+                        name='cellGroup' label='Missional Community'
+                        remote={remoteRoutes.cellGroups}
+                        parser={parser}
+                        isMulti={false}
+                    />
+                </Grid>
                 <Grid item xs={12} sm={3}>
                     <SelectInput name='salutation' label='Salutation' options={toOptions(salutation)}/>
                 </Grid>

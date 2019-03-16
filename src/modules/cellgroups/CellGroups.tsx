@@ -20,7 +20,7 @@ interface IProps extends RouteComponentProps<any> {
 function Locations(props: IProps) {
     const {
         isNew, toEdit, showDialog,
-        handleChange, handleClose, handleDelete,
+        handleSearch, handleClose, handleDelete,
         handleEdit, handleNewContact, handleCompletion
     } = useDataManipulator({deleteUrl: remoteRoutes.cellGroups, loadData: props.loadData})
     const {data, isLoading} = props
@@ -33,7 +33,7 @@ function Locations(props: IProps) {
                 title='Mcs'
                 hasData={data && data.length > 0}
                 handleAdd={handleNewContact}
-                handleSearch={handleChange}
+                handleSearch={handleSearch}
             >
                 {
                     data.map((it: any) => (
@@ -56,7 +56,6 @@ function Locations(props: IProps) {
                 schema={schema}
                 onAjaxComplete={handleCompletion}
                 dataParser={cellGroupFormDataParser}
-                debug
             >
                 <Editor/>
             </FormHolder>

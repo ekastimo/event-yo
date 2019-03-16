@@ -64,7 +64,7 @@ class Events extends React.Component<IProps, IState> {
         return (
             <div className={classes.root}>
                 <XToolBar
-                    handleChange={this.handleChange}
+                    onFilter={this.handleChange}
                     title='Events'
                     handleNew={this.handleNewContact}
                 />

@@ -84,7 +84,7 @@ class ChcView extends React.Component<IProps, IState> {
                     onAjaxComplete={this.onContactUpdated}
                     dataParser={contactChcFormDataParser}
                 >
-                    <LocationForm/>
+                    <ChcForm/>
                 </FormHolder>
             </div>
         );
@@ -110,12 +110,12 @@ class ChcView extends React.Component<IProps, IState> {
 }
 
 
-const LocationForm = () => {
+export const ChcForm = () => {
     const parser = (it: any) => ({label: it.name, value: it.id})
     return <Fragment>
         <div style={{padding: 12}}>
             <Grid container spacing={24}>
-                <Grid item xs={12} sm={12}>
+                <Grid item xs={12} sm={12} md={6}>
                     <XRemoteSelect
                         name='churchLocation' label='Church Location'
                         remote={remoteRoutes.locations}
@@ -123,7 +123,7 @@ const LocationForm = () => {
                         isMulti={false}
                     />
                 </Grid>
-                <Grid item xs={12} sm={12}>
+                <Grid item xs={12} sm={12} md={6}>
                     <XRemoteSelect
                         name='cellGroup' label='Missional Community'
                         remote={remoteRoutes.cellGroups}

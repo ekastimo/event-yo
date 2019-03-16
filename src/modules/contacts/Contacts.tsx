@@ -3,7 +3,7 @@ import {localRoutes, remoteRoutes} from "../../data/constants";
 import {RouteComponentProps, withRouter} from 'react-router'
 import ContactItem from "./ContactItem";
 import {IContact} from "./types";
-import {newPersonSchema} from "./config";
+import {contactChcFilterDataParser, contactChcFormDataParser, newPersonSchema} from "./config";
 import FormHolder from "../../widgets/FormHolder";
 import NewPersonEditor from "./editors/NewPersonEditor";
 import ListView from "../../widgets/lists/ListView";
@@ -11,6 +11,7 @@ import {connect} from "react-redux";
 import {IStore} from "../../data/types";
 import {fetchData} from "./redux";
 import {useDataManipulator} from "../../data/hooks";
+import {ChcForm} from "./views/ChcView";
 
 interface IProps extends RouteComponentProps<any> {
     isLoading: boolean,
@@ -21,7 +22,7 @@ interface IProps extends RouteComponentProps<any> {
 export function Contacts(props: IProps) {
     const {
         toEdit, showDialog,
-        handleChange, handleClose, handleDelete,
+        handleSearch, handleClose, handleDelete,
         handleNewContact, handleCompletion
     } = useDataManipulator({deleteUrl: remoteRoutes.contacts, loadData: props.loadData})
     const {data, isLoading} = props
@@ -34,10 +35,12 @@ export function Contacts(props: IProps) {
         <div>
             <ListView
                 isLoading={isLoading}
-                title='Church Locations'
+                title='People'
                 hasData={data && data.length > 0}
                 handleAdd={handleNewContact}
-                handleSearch={handleChange}
+                handleSearch={handleSearch}
+                advancedForm={<ChcForm/>}
+                dataParser={contactChcFilterDataParser}
             >
                 {
                     data.map((it: any) => (
@@ -59,6 +62,7 @@ export function Contacts(props: IProps) {
                 open={showDialog}
                 onClose={handleClose}
                 onAjaxComplete={handleCompletion}
+                dataParser={contactChcFormDataParser}
             >
                 <NewPersonEditor/>
             </FormHolder>
@@ -66,6 +70,10 @@ export function Contacts(props: IProps) {
         </div>
     )
 }
+
+
+
+
 
 export default connect(
     ({contacts}: IStore) => {

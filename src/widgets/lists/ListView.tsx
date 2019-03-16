@@ -3,7 +3,6 @@ import {List, ListItem, ListItemText, Theme, WithStyles} from "@material-ui/core
 import Grid from '@material-ui/core/Grid';
 import createStyles from "@material-ui/core/styles/createStyles";
 import {withStyles} from "@material-ui/core/styles";
-import Fab from '@material-ui/core/Fab';
 import Hidden from '@material-ui/core/Hidden';
 import AddIcon from '@material-ui/icons/Add';
 import XToolBar from "../XToolBar";
@@ -25,15 +24,18 @@ const styles = (theme: Theme) =>
 
 interface IProps extends WithStyles<typeof styles> {
     isLoading: boolean,
-    handleSearch?: (query: string) => any,
+    handleSearch?: (data: any) => any,
+    dataParser?: (data: any) => any,
     title: string,
     handleAdd: () => any,
     hasData: boolean,
     children: React.ReactNode
+    filter?: any
+    advancedForm?: any
 }
 
 const ListView = (props: IProps) => {
-    const {isLoading, handleSearch, title, handleAdd, children, classes, hasData} = props
+    const {isLoading, handleSearch, title, handleAdd, children, classes, hasData, filter, advancedForm, dataParser} = props
     return (
         <div className={classes.root}>
             <Grid container spacing={0} justify='center'>
@@ -42,9 +44,12 @@ const ListView = (props: IProps) => {
                         handleSearch &&
                         <Hidden smDown>
                             <XToolBar
-                                handleChange={handleSearch}
+                                onFilter={handleSearch}
                                 title={title}
                                 handleNew={handleAdd}
+                                filter={filter}
+                                advancedForm={advancedForm}
+                                dataParser={dataParser}
                             />
                         </Hidden>
                     }

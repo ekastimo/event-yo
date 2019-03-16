@@ -1,9 +1,7 @@
 import * as yup from 'yup';
-import {fakeRecord} from '../../utils/fakeData';
-import {IContact, IPerson} from './types';
+import {IPerson} from './types';
 import {countryCodes} from "../../data/countries";
 import {invalidInputs, nullableString, reqDate, reqMsg, reqString} from "../../data/validations";
-import {IUser} from "../../data/types";
 
 export const defaultData = {
     person: {
@@ -72,6 +70,8 @@ export const personSchema = yup.object().shape(
 
 export const newPersonSchema = yup.object().shape(
     {
+        churchLocation: reqString,
+        cellGroup: reqString,
         gender: reqString.oneOf(gender),
         firstName: reqString,
         lastName: reqString,
@@ -153,4 +153,9 @@ export const renderName = (person: IPerson): string => {
 export const contactChcFormDataParser = (data: any) => {
     const {churchLocation, cellGroup} = data
     return {...data, churchLocation: churchLocation.value, cellGroup: cellGroup.value}
+}
+
+export const contactChcFilterDataParser = (data: any) => {
+    const {churchLocation = {}, cellGroup = {}} = data
+    return {...data, churchLocation: churchLocation.value || '', cellGroup: cellGroup.value || ''}
 }

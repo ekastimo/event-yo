@@ -18,33 +18,34 @@ interface IProps {
     url: string,
     open: boolean
     debug?: boolean
+    handleSubmit?: (data: any) => any
     title: string
     onClose: () => any
     dataParser?: (data: any) => any
-    schema: any
+    schema?: any
     width: false | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-    onAjaxComplete: (data: any) => any
+    onAjaxComplete?: (data: any) => any
 }
 
 class FormHolder extends React.Component<IProps> {
     form?: Formik = undefined
 
     render() {
-        const {width,  data, title, children, open, onClose, schema, debug} = this.props
+        const {width, data, title, children, open, onClose, schema, debug} = this.props
         const isMobile = width === 'xs'
         const isSmall = width === 'sm'
-        const initialValues =data || {};
+        const initialValues = data || {};
         return (
             <Formik
                 ref={(node: any) => (this.form = node)}
                 initialValues={{...initialValues}}
                 validationSchema={schema}
-                onSubmit={this.onSubmit}
+                onSubmit={ this.onSubmit}
                 enableReinitialize={true}
             >
                 {(formState) => (
                     <Form>
-                        <div >
+                        <div>
                             <Dialog
                                 open={open}
                                 onClose={onClose}
@@ -88,6 +89,7 @@ class FormHolder extends React.Component<IProps> {
             </Formik>
         )
     }
+
     submitForm = () => {
         if (this.form) {
             this.form.submitForm()
@@ -95,21 +97,28 @@ class FormHolder extends React.Component<IProps> {
     }
 
     onSubmit = (rawValues: any, actions: FormikActions<any>) => {
-        const values = this.props.dataParser ? this.props.dataParser(rawValues) : rawValues
 
-        const {isNew, url} = this.props
+        const {isNew, url, dataParser, onAjaxComplete, onClose,handleSubmit} = this.props
+        const values = dataParser ? dataParser(rawValues) : rawValues
+        if(handleSubmit){
+            // Custom submission
+            handleSubmit(values)
+            actions.setSubmitting(false)
+            onClose()
+            return// stop processing
+        }
         if (isNew) {
             post(url, values,
                 (data) => {
                     Toast.info('Operation successful')
                     actions.resetForm()
-                    this.props.onAjaxComplete(data)
-                    this.props.onClose()
+                    onAjaxComplete && onAjaxComplete(data)
+                    onClose()
 
                 },
                 (err, resp) => {
                     handleError(err, resp)
-                },()=>{
+                }, () => {
                     actions.setSubmitting(false);
                 }
             )
@@ -118,12 +127,12 @@ class FormHolder extends React.Component<IProps> {
                 (data) => {
                     Toast.info('Update successful')
                     actions.resetForm()
-                    this.props.onAjaxComplete(data)
-                    this.props.onClose()
+                    onAjaxComplete && onAjaxComplete(data)
+                    onClose()
                 },
                 (err, resp) => {
                     handleError(err, resp)
-                },()=>{
+                }, () => {
                     actions.setSubmitting(false);
                 }
             )
