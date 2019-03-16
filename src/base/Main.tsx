@@ -9,7 +9,6 @@ import {withStyles} from '@material-ui/core/styles';
 import {Theme} from "@material-ui/core/styles/createMuiTheme";
 import createStyles from "@material-ui/core/styles/createStyles";
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
 import Typography from "@material-ui/core/Typography";
 import withWidth from '@material-ui/core/withWidth';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -56,8 +55,7 @@ const styles = (theme: Theme) =>
     });
 
 export interface IProps extends WithStyles<typeof styles> {
-    theme: any,
-    handleLogout: () => any
+    theme: any
 }
 
 class Main extends React.Component<IProps> {
@@ -98,11 +96,6 @@ class Main extends React.Component<IProps> {
                         <Typography variant="h6" color="inherit" noWrap className={classes.grow}>
                             dEMO
                         </Typography>
-                        <Button
-                            color="inherit"
-                            onClick={this.props.handleLogout}
-                            size={"small"}>
-                            LOG OUT</Button>
                     </Toolbar>
                 </AppBar>
                 <nav className={classes.drawer}>

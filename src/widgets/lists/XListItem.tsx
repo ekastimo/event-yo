@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React,{Fragment} from 'react';
 import ListItem from '@material-ui/core/ListItem';
+import Divider from '@material-ui/core/Divider';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
@@ -58,27 +59,31 @@ class XListItem extends React.Component<IProps, any> {
         }
 
         return (
-            <ListItem dense={width === 'sm'} button onClick={handleEdit} role={undefined}
-                      onMouseOver={this.showButtons}
-                      onMouseLeave={this.hideButtons}
-            >
-                {this.props.children}
-                {
-                    isSmall?
-                        <ListItemSecondaryAction>
-                            <MoreMenu options={items} onItemSelected={handleMenuClick}/>
-                        </ListItemSecondaryAction>:
-                        showButtons &&
-                        <React.Fragment>
-                            <IconButton aria-label="Edit" onClick={handleEdit} disabled={isLoading}>
-                                <EditIcon fontSize='small'/>
-                            </IconButton>
-                            <IconButton aria-label="Delete" onClick={handleDelete} disabled={isLoading}>
-                                <DeleteIcon fontSize='small'/>
-                            </IconButton>
-                        </React.Fragment>
-                }
-            </ListItem>
+            <Fragment>
+                <ListItem dense={width === 'sm'} button onClick={handleEdit} role={undefined}
+                          onMouseOver={this.showButtons}
+                          onMouseLeave={this.hideButtons}
+                >
+                    {this.props.children}
+                    {
+                        isSmall?
+                            <ListItemSecondaryAction>
+                                <MoreMenu options={items} onItemSelected={handleMenuClick}/>
+                            </ListItemSecondaryAction>:
+                            showButtons &&
+                            <React.Fragment>
+                                <IconButton aria-label="Edit" onClick={handleEdit} disabled={isLoading}>
+                                    <EditIcon fontSize='small'/>
+                                </IconButton>
+                                <IconButton aria-label="Delete" onClick={handleDelete} disabled={isLoading}>
+                                    <DeleteIcon fontSize='small'/>
+                                </IconButton>
+                            </React.Fragment>
+                    }
+                </ListItem>
+                <Divider/>
+            </Fragment>
+
         );
     }
 }

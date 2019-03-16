@@ -13,7 +13,6 @@ import Loading from "./widgets/Loading";
 interface IProps {
     user?: IUser
     handleLogin: (data: any) => any
-    handleLogout: () => any
 }
 
 
@@ -33,7 +32,7 @@ function App(props: IProps) {
             <HashRouter>
                 <Fragment>
                     <ToastContainer/>
-                    <Main handleLogout={props.handleLogout}/>
+                    <Main />
                 </Fragment>
             </HashRouter>
         );
@@ -54,8 +53,7 @@ export default connect(
     },
     (dispatch: any) => {
         return {
-            handleLogin: (data: any) => dispatch(doLogin(data)),
-            handleLogout: () => dispatch(doLogout())
+            handleLogin: (data: any) => dispatch(doLogin(data))
         }
     }
 )(withRoot(App))

@@ -40,28 +40,34 @@ const ContactItem = (props: IProps) => {
                         {renderName(person)}
                     </Typography>
                 }
-                secondary={<Grid container spacing={8} direction="row" >
-                    <Grid item >
-                        <Typography variant="caption" inline>
-                            <EmailIcon fontSize="inherit"/>&nbsp;{email.address}
-                        </Typography>
-                    </Grid>
-                    <Grid item >
-                        <Typography variant="caption" inline>
-                            <PhoneIcon fontSize="inherit"/>&nbsp;{phone.number}
-                        </Typography>
-                    </Grid>
-                    <Grid item >
-                        <Typography variant="caption" inline>
-                            <PinDropIcon fontSize="inherit"/>&nbsp;{data.churchLocation}
-                        </Typography>
-                    </Grid>
-                    <Grid item >
-                        <Typography variant="caption" inline>
-                            <NaturePeopleIcon fontSize="inherit"/>&nbsp;{data.cellGroup}
-                        </Typography>
-                    </Grid>
-                </Grid>}
+                secondary={
+                    <div>
+                        <Grid container spacing={8} direction="row" >
+                            <Grid item >
+                                <Typography variant="caption" inline>
+                                    <EmailIcon fontSize="inherit"/>&nbsp;{email.address}
+                                </Typography>
+                            </Grid>
+                            <Grid item >
+                                <Typography variant="caption" inline>
+                                    <PhoneIcon fontSize="inherit"/>&nbsp;{phone.number}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={8} direction="row" >
+                            <Grid item >
+                                <Typography variant="caption" inline>
+                                    <PinDropIcon fontSize="inherit"/>&nbsp;{data.churchLocation}
+                                </Typography>
+                            </Grid>
+                            <Grid item >
+                                <Typography variant="caption" inline>
+                                    <NaturePeopleIcon fontSize="inherit"/>&nbsp;{data.cellGroup}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </div>
+                    }
             />
         </XListItem>
     );

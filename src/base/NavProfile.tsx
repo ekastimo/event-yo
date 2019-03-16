@@ -4,12 +4,13 @@ import createStyles from "@material-ui/core/styles/createStyles";
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
 import * as React from 'react';
-import {images} from "../assets/images";
 import {connect} from "react-redux";
 import {doLogin, doLogout} from "../data/coreActions";
 import {IUser} from "../data/types";
 import {WithStyles} from "@material-ui/core";
 import {isNullOrEmpty, parseAvatar} from "../utils/TK";
+
+import Link from '@material-ui/core/Link';
 
 interface IProps extends WithStyles<typeof styles> {
     user: IUser
@@ -46,6 +47,16 @@ class NavProfile extends React.Component<IProps> {
                     <Typography variant="caption" className={classes.profileText}>
                         {user.email}
                     </Typography>
+                </div>
+                <div className={classes.row}>
+                    <Link
+                        component="button"
+                        variant="caption"
+                        onClick={this.props.handleLogout}
+                        className={classes.profileText}
+                    >
+                        LOG OUT
+                    </Link>
                 </div>
             </div>
         )
