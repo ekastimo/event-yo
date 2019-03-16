@@ -1,8 +1,11 @@
 import * as React from 'react';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
 import EmailIcon from '@material-ui/icons/Email';
 import PhoneIcon from '@material-ui/icons/Phone';
+import NaturePeopleIcon from '@material-ui/icons/NaturePeople';
+import PinDropIcon from '@material-ui/icons/PinDrop';
 import {IContact} from "./types";
 import {renderName} from "./config";
 import XListItem from "../../widgets/lists/XListItem";
@@ -37,14 +40,28 @@ const ContactItem = (props: IProps) => {
                         {renderName(person)}
                     </Typography>
                 }
-                secondary={<div>
-                    <Typography variant="caption" inline>
-                        <EmailIcon fontSize="inherit"/>&nbsp;{email.address}
-                    </Typography><br/>
-                    <Typography variant="caption" inline>
-                        <PhoneIcon fontSize="inherit"/>&nbsp;{phone.number}
-                    </Typography>
-                </div>}
+                secondary={<Grid container spacing={8} direction="row" >
+                    <Grid item >
+                        <Typography variant="caption" inline>
+                            <EmailIcon fontSize="inherit"/>&nbsp;{email.address}
+                        </Typography>
+                    </Grid>
+                    <Grid item >
+                        <Typography variant="caption" inline>
+                            <PhoneIcon fontSize="inherit"/>&nbsp;{phone.number}
+                        </Typography>
+                    </Grid>
+                    <Grid item >
+                        <Typography variant="caption" inline>
+                            <PinDropIcon fontSize="inherit"/>&nbsp;{data.churchLocation}
+                        </Typography>
+                    </Grid>
+                    <Grid item >
+                        <Typography variant="caption" inline>
+                            <NaturePeopleIcon fontSize="inherit"/>&nbsp;{data.cellGroup}
+                        </Typography>
+                    </Grid>
+                </Grid>}
             />
         </XListItem>
     );

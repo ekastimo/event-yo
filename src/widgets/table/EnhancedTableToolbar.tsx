@@ -103,7 +103,7 @@ class EnhancedTableToolbar extends React.Component<IProps, any> {
                     <Fragment>
                         {
                             isSearching ?
-                                <SearchInput onChange={onChange} onBack={this.handleEndSearch} withBack={true}/>
+                                <SearchInput onFilter={onChange} onBack={this.handleEndSearch} withBack={true}/>
                                 :
                                 <Fragment>
                                     <div className={classes.title}>

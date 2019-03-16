@@ -259,6 +259,7 @@ class XRemoteSelect extends React.Component<IProps> {
                     onBlur={handleBlur}
                     placeholder='Select..'
                     isMulti={isMulti}
+                    isClearable={true}
                     {...extraProps}
                 />
                 {showError && <FormHelperText error={true}>{error}</FormHelperText>}

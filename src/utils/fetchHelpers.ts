@@ -51,7 +51,7 @@ export const handleFetchError = (action: any) => {
     const error = action.payload
     if (error.status === 401) {
         Toast.error("User Unauthorized")
-        window.location.reload()
+        //window.location.reload()
     }
     if(error.message === 'Failed to fetch'){
         Toast.warn("No network Connectivity")

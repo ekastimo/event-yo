@@ -20,7 +20,7 @@ interface IProps extends RouteComponentProps<any> {
 function Locations(props: IProps) {
     const {
         isNew,toEdit, showDialog,
-        handleChange, handleClose, handleDelete,
+        handleSearch, handleClose, handleDelete,
         handleEdit, handleNewContact, handleCompletion
     } = useDataManipulator({deleteUrl: remoteRoutes.locations, loadData: props.loadData})
     const {data, isLoading} = props
@@ -32,7 +32,7 @@ function Locations(props: IProps) {
                 title='Church Locations'
                 hasData={data && data.length > 0}
                 handleAdd={handleNewContact}
-                handleSearch={handleChange}
+                handleSearch={handleSearch}
             >
                 {
                     data.map((it: any) => (
