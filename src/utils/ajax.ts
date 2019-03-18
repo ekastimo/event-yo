@@ -1,13 +1,21 @@
 import * as superagent from 'superagent'
 import Toast from './Toast'
-import {authToken} from "../data/constants";
+import {AUTH_TOKEN_KEY, AUTH_USER_KEY} from "../data/constants";
 import * as validate from "validate.js";
 
 
 export const getToken = (): string | undefined => {
-    const token = localStorage.getItem(authToken);
+    const token = localStorage.getItem(AUTH_TOKEN_KEY);
     if (token && validate.isDefined(token)) {
         return token;
+    }
+    return
+}
+
+export const getUser = (): string | undefined => {
+    const data = localStorage.getItem(AUTH_USER_KEY);
+    if (data && validate.isDefined(data)) {
+        return JSON.parse(data);
     }
     return
 }
@@ -43,6 +51,14 @@ export const handleError = (err: any = {}, res: superagent.Response) => {
         Toast.error(finalMessage)
     }
 }
+const timeout = 4000
+export const isAuthError = (err: any = {}, res: superagent.Response) => {
+    if (err) {
+        console.log(err)
+        return false
+    }
+    return res && res.forbidden || res && res.unauthorized
+}
 
 export const handleResponse = (callBack: CallbackFunction, errorCallBack?: ErrorCallback, endCallBack?: EndCallback) => (err: any, res: superagent.Response) => {
     try {
@@ -68,6 +84,7 @@ export const get = (url: string, callBack: CallbackFunction, errorCallBack?: Err
     superagent.get(url)
         .set('Authorization', `Bearer ${getToken()}`)
         .set('Accept', 'application/json')
+        .timeout(timeout)
         .end(handleResponse(callBack, errorCallBack, endCallBack))
 }
 
@@ -76,6 +93,7 @@ export const search = (url: string, data: any, callBack: CallbackFunction, error
         .set('Authorization', `Bearer ${getToken()}`)
         .set('Accept', 'application/json')
         .query(data)
+        .timeout(timeout)
         .end(handleResponse(callBack, errorCallBack, endCallBack))
 }
 
@@ -86,6 +104,7 @@ export const post = (url: string, data: any, callBack: CallbackFunction, errorCa
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
         .send(data)
+        .timeout(timeout)
         .end(handleResponse(callBack, errorCallBack, endCallBack))
 }
 
@@ -94,6 +113,7 @@ export const postFile = (url: string, data: any, callBack: CallbackFunction, err
         .set('Authorization', `Bearer ${getToken()}`)
         .set('Accept', 'application/json')
         .send(data)
+        .timeout(timeout)
         .end(handleResponse(callBack, errorCallBack, endCallBack))
 }
 
@@ -103,6 +123,7 @@ export const put = (url: string, data: any, callBack: CallbackFunction, errorCal
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .send(data)
+        .timeout(timeout)
         .end(handleResponse(callBack, errorCallBack, endCallBack))
 }
 
@@ -110,5 +131,6 @@ export const del = (url: string, callBack: CallbackFunction, errorCallBack?: Err
     superagent.delete(url)
         .set('Authorization', `Bearer ${getToken()}`)
         .set('Accept', 'application/json')
+        .timeout(timeout)
         .end(handleResponse(callBack, errorCallBack, endCallBack))
 }

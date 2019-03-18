@@ -10,7 +10,6 @@ import cellGroups from "../modules/cellgroups/redux";
 import events from "../modules/events/redux";
 
 const discard = (error:any, _action:any, _retries:any) => {
-
     console.log("Got an error....",error)
     const { status, response } = error;
     console.log("Got an error....",{ status, response,error })

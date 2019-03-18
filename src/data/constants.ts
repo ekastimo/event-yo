@@ -1,5 +1,5 @@
-export const authToken = '__demo__ecole__token'
-export const authUser = '__demo__ecole__user'
+export const AUTH_TOKEN_KEY = '__demo__ecole__token'
+export const AUTH_USER_KEY = '__demo__ecole__user'
 
 export const redux = {
     doLogin: 'DO_LOGIN',

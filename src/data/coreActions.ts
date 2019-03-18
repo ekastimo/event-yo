@@ -1,20 +1,13 @@
-import {remoteRoutes} from "./constants";
-import {ISearch} from "./types";
-import {fetchPost} from "../utils/fetchHelpers";
-
-
 export const coreActionsDefs = {
-    LOGIN_REQUEST: 'LOGIN_REQUEST',
-    LOGIN_COMMIT: 'LOGIN_COMMIT',
-    LOGIN_ROLLBACK: 'LOGIN_ROLLBACK',
-    LOGIN_START: 'LOGIN_START',
+    LOGIN_LOGIN: 'LOGIN_LOGIN',
     LOGIN_LOGOUT: 'LOGIN_LOGOUT',
+    PROFILE_FAILED: 'PROFILE_FAILED',
 }
 
-
-export const startLogin = () => {
+export const handleLogin = (data: any) => {
     return {
-        type: coreActionsDefs.LOGIN_START,
+        type: coreActionsDefs.LOGIN_LOGOUT,
+        payload: {...data},
     }
 }
 
@@ -24,17 +17,8 @@ export const doLogout = () => {
     }
 }
 
-export const doLogin = (query: ISearch) => {
+export const handleFailedProfile = () => {
     return {
-        type: coreActionsDefs.LOGIN_REQUEST,
-        payload: {...query},
-        meta: {
-            offline: {
-                effect: fetchPost(remoteRoutes.login, query),
-                commit: {type: coreActionsDefs.LOGIN_COMMIT, meta: {...query}},
-                rollback: {type: coreActionsDefs.LOGIN_ROLLBACK, meta: {...query}}
-            }
-        }
+        type: coreActionsDefs.PROFILE_FAILED,
     }
-};
-
+}

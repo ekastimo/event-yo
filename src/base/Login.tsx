@@ -5,14 +5,16 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import LockIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import {Form, Formik} from 'formik';
-import {doLogin, startLogin} from "../data/coreActions";
+import {Form, Formik, FormikActions} from 'formik';
+import {doLogout, handleLogin as dispatchLogin} from "../data/coreActions";
 import TextInput from "../widgets/inputs/TextInput";
 import * as yup from "yup";
 import {connect} from "react-redux";
-import {IStore} from "../data/types";
 import createStyles from "@material-ui/core/styles/createStyles";
 import withStyles from "@material-ui/core/styles/withStyles";
+import {post} from "../utils/ajax";
+import {remoteRoutes} from "../data/constants";
+import Toast from "../utils/Toast";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -49,16 +51,20 @@ const styles = (theme: Theme) =>
 
 
 interface IProps extends WithStyles<typeof styles> {
-    doLogin: (data: any) => any
-    startLogin: () => any
-    isLoading: boolean
+    handleLogin: (data: any) => any
+    handleLogout: () => any
 }
 
 function Login(props: IProps) {
-    const {isLoading, classes} = props
-    const onSubmit = (data: any) => {
-        props.startLogin()
-        props.doLogin(data)
+    const {classes, handleLogin} = props
+    const onSubmit = (data: any, actions: FormikActions<any>) => {
+        post(remoteRoutes.login, data, resp => {
+            handleLogin(resp)
+        }, err => {
+            Toast.error("Invalid username/password")
+        }, () => {
+            actions.setSubmitting(false)
+        })
     }
     return (
         <main className={classes.main}>
@@ -78,7 +84,7 @@ function Login(props: IProps) {
                     validationSchema={validationSchema}
                     onSubmit={onSubmit}
                 >
-                    {() => (
+                    {(formState) => (
                         <Form className={classes.form}>
                             <TextInput
                                 type='email'
@@ -102,7 +108,7 @@ function Login(props: IProps) {
                                 variant="contained"
                                 color="primary"
                                 className={classes.submit}
-                                disabled={isLoading}
+                                disabled={formState.isSubmitting}
                             >
                                 Sign in
                             </Button>
@@ -125,16 +131,11 @@ export const validationSchema = yup.object().shape(
 );
 
 export default connect(
-    ({core}: IStore) => {
-        return {
-            data: core.user,
-            isLoading: core.isLoading
-        }
-    },
+    null,
     (dispatch: any) => {
         return {
-            doLogin: (data: any) => dispatch(doLogin(data)),
-            startLogin: () => dispatch(startLogin())
+            handleLogin: (data: any) => dispatch(dispatchLogin(data)),
+            handleLogout: () => dispatch(doLogout())
         }
     }
 )(withStyles(styles)(Login))
