@@ -3,6 +3,7 @@ import * as React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
 import {withStyles} from '@material-ui/core/styles';
@@ -71,10 +72,14 @@ class Main extends React.Component<IProps> {
         this.setState({mobileOpen: false});
     }
 
+    public openDrawer = () => {
+        this.setState({mobileOpen: true});
+    }
+
     public render() {
         const {classes, theme} = this.props;
         const drawer = (
-            <div >
+            <div>
                 <NavProfile/>
                 <Divider/>
                 <NavBar onClose={this.closeDrawer}/>
@@ -99,19 +104,19 @@ class Main extends React.Component<IProps> {
                     </Toolbar>
                 </AppBar>
                 <nav className={classes.drawer}>
-                    {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
                     <Hidden smUp implementation="css">
-                        <Drawer
+                        <SwipeableDrawer
                             variant="temporary"
                             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
                             open={this.state.mobileOpen}
+                            onOpen={this.openDrawer}
                             onClose={this.handleDrawerToggle}
                             classes={{
                                 paper: classes.drawerPaper,
                             }}
                         >
                             {drawer}
-                        </Drawer>
+                        </SwipeableDrawer>
                     </Hidden>
                     <Hidden xsDown implementation="css">
                         <Drawer
