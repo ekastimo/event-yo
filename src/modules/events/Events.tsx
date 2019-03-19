@@ -15,7 +15,7 @@ import {IStore} from "../../data/types";
 import AppBase from "../../base/AppBase";
 import {useDataManipulator} from "../../data/hooks";
 import {connect} from "react-redux";
-import {fetchData} from "../contacts/redux";
+import {fetchData} from "./redux";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -47,7 +47,7 @@ function Events(props: IProps) {
     } = useDataManipulator({deleteUrl: remoteRoutes.contacts, loadData: props.loadData})
     const {data, isLoading} = props
     const handleEdit = (data: any) => {
-        const path = `${localRoutes.contacts}/${data.id}`
+        const path = `${localRoutes.events}/${data.id}`
         const {history} = props
         history.push(path)
     }
@@ -92,10 +92,10 @@ function Events(props: IProps) {
 }
 
 export default connect(
-    ({contacts}: IStore) => {
+    ({events}: IStore) => {
         return {
-            data: contacts.data,
-            isLoading: contacts.isFetching
+            data: events.data,
+            isLoading: events.isFetching
         }
     },
     (dispatch: any) => {

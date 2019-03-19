@@ -6,6 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
 import withWidth from '@material-ui/core/withWidth';
 
 import {handleError, post, put} from '../utils/ajax';
@@ -76,16 +77,20 @@ class FormHolder extends React.Component<IProps> {
                                 <DialogActions>
                                     <Button
                                         onClick={onClose}
-                                        color='primary'
+                                        color='default'
                                         disabled={formState.isSubmitting}
-                                    >
+                                        variant='contained'
+                                    ><CancelIcon/>
+                                        &nbsp;
                                         Cancel
                                     </Button>
                                     <Button
+                                        color='primary'
                                         type='submit'
                                         aria-label='Save'
                                         disabled={formState.isSubmitting}
                                         onClick={this.submitForm}
+                                        variant='contained'
                                     >
                                         <SaveIcon/>
                                         &nbsp;Submit

@@ -18,6 +18,7 @@ import {remoteRoutes} from "../../../data/constants";
 import {get} from "../../../utils/ajax";
 import {IEvent} from "../types";
 import Loading from "../../../widgets/Loading";
+import AppBase from "../../../base/AppBase";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -77,27 +78,34 @@ class EventDetails extends React.Component<IProps, IState> {
 
         if (!data)
             return <Loading/>
+
+        const eventData = data as IEvent
         return (
-            <div className={classes.root}>
-                <AppBar position="static" color="inherit">
-                    <Tabs
-                        variant="fullWidth"
-                        value={value}
-                        onChange={this.handleChange}
-                        scrollButtons="on"
-                        indicatorColor="primary"
-                        textColor="primary"
-                        centered
-                    >
-                        <Tab label="Info" icon={isNotMobile ? <InfoIcon/> : undefined}/>
-                        <Tab label="Agenda" icon={isNotMobile ? <AssignmentIcon/> : undefined}/>
-                        <Tab label="Venue" icon={isNotMobile ? <MapIcon/> : undefined}/>
-                    </Tabs>
-                </AppBar>
-                {value === 0 && <TabContainer><InfoView data={data}/></TabContainer>}
-                {value === 1 && <TabContainer><Agenda data={data} handleClick={this.killEvent}/></TabContainer>}
-                {value === 2 && <TabContainer>Someting</TabContainer>}
-            </div>
+            <AppBase
+                title={eventData.name}
+            >
+                <div className={classes.root}>
+                    <AppBar position="static" color="inherit">
+                        <Tabs
+                            variant="fullWidth"
+                            value={value}
+                            onChange={this.handleChange}
+                            scrollButtons="on"
+                            indicatorColor="primary"
+                            textColor="primary"
+                            centered
+                        >
+                            <Tab label="Info" icon={isNotMobile ? <InfoIcon/> : undefined}/>
+                            <Tab label="Agenda" icon={isNotMobile ? <AssignmentIcon/> : undefined}/>
+                            <Tab label="Venue" icon={isNotMobile ? <MapIcon/> : undefined}/>
+                        </Tabs>
+                    </AppBar>
+                    {value === 0 && <TabContainer><InfoView data={eventData}/></TabContainer>}
+                    {value === 1 &&
+                    <TabContainer><Agenda data={eventData} handleClick={this.killEvent}/></TabContainer>}
+                    {value === 2 && <TabContainer>Someting</TabContainer>}
+                </div>
+            </AppBase>
         );
     }
 
