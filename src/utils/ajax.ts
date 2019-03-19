@@ -51,7 +51,8 @@ export const handleError = (err: any = {}, res: superagent.Response) => {
         Toast.error(finalMessage)
     }
 }
-const timeout = 4000
+
+const timeout = 0
 export const isAuthError = (err: any = {}, res: superagent.Response) => {
     if (err) {
         console.log(err)

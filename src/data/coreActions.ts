@@ -6,7 +6,7 @@ export const coreActionsDefs = {
 
 export const handleLogin = (data: any) => {
     return {
-        type: coreActionsDefs.LOGIN_LOGOUT,
+        type: coreActionsDefs.LOGIN_LOGIN,
         payload: {...data},
     }
 }
