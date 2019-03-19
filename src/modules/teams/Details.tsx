@@ -14,9 +14,9 @@ import {RouteComponentProps} from "react-router";
 import Loading from "../../widgets/Loading";
 import Error from "../../widgets/Error";
 import BasePanel from "../../base/BasePanel";
-import MyDebug from "../../widgets/MyDebug";
 import moment from "moment";
 import TabbedDetails from "./TabbedDetails";
+import AppBase from "../../base/AppBase";
 
 
 const styles = (theme: Theme) =>
@@ -74,6 +74,9 @@ class Details extends React.Component<IProps, IState> {
             return <Error message='Failed to load team data!'/>
         }
         return (
+            <AppBase
+                title={data.name}
+            >
             <BasePanel>
                 <Card>
                     <CardHeader
@@ -109,6 +112,7 @@ class Details extends React.Component<IProps, IState> {
                 </Card>
                 <TabbedDetails data={data}/>
             </BasePanel>
+            </AppBase>
         );
     }
 

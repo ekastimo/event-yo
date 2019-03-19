@@ -24,6 +24,7 @@ export interface IStore {
     locations: any
     cellGroups: any
     events: any
+    teams: any
 }
 
 export interface ISearch {

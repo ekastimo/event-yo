@@ -1,26 +1,16 @@
 import * as React from 'react';
-import {Theme, WithStyles} from "@material-ui/core";
-import createStyles from "@material-ui/core/styles/createStyles";
 import {localRoutes, remoteRoutes} from "../../data/constants";
-import {del, search} from "../../utils/ajax";
-import {withStyles} from "@material-ui/core/styles";
 import {RouteComponentProps, withRouter} from 'react-router'
 import TeamItem from "./TeamItem";
-import {ITeam} from "./types";
 import {teamSchema} from "./config";
 import FormHolder from "../../widgets/FormHolder";
 import NewTeamEditor from "./editors/NewTeamEditor";
-import Toast from "../../utils/Toast";
-import uiConfirm from "../../widgets/confirm";
 import ListView from "../../widgets/lists/ListView";
 import AppBase from "../../base/AppBase";
 import {useDataManipulator} from "../../data/hooks";
-import LocationItem from "../locations/Locations";
-import {locationSchema} from "../locations/config";
 import {connect} from "react-redux";
 import {IStore} from "../../data/types";
-import {fetchData} from "../locations/redux";
-
+import {fetchData} from "./redux";
 
 
 interface IProps extends RouteComponentProps<any> {
@@ -33,9 +23,14 @@ function Teams(props: IProps) {
     const {
         isNew,toEdit, showDialog,
         handleSearch, handleClose, handleDelete,
-        handleEdit, handleNew, handleCompletion
+        handleNew, handleCompletion
     } = useDataManipulator({deleteUrl: remoteRoutes.locations, loadData: props.loadData})
     const {data, isLoading} = props
+    const handleEdit = (data: any) => {
+        const path = `${localRoutes.teams}/${data.id}`
+        const {history} = props
+        history.push(path)
+    }
 
     return (
         <AppBase
@@ -76,10 +71,10 @@ function Teams(props: IProps) {
 }
 
 export default connect(
-    ({locations}: IStore) => {
+    ({teams}: IStore) => {
         return {
-            data: locations.data,
-            isLoading: locations.isFetching
+            data: teams.data,
+            isLoading: teams.isFetching
         }
     },
     (dispatch: any) => {

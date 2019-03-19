@@ -200,7 +200,6 @@ class XRemoteSelect extends React.Component<IProps> {
     }
 
     fetchData = (textIn: any, callback: any) => {
-        console.log("Fetching...")
         const url = this.props.remote
         const query = this.state.textIn;
         const {parser, filter} = this.props
@@ -248,6 +247,9 @@ class XRemoteSelect extends React.Component<IProps> {
             const extraProps = {...props, error: showError}
             return <div className={classes.root}>
                 <AsyncSelect
+                    formatOptionLabel={(option: any, context: any ) => {
+                        return option.label|| option.value
+                    }}
                     cacheOptions
                     loadOptions={this.fetchData}
                     defaultOptions

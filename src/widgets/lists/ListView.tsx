@@ -49,11 +49,9 @@ const ListView = (props: IProps) => {
                                 }
                             </List>
                     }
-                    <Hidden mdUp>
-                        <FabButton color='primary' onClick={handleAdd}>
-                            <AddIcon/>
-                        </FabButton>
-                    </Hidden>
+                    <FabButton color='primary' onClick={handleAdd}>
+                        <AddIcon/>
+                    </FabButton>
                 </Grid>
             </Grid>
         </div>

@@ -80,7 +80,6 @@ function SearchInput(props: IProps) {
                 dataParser={dataParser}
                 dataParserReverse={dataParserReverse}
                 handleSubmit={handleAdvancedQuery}
-                debug
             >
                 {advancedForm}
             </FormHolder>

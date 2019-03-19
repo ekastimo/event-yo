@@ -57,14 +57,7 @@ class TabbedDetails extends React.Component<IProps> {
                             title: "Tasks",
                             icon: <DomainIcon/>,
                             component: <TabContainer>Item Two</TabContainer>
-                        },
-                        {
-                            id: '4',
-                            title: "More",
-                            icon: <DomainIcon/>,
-                            component: <TabContainer>Item Three</TabContainer>
                         }
-
                     ]}
                 />
             </div>

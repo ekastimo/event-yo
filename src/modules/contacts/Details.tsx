@@ -19,6 +19,7 @@ import {connect} from "react-redux";
 import {IStore} from "../../data/types";
 import Toast from "../../utils/Toast";
 import LocationView from "./views/ChcView";
+import AppBase from "../../base/AppBase";
 
 const styles = () =>
     createStyles({
@@ -56,20 +57,25 @@ class Details extends React.Component<IProps, IState> {
             return <Error message='Failed to load contact!'/>
         }
         return (
-            <GridWrapper>
-                <Grid container spacing={16}>
-                    <Grid item xs={12} md={4}>
-                        <ImageView data={data}/>
-                        <LocationView data={data}/>
+            <AppBase
+                title={data.person.firstName}
+            >
+                <GridWrapper>
+                    <Grid container spacing={16}>
+                        <Grid item xs={12} md={4}>
+                            <ImageView data={data}/>
+                            <LocationView data={data}/>
+                        </Grid>
+                        <Grid item xs={12} md={8}>
+                            <PersonView data={data} handleReload={this.reloadData}/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TabbedDetails data={data} handleReload={this.reloadData}/>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12} md={8}>
-                        <PersonView data={data} handleReload={this.reloadData}/>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TabbedDetails data={data} handleReload={this.reloadData}/>
-                    </Grid>
-                </Grid>
-            </GridWrapper>
+                </GridWrapper>
+            </AppBase>
+
         );
     }
 

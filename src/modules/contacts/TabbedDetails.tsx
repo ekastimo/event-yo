@@ -37,15 +37,6 @@ interface IProps extends WithStyles<typeof styles> {
     handleReload: () => any
 }
 
-function TabContainer(props: any) {
-    return (
-        <Typography component='div' style={{padding: 8 * 3}}>
-            {props.children}
-        </Typography>
-    );
-}
-
-
 class TabbedDetails extends React.Component<IProps> {
     public render() {
         const {classes, data} = this.props;
@@ -79,14 +70,7 @@ class TabbedDetails extends React.Component<IProps> {
                             title: "Teams",
                             icon: <PeopleIcon/>,
                             component: <ContactTeams key='2' contactId={data.id}/>
-                        },
-                        {
-                            id: '2',
-                            title: "More",
-                            icon: <DomainIcon/>,
-                            component: <TabContainer key='3'>Item Three</TabContainer>
                         }
-
                     ]}
                 />
             </div>

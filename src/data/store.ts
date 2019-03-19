@@ -7,6 +7,7 @@ import core from "./coreReducer";
 import contacts from "../modules/contacts/redux";
 import locations from "../modules/locations/redux";
 import cellGroups from "../modules/cellgroups/redux";
+import teams from "../modules/teams/redux";
 import events from "../modules/events/redux";
 
 const discard = (error:any, _action:any, _retries:any) => {
@@ -26,7 +27,7 @@ const devTools: any = myWindow[toolsName] ? myWindow[toolsName]() : (f: any) => 
 
 const store = createStore(
     combineReducers({
-        core, contacts, locations,cellGroups,events
+        core, contacts, locations,cellGroups,events,teams
     }),
     {},
     compose(

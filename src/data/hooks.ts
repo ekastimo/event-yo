@@ -27,7 +27,7 @@ export function useDataManipulator(params: IDataParams): IDataResponse {
     const [isDeleting, setIsDeleting] = useState(true)
     const [showDialog, setShowDialog] = useState(false)
     const [toEdit, setToEdit] = useState(undefined)
-    const [filter, setFilter] = useState({limit: 10, skip: 0})
+    const [filter, setFilter] = useState({limit: 20, skip: 0})
 
     const handleClose = () => {
         setShowDialog(false)

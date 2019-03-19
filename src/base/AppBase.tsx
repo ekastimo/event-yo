@@ -1,5 +1,5 @@
 import React, {ReactNode, useState} from 'react';
-
+import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -55,7 +55,7 @@ const styles = (theme: Theme) =>
 
 export interface IProps extends WithStyles<typeof styles>, WithTheme {
     title: string
-    handleSearch: (data: any) => any
+    handleSearch?: (data: any) => any
     children: ReactNode
 
     filter?: any
@@ -73,7 +73,7 @@ function DrawerBody(props: any) {
 }
 
 function AppBase(props: IProps) {
-    const {classes, theme, title = "dEMO", children, handleSearch, advancedForm, filter, dataParser,dataParserReverse} = props;
+    const {classes, theme, title = "dEMO", children, handleSearch, advancedForm, filter, dataParser, dataParserReverse} = props;
     const [mobileOpen, setMobileOpen] = useState(false)
 
     const handleDrawerToggle = () => {
@@ -90,7 +90,7 @@ function AppBase(props: IProps) {
 
     const killIt = () => {
     }
-    
+
     return (
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.appBar}>
@@ -103,15 +103,22 @@ function AppBase(props: IProps) {
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <XToolBar
-                        onFilter={handleSearch}
-                        title={title}
-                        handleNew={killIt}
-                        filter={filter}
-                        advancedForm={advancedForm}
-                        dataParser={dataParser}
-                        dataParserReverse={dataParserReverse}
-                    />
+                    {
+                        handleSearch ?
+                            <XToolBar
+                                onFilter={handleSearch}
+                                title={title}
+                                handleNew={killIt}
+                                filter={filter}
+                                advancedForm={advancedForm}
+                                dataParser={dataParser}
+                                dataParserReverse={dataParserReverse}
+                            /> :
+                            <Typography variant="h6" color="inherit" className={classes.grow}>
+                                {title}
+                            </Typography>
+                    }
+
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer}>

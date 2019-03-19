@@ -22,14 +22,10 @@ function Locations(props: IProps) {
     const {
         isNew, toEdit, showDialog,
         handleSearch, handleClose, handleDelete,
-        handleNew, handleCompletion
+        handleNew, handleCompletion,handleEdit
     } = useDataManipulator({deleteUrl: remoteRoutes.locations, loadData: props.loadData})
     const {data, isLoading} = props
-    const handleEdit = (data: any) => {
-        const path = `${localRoutes.contacts}/${data.id}`
-        const {history} = props
-        history.push(path)
-    }
+
     return (
         <AppBase
             handleSearch={handleSearch}
