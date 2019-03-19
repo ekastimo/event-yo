@@ -159,3 +159,15 @@ export const contactChcFilterDataParser = (data: any) => {
     const {churchLocation = {}, cellGroup = {}} = data
     return {...data, churchLocation: churchLocation.value || '', cellGroup: cellGroup.value || ''}
 }
+
+export const contactChcFilterDataParserReverse = (data: any) => {
+    const {churchLocation = '', cellGroup = ''} = data
+    const toReturn = {...data}
+    if(churchLocation.length>0){
+        toReturn.churchLocation = {value:churchLocation}
+    }
+    if(cellGroup.length>0){
+        toReturn.cellGroup = {value:cellGroup}
+    }
+    return toReturn
+}

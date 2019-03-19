@@ -22,6 +22,7 @@ interface IProps {
     title: string
     onClose: () => any
     dataParser?: (data: any) => any
+    dataParserReverse?: (data: any) => any
     schema?: any
     width: false | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
     onAjaxComplete?: (data: any) => any
@@ -31,16 +32,24 @@ class FormHolder extends React.Component<IProps> {
     form?: Formik = undefined
 
     render() {
-        const {width, data, title, children, open, onClose, schema, debug} = this.props
+        const {width, data, title, children, open, onClose, schema, debug, dataParserReverse} = this.props
         const isMobile = width === 'xs'
         const isSmall = width === 'sm'
-        const initialValues = data || {};
+        let initialData = {};
+        console.log("Rendering form",{data,dataParserReverse})
+        if (dataParserReverse && data) {
+            console.log("Reversing data")
+            initialData = dataParserReverse(data)
+        } else {
+            console.log("No reverse")
+            initialData = data || {}
+        }
         return (
             <Formik
                 ref={(node: any) => (this.form = node)}
-                initialValues={{...initialValues}}
+                initialValues={{...initialData}}
                 validationSchema={schema}
-                onSubmit={ this.onSubmit}
+                onSubmit={this.onSubmit}
                 enableReinitialize={true}
             >
                 {(formState) => (
@@ -98,9 +107,9 @@ class FormHolder extends React.Component<IProps> {
 
     onSubmit = (rawValues: any, actions: FormikActions<any>) => {
 
-        const {isNew, url, dataParser, onAjaxComplete, onClose,handleSubmit} = this.props
+        const {isNew, url, dataParser, onAjaxComplete, onClose, handleSubmit} = this.props
         const values = dataParser ? dataParser(rawValues) : rawValues
-        if(handleSubmit){
+        if (handleSubmit) {
             // Custom submission
             handleSubmit(values)
             actions.setSubmitting(false)

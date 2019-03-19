@@ -72,11 +72,9 @@ class Contacts extends React.Component<IProps, IState> {
             <div>
 
                 <ListView
-                    title=''
                     handleAdd={this.handleNewContact}
                     isLoading={isLoading}
                     hasData={data && data.length > 0}
-                    handleSearch={this.handleSearch}
                 >
                     {
                         data.map((it: any) => (

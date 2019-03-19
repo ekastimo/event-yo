@@ -10,6 +10,8 @@ import {fetchData} from "./redux";
 import {connect} from "react-redux";
 import {IStore} from "../../data/types";
 import {useDataManipulator} from "../../data/hooks";
+import AppBase from "../../base/AppBase";
+
 
 interface IProps extends RouteComponentProps<any> {
     loadData: (req: any) => any
@@ -21,19 +23,19 @@ function Locations(props: IProps) {
     const {
         isNew, toEdit, showDialog,
         handleSearch, handleClose, handleDelete,
-        handleEdit, handleNewContact, handleCompletion
+        handleEdit, handleNew, handleCompletion
     } = useDataManipulator({deleteUrl: remoteRoutes.cellGroups, loadData: props.loadData})
     const {data, isLoading} = props
 
 
     return (
-        <div>
+        <AppBase
+            handleSearch={handleSearch}
+            title='Mcs'>
             <ListView
                 isLoading={isLoading}
-                title='Mcs'
                 hasData={data && data.length > 0}
-                handleAdd={handleNewContact}
-                handleSearch={handleSearch}
+                handleAdd={handleNew}
             >
                 {
                     data.map((it: any) => (
@@ -60,7 +62,7 @@ function Locations(props: IProps) {
                 <Editor/>
             </FormHolder>
 
-        </div>
+        </AppBase>
     )
 }
 

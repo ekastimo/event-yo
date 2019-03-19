@@ -1,5 +1,4 @@
 import React, {Fragment} from 'react';
-import Main from "./base/Main";
 import withRoot from './withRoot';
 import {ToastContainer} from "react-toastify";
 import {BrowserRouter as HashRouter} from 'react-router-dom';
@@ -7,6 +6,7 @@ import {IUser} from "./data/types";
 import Login from "./base/Login";
 import {connect} from "react-redux";
 import Splash from "./base/Splash";
+import {ContentSwitch} from "./base/ContentSwitch";
 
 interface IProps {
     user?: IUser
@@ -24,7 +24,7 @@ function App(props: IProps) {
             <HashRouter>
                 <Fragment>
                     <ToastContainer/>
-                    <Main/>
+                    <ContentSwitch/>
                 </Fragment>
             </HashRouter>
         );

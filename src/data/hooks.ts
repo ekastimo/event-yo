@@ -12,10 +12,11 @@ interface IDataResponse {
     isDeleting: boolean
     showDialog: boolean
     toEdit?: any
+    filter?: any
     isNew: boolean
     handleDelete: (data: any) => any,
     handleEdit: (data: any) => any
-    handleNewContact: () => any
+    handleNew: () => any
     handleClose: () => any
     handleSearch: (data: any) => any
     handleCompletion: (data: any) => any
@@ -37,6 +38,7 @@ export function useDataManipulator(params: IDataParams): IDataResponse {
     }
 
     useEffect(() => {
+        console.log("Going to filter")
         params.loadData(filter)
     }, [filter])
 
@@ -73,7 +75,7 @@ export function useDataManipulator(params: IDataParams): IDataResponse {
     }
 
     return {
-        isNew, isDeleting, showDialog, toEdit,
-        handleDelete, handleEdit, handleNewContact, handleClose, handleSearch, handleCompletion
+        isNew, isDeleting, showDialog, toEdit, filter,
+        handleDelete, handleEdit, handleNew: handleNewContact, handleClose, handleSearch, handleCompletion
     }
 }

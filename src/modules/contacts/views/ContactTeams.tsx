@@ -68,11 +68,9 @@ class ContactTeams extends React.Component<IProps, IState> {
         return (
             <div>
                 <ListView
-                    title=''
                     isLoading={isLoading}
                     handleAdd={this.handleAdd}
                     hasData={data && data.length > 0}
-                    handleSearch={this.handleSearch}
                 >
                     {
                         data.map((it: any) => (

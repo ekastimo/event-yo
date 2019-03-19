@@ -3,7 +3,7 @@ import {localRoutes, remoteRoutes} from "../../data/constants";
 import {RouteComponentProps, withRouter} from 'react-router'
 import ContactItem from "./ContactItem";
 import {IContact} from "./types";
-import {contactChcFilterDataParser, contactChcFormDataParser, newPersonSchema} from "./config";
+import {contactChcFormDataParser, newPersonSchema, contactChcFilterDataParser,contactChcFilterDataParserReverse} from "./config";
 import FormHolder from "../../widgets/FormHolder";
 import NewPersonEditor from "./editors/NewPersonEditor";
 import ListView from "../../widgets/lists/ListView";
@@ -11,6 +11,7 @@ import {connect} from "react-redux";
 import {IStore} from "../../data/types";
 import {fetchData} from "./redux";
 import {useDataManipulator} from "../../data/hooks";
+import AppBase from "../../base/AppBase";
 import {ChcForm} from "./views/ChcView";
 
 interface IProps extends RouteComponentProps<any> {
@@ -21,9 +22,9 @@ interface IProps extends RouteComponentProps<any> {
 
 export function Contacts(props: IProps) {
     const {
-        toEdit, showDialog,
+        toEdit, showDialog, filter,
         handleSearch, handleClose, handleDelete,
-        handleNewContact, handleCompletion
+        handleNew, handleCompletion
     } = useDataManipulator({deleteUrl: remoteRoutes.contacts, loadData: props.loadData})
     const {data, isLoading} = props
     const handleEdit = (data: any) => {
@@ -32,15 +33,18 @@ export function Contacts(props: IProps) {
         history.push(path)
     }
     return (
-        <div>
+        <AppBase
+            title='People'
+            filter={filter}
+            handleSearch={handleSearch}
+            dataParser={contactChcFilterDataParser}
+            dataParserReverse={contactChcFilterDataParserReverse}
+            advancedForm={<ChcForm/>}
+        >
             <ListView
                 isLoading={isLoading}
-                title='People'
                 hasData={data && data.length > 0}
-                handleAdd={handleNewContact}
-                handleSearch={handleSearch}
-                advancedForm={<ChcForm/>}
-                dataParser={contactChcFilterDataParser}
+                handleAdd={handleNew}
             >
                 {
                     data.map((it: any) => (
@@ -66,13 +70,9 @@ export function Contacts(props: IProps) {
             >
                 <NewPersonEditor/>
             </FormHolder>
-
-        </div>
+        </AppBase>
     )
 }
-
-
-
 
 
 export default connect(

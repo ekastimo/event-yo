@@ -24,35 +24,17 @@ const styles = (theme: Theme) =>
 
 interface IProps extends WithStyles<typeof styles> {
     isLoading: boolean,
-    handleSearch?: (data: any) => any,
-    dataParser?: (data: any) => any,
-    title: string,
     handleAdd: () => any,
     hasData: boolean,
     children: React.ReactNode
-    filter?: any
-    advancedForm?: any
 }
 
 const ListView = (props: IProps) => {
-    const {isLoading, handleSearch, title, handleAdd, children, classes, hasData, filter, advancedForm, dataParser} = props
+    const {isLoading, handleAdd, children, classes, hasData} = props
     return (
         <div className={classes.root}>
             <Grid container spacing={0} justify='center'>
                 <Grid item xs={12} sm={10} md={8} className={classes.item}>
-                    {
-                        handleSearch &&
-                        <Hidden smDown>
-                            <XToolBar
-                                onFilter={handleSearch}
-                                title={title}
-                                handleNew={handleAdd}
-                                filter={filter}
-                                advancedForm={advancedForm}
-                                dataParser={dataParser}
-                            />
-                        </Hidden>
-                    }
                     {
                         isLoading ? <Loading/> :
                             <List>

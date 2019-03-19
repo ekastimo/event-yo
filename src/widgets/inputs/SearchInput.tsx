@@ -34,6 +34,7 @@ const styles = (theme: Theme) =>
 interface IProps extends WithStyles<typeof styles> {
     onFilter: (data: any) => any
     dataParser?: (data: any) => any
+    dataParserReverse?: (data: any) => any
     onBack?: () => any
     filter?: any
     advancedForm?: any
@@ -42,7 +43,7 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 function SearchInput(props: IProps) {
-    const {classes, placeholder = "Search here", onBack, onFilter, filter = {}, advancedForm, dataParser} = props;
+    const {classes, placeholder = "Search here", onBack, onFilter, filter = {}, advancedForm, dataParser, dataParserReverse} = props;
     const [open, setOpen] = useState(false)
     const handleClose = () => {
         setOpen(false)
@@ -77,7 +78,9 @@ function SearchInput(props: IProps) {
                 url={""}
                 isNew={true}
                 dataParser={dataParser}
+                dataParserReverse={dataParserReverse}
                 handleSubmit={handleAdvancedQuery}
+                debug
             >
                 {advancedForm}
             </FormHolder>

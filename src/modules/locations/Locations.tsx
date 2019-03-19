@@ -1,5 +1,5 @@
 import React from 'react';
-import {remoteRoutes} from "../../data/constants";
+import {localRoutes, remoteRoutes} from "../../data/constants";
 import {RouteComponentProps, withRouter} from 'react-router'
 import LocationItem from "./LocationItem";
 import {locationSchema} from "./config";
@@ -10,6 +10,7 @@ import {fetchData} from "./redux";
 import {connect} from "react-redux";
 import {IStore} from "../../data/types";
 import {useDataManipulator} from "../../data/hooks";
+import AppBase from "../../base/AppBase";
 
 interface IProps extends RouteComponentProps<any> {
     loadData: (req: any) => any
@@ -19,20 +20,25 @@ interface IProps extends RouteComponentProps<any> {
 
 function Locations(props: IProps) {
     const {
-        isNew,toEdit, showDialog,
+        isNew, toEdit, showDialog,
         handleSearch, handleClose, handleDelete,
-        handleEdit, handleNewContact, handleCompletion
+        handleNew, handleCompletion
     } = useDataManipulator({deleteUrl: remoteRoutes.locations, loadData: props.loadData})
     const {data, isLoading} = props
-
+    const handleEdit = (data: any) => {
+        const path = `${localRoutes.contacts}/${data.id}`
+        const {history} = props
+        history.push(path)
+    }
     return (
-        <div>
+        <AppBase
+            handleSearch={handleSearch}
+            title='Church Locations'
+        >
             <ListView
                 isLoading={isLoading}
-                title='Church Locations'
                 hasData={data && data.length > 0}
-                handleAdd={handleNewContact}
-                handleSearch={handleSearch}
+                handleAdd={handleNew}
             >
                 {
                     data.map((it: any) => (
@@ -46,7 +52,7 @@ function Locations(props: IProps) {
                 }
             </ListView>
             <FormHolder
-                title={isNew?'New Location':'Edit Location'}
+                title={isNew ? 'New Location' : 'Edit Location'}
                 open={showDialog}
                 onClose={handleClose}
                 data={toEdit ? {...toEdit} : {}}
@@ -58,7 +64,7 @@ function Locations(props: IProps) {
                 <LocationEditor/>
             </FormHolder>
 
-        </div>
+        </AppBase>
     )
 }
 

@@ -13,39 +13,88 @@ import NewTeamEditor from "./editors/NewTeamEditor";
 import Toast from "../../utils/Toast";
 import uiConfirm from "../../widgets/confirm";
 import ListView from "../../widgets/lists/ListView";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import CommentIcon from '@material-ui/icons/Comment';
+import AppBase from "../../base/AppBase";
+import {useDataManipulator} from "../../data/hooks";
+import LocationItem from "../locations/Locations";
+import {locationSchema} from "../locations/config";
+import {connect} from "react-redux";
+import {IStore} from "../../data/types";
+import {fetchData} from "../locations/redux";
 
-const styles = (theme: Theme) =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-            [theme.breakpoints.only('xs')]: {
-                padding: theme.spacing.unit * 2,
-            },
+
+
+interface IProps extends RouteComponentProps<any> {
+    loadData: (req: any) => any
+    data: any[]
+    isLoading: boolean
+}
+
+function Teams(props: IProps) {
+    const {
+        isNew,toEdit, showDialog,
+        handleSearch, handleClose, handleDelete,
+        handleEdit, handleNew, handleCompletion
+    } = useDataManipulator({deleteUrl: remoteRoutes.locations, loadData: props.loadData})
+    const {data, isLoading} = props
+
+    return (
+        <AppBase
+            handleSearch={handleSearch}
+            title='Teams'
+        >
+            <ListView
+                isLoading={isLoading}
+                hasData={data && data.length > 0}
+                handleAdd={handleNew}
+            >
+                {
+                    data.map((it: any) => (
+                        <TeamItem
+                            key={it.id}
+                            data={{...it}}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                        />
+                    ))
+                }
+            </ListView>
+            <FormHolder
+                open={showDialog}
+                onClose={handleClose}
+                url={remoteRoutes.teams}
+                onAjaxComplete={handleCompletion}
+                title='New Team'
+                data={{}}
+                isNew={true}
+                schema={teamSchema}
+            >
+                <NewTeamEditor/>
+            </FormHolder>
+
+        </AppBase>
+    )
+}
+
+export default connect(
+    ({locations}: IStore) => {
+        return {
+            data: locations.data,
+            isLoading: locations.isFetching
         }
-    });
+    },
+    (dispatch: any) => {
+        return {
+            loadData: (data: any) => dispatch(fetchData(data))
+        }
+    }
+)(withRouter(Teams))
 
-interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any> {
-}
 
-interface IState {
-    isLoading: boolean,
-    data: ITeam[],
-    search: ISearch,
-    showDialog: boolean
-}
 
-interface ISearch {
-    limit: number,
-    skip: number,
-    name?: string
-}
+
+
+/*
+
 
 class Contacts extends React.Component<IProps, IState> {
     constructor(props: IProps) {
@@ -64,7 +113,10 @@ class Contacts extends React.Component<IProps, IState> {
     public render() {
         const {isLoading, data} = this.state
         return (
-            <div>
+            <AppBase
+                handleSearch={handleSearch}
+                title='Church Locations'
+            >
 
                 <ListView
                     isLoading={isLoading}
@@ -96,7 +148,7 @@ class Contacts extends React.Component<IProps, IState> {
                 >
                     <NewTeamEditor/>
                 </FormHolder>
-            </div>
+            </AppBase>
         )
     }
 
@@ -160,3 +212,6 @@ class Contacts extends React.Component<IProps, IState> {
 }
 
 export default withRouter(withStyles(styles)(Contacts))
+
+
+*/

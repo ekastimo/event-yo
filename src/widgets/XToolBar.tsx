@@ -16,6 +16,7 @@ const styles = (theme: Theme) =>
     createStyles({
         root: {
             paddingRight: theme.spacing.unit,
+            width: '100%'
         },
         highlight:
             theme.palette.type === 'light'
@@ -41,16 +42,21 @@ const styles = (theme: Theme) =>
             flexDirection: 'row',
             justifyContent: 'flex-end'
         }
-        , toolBarButton: {}
+        , toolBarButton: {},
+        grow: {
+            flexGrow: 1,
+        },
     });
 
 interface IProps extends WithStyles<typeof styles> {
     onFilter: (data: any) => any
     title: string
     handleNew: () => any
+
     filter?: any
     advancedForm?: any
     dataParser?: (data: any) => any
+    dataParserReverse?: (data: any) => any
 }
 
 class XToolBar extends React.Component<IProps, any> {
@@ -59,7 +65,7 @@ class XToolBar extends React.Component<IProps, any> {
     }
 
     public render() {
-        const {classes, onFilter, handleNew, title,...rest} = this.props;
+        const {classes, onFilter, handleNew, title, ...rest} = this.props;
         const {isSearching} = this.state;
         return (
             <Toolbar
@@ -71,7 +77,7 @@ class XToolBar extends React.Component<IProps, any> {
                         :
                         <Fragment>
                             <div className={classes.title}>
-                                <Typography variant="h6" id="tableTitle">
+                                <Typography variant="h6" color="inherit" className={classes.grow}>
                                     {title}
                                 </Typography>
                             </div>
@@ -82,11 +88,6 @@ class XToolBar extends React.Component<IProps, any> {
                                         <IconButton aria-label="Search" onClick={this.handleStartSearch}>
                                             <SearchIcon/>
                                         </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title="Add New">
-                                        <Button aria-label="Add New" size='medium' onClick={handleNew}>
-                                            <AddIcon/> Add
-                                        </Button>
                                     </Tooltip>
                                 </div>
                             </div>
