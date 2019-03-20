@@ -30,24 +30,24 @@ const styles = (theme: Theme) =>
         actions: {
             display: 'flex',
         },
-        expand: {
-            transform: 'rotate(0deg)',
-            transition: theme.transitions.create('transform', {
-                duration: theme.transitions.duration.shortest,
-            }),
-            marginLeft: 'auto',
-        },
-        expandOpen: {
-            transform: 'rotate(180deg)',
-        },
+
         avatar: {
             backgroundColor: red[500],
+        },
+
+        myAvatar: {
+            height: 40,
+            width: 40,
+            backgroundColor: red[500],
+        },
+        myAvatarDate: {
+
         },
     });
 
 interface IProps extends WithStyles<typeof styles> {
     data: IEvent
-    handleClick: ()=>any
+    handleClick: () => any
 }
 
 class EventItem extends React.Component<IProps> {
@@ -56,19 +56,19 @@ class EventItem extends React.Component<IProps> {
     public render() {
         const {classes, data} = this.props;
         const subHeaderText = data.startDate
+        const killIt = (e: React.MouseEvent<HTMLElement>) => {
+            e.preventDefault()
+            e.stopPropagation()
+        }
         return (
             <div>
-                <Card className={classes.card}>
+                <Card className={classes.card} onClick={this.props.handleClick}>
                     <CardHeader
                         avatar={
-                            <Avatar aria-label="Event" className={classes.avatar}>
-                                E
-                            </Avatar>
-                        }
-                        action={
-                            <IconButton onClick={this.props.handleClick}>
-                                <MoreVertIcon/>
-                            </IconButton>
+                            <div className={classes.myAvatar}>
+                                <Typography variant="body2">JUN</Typography>
+                                <Typography variant="body1">24</Typography>
+                            </div>
                         }
                         title={data.name}
                         subheader={<Typography variant="caption">{subHeaderText}</Typography>}
@@ -79,16 +79,16 @@ class EventItem extends React.Component<IProps> {
                         title="Event Image"
                     />
                     <CardContent>
-                        <Typography component="p">{trimSentence(data.details,100)}</Typography>
+                        <Typography component="p">{trimSentence(data.details, 100)}</Typography>
                     </CardContent>
                     <CardActions className={classes.actions} disableActionSpacing>
-                        <IconButton aria-label="Add to favorites">
+                        <IconButton aria-label="Add to favorites" onClick={killIt}>
                             <FavoriteIcon/>
                         </IconButton>
-                        <IconButton aria-label="Share">
+                        <IconButton aria-label="Share" onClick={killIt}>
                             <ShareIcon/>
                         </IconButton>
-                        <IconButton aria-label="More">
+                        <IconButton aria-label="More" onClick={this.props.handleClick}>
                             <MoreVertIcon/>
                         </IconButton>
                     </CardActions>

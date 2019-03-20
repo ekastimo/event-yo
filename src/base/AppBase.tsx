@@ -114,7 +114,7 @@ function AppBase(props: IProps) {
                                 dataParser={dataParser}
                                 dataParserReverse={dataParserReverse}
                             /> :
-                            <Typography variant="h6" color="inherit" className={classes.grow}>
+                            <Typography variant="h6" color="inherit" className={classes.grow} noWrap>
                                 {title}
                             </Typography>
                     }

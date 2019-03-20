@@ -16,6 +16,8 @@ import AppBase from "../../base/AppBase";
 import {useDataManipulator} from "../../data/hooks";
 import {connect} from "react-redux";
 import {fetchData} from "./redux";
+import FabButton from "../../widgets/FabButton";
+import AddIcon from '@material-ui/icons/Add';
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -87,6 +89,9 @@ function Events(props: IProps) {
             >
                 <EventForm/>
             </FormHolder>
+            <FabButton color='primary' onClick={handleNew}>
+                <AddIcon/>
+            </FabButton>
         </AppBase>
     )
 }
