@@ -37,7 +37,7 @@ class NavBar extends React.Component<IProps> {
                 <ListItemIcon>
                     <PeopleOutline/>
                 </ListItemIcon>
-                <ListItemText primary="Contacts"/>
+                <ListItemText primary="People"/>
             </ListItem>
             <ListItem button={true} onClick={this.onClick(localRoutes.teams)}>
                 <ListItemIcon>

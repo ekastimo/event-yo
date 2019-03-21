@@ -80,10 +80,8 @@ class FormHolder extends React.Component<IProps> {
                                         color='default'
                                         disabled={formState.isSubmitting}
                                         variant='contained'
-                                    ><CancelIcon/>
-                                        &nbsp;
-                                        Cancel
-                                    </Button>
+                                        size='small'
+                                    >Cancel</Button>
                                     <Button
                                         color='primary'
                                         type='submit'
@@ -91,10 +89,8 @@ class FormHolder extends React.Component<IProps> {
                                         disabled={formState.isSubmitting}
                                         onClick={this.submitForm}
                                         variant='contained'
-                                    >
-                                        <SaveIcon/>
-                                        &nbsp;Submit
-                                    </Button>
+                                        size='small'
+                                    >Submit</Button>
                                 </DialogActions>
                             </Dialog>
                         </div>

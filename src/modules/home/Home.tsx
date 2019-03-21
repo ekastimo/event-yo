@@ -2,20 +2,25 @@ import * as React from 'react';
 import GridWrapper from "../../widgets/GridWrapper";
 import {Grid} from "@material-ui/core";
 import HomeWidget from "./HomeWidget";
+import AppBase from "../../base/AppBase";
 
 
 function Home() {
-    return <GridWrapper>
-        <Grid container spacing={16}>
-            <Grid item sm={12} md={3}>
-                <HomeWidget
-                    title='Members'
-                    chipText='LIVE'
-                    content='2000 adults, 570 children'
-                />
+    return <AppBase
+        title='Home'
+    >
+        <GridWrapper>
+            <Grid container spacing={16}>
+                <Grid item sm={12} md={3}>
+                    <HomeWidget
+                        title='Members'
+                        chipText='LIVE'
+                        content='2000 adults, 570 children'
+                    />
+                </Grid>
             </Grid>
-        </Grid>
-    </GridWrapper>
+        </GridWrapper>
+    </AppBase>
 }
 
 export default Home;

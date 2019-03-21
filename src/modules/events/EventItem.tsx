@@ -16,6 +16,7 @@ import createStyles from "@material-ui/core/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import {IEvent} from "./types";
 import {trimSentence} from "../../utils/TK";
+import {printDate, printDateTime,printDay,printMonth} from "../../utils/dates";
 
 
 const styles = (theme: Theme) =>
@@ -37,8 +38,7 @@ const styles = (theme: Theme) =>
 
         myAvatar: {
             height: 40,
-            width: 40,
-            backgroundColor: red[500],
+            width: 40
         },
         myAvatarDate: {
 
@@ -55,7 +55,7 @@ class EventItem extends React.Component<IProps> {
 
     public render() {
         const {classes, data} = this.props;
-        const subHeaderText = data.startDate
+        const subHeaderText = printDateTime(data.startDate)
         const killIt = (e: React.MouseEvent<HTMLElement>) => {
             e.preventDefault()
             e.stopPropagation()
@@ -66,11 +66,11 @@ class EventItem extends React.Component<IProps> {
                     <CardHeader
                         avatar={
                             <div className={classes.myAvatar}>
-                                <Typography variant="body2">JUN</Typography>
-                                <Typography variant="body1">24</Typography>
+                                <Typography variant="body2" align='center'>{printMonth(data.startDate)}</Typography>
+                                <Typography variant="body1" align='center'><b>{printDay(data.startDate)}</b></Typography>
                             </div>
                         }
-                        title={data.name}
+                        title={<Typography variant="body1">{data.name}</Typography>}
                         subheader={<Typography variant="caption">{subHeaderText}</Typography>}
                     />
                     <CardMedia

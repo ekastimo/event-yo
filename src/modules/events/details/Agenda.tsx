@@ -10,12 +10,11 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import MoreMenu from "../../../widgets/MoreMenu";
-import AgendaItem from "./AgendaItem";
 import {IEvent, IEventItem} from "../types";
-import {getImage, parseRange} from "../../../utils/TK";
+import {getImage} from "../../../utils/TK";
+import {parseRange} from "../../../utils/dates";
 import FabButton from '../../../widgets/FabButton';
 
 const styles = (theme: Theme) =>
@@ -45,12 +44,11 @@ class Agenda extends React.Component<IProps, any> {
     };
 
 
-
     public render() {
         const {classes, data} = this.props;
         const itemProps = {alignItems: "flex-start"}
         return (
-            <Grid container  justify='center' spacing={8} className={classes.root}>
+            <Grid container justify='center' spacing={8} className={classes.root}>
                 <Grid item xs={12} sm={8}>
                     <List className={classes.root}>
                         {

@@ -18,7 +18,7 @@ import moment from 'moment';
 import createStyles from "@material-ui/core/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import {IEvent} from "../types";
-import {printDate} from "../../../utils/TK";
+import {printDate, printShortDate} from "../../../utils/dates";
 
 
 const styles = (theme: Theme) =>
@@ -33,10 +33,9 @@ const styles = (theme: Theme) =>
                 height: 350
             }
         },
-        chip:{
+        chip: {
             margin: theme.spacing.unit
-        }
-        ,
+        },
         actions: {
             display: 'flex',
             backgroundColor: ''
@@ -63,10 +62,10 @@ const styles = (theme: Theme) =>
         extendedIcon: {
             fontSize: 16,
         },
-        tags:{
-            display:'flex',
-            flexDirection:'row',
-            justifyContent:'center'
+        tags: {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center'
         }
     });
 
@@ -79,6 +78,45 @@ interface IState {
     data?: IEvent
 }
 
+function Location(props: { event: IEvent }) {
+    return <Grid item xs={12} sm={6}>
+        <div style={{display: "flex", flexDirection: "row"}}>
+            <div style={{display: "inline-block"}}>
+                <MyLocationIcon/>
+                &nbsp;&nbsp;
+            </div>
+            <div style={{flexGrow: 1}}>
+                <Typography variant='subtitle2'>
+                    {props.event.venue}
+                </Typography>
+                <Typography variant='caption'>
+                    {props.event.freeFormAddress}
+                </Typography>
+            </div>
+        </div>
+    </Grid>;
+}
+
+function DateComponent(props: { event: IEvent }) {
+    const shortTime = (dt: any) => moment(dt).format('LT');
+    return <Grid item xs={12} sm={6}>
+        <div style={{display: "flex", flexDirection: "row"}}>
+            <div style={{display: "inline-block"}}>
+                <EventIcon/>
+                &nbsp;&nbsp;
+            </div>
+            <div style={{flexGrow: 1}}>
+                <Typography variant='subtitle2'>
+                    {printShortDate(props.event.startDate)} - {printShortDate(props.event.endDate)}
+                </Typography>
+                <Typography variant='caption'>
+                    {printShortDate(props.event.startDate)} at {shortTime(props.event.startDate)} - {printShortDate(props.event.endDate)} at {shortTime(props.event.endDate)}
+                </Typography>
+            </div>
+        </div>
+    </Grid>;
+}
+
 class InfoView extends React.Component<IProps, IState> {
     public state = {
         open: {},
@@ -89,8 +127,7 @@ class InfoView extends React.Component<IProps, IState> {
 
     public render() {
         const {classes, data} = this.props;
-        const shortDate = (dt: any) => moment(dt).format('MMM Do');
-        const shortTime = (dt: any) => moment(dt).format('LT');
+
         if (!data) {
             return (
                 <div>
@@ -115,7 +152,8 @@ class InfoView extends React.Component<IProps, IState> {
                                     {event.name}
                                 </Typography>
                                 <div className={classes.tags}>
-                                    {event.tags.map(it=><Chip key={it} label={`#${it}`} className={classes.chip} clickable />)}
+                                    {event.tags.map(it => <Chip key={it} label={`#${it}`} className={classes.chip}
+                                                                clickable/>)}
                                 </div>
                             </CardContent>
                             <CardActions className={classes.actions} disableActionSpacing>
@@ -142,32 +180,8 @@ class InfoView extends React.Component<IProps, IState> {
                             </CardActions>
                             <CardContent>
                                 <Grid container justify='center' spacing={8}>
-                                    <Grid item xs={12} sm={6}>
-                                        <div style={{display: 'inline-block'}}>
-                                            <EventIcon/>
-                                        </div>                                         &nbsp;&nbsp;
-                                        <div style={{display: 'inline-block'}}>
-                                            <Typography variant='subtitle2'>
-                                                {shortDate(event.startDate)} - {shortDate(event.endDate)}
-                                            </Typography>
-                                            <Typography variant='caption'>
-                                                {shortDate(event.startDate)} at {shortTime(event.startDate)} - {shortDate(event.endDate)} at {shortTime(event.endDate)}
-                                            </Typography>
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <div style={{display: 'inline-block'}}>
-                                            <MyLocationIcon/>
-                                        </div>                                        &nbsp;&nbsp;
-                                        <div style={{display: 'inline-block'}}>
-                                            <Typography variant='subtitle2'>
-                                                {event.venue}
-                                            </Typography>
-                                            <Typography variant='caption'>
-                                                {event.freeFormAddress}
-                                            </Typography>
-                                        </div>
-                                    </Grid>
+                                    <DateComponent event={event}/>
+                                    <Location event={event}/>
                                 </Grid>
                             </CardContent>
                             <CardContent>

@@ -1,9 +1,8 @@
-import moment from 'moment'
-import {format, isValid} from 'date-fns'
 import Toast from "./Toast";
 import * as _ from 'lodash';
 import {IOption} from "../data/types";
 import {images} from "../assets/images";
+import {isDate, printDate} from "./dates";
 
 // <pre>{JSON.stringify(data, null, 2)}</pre>
 export function isDefined(value: any) {
@@ -14,64 +13,13 @@ export function printLn(value: any) {
     console.log(isDefined(value) ? JSON.stringify(value) : value)
 }
 
-export const printDate = (value: any): string => {
-    if (isValid(value))
-        return format(value, 'MM/dd/yyyy')
-    else
-        return ''
-}
 
-export const parseRange = (rec: any) => {
-    const {startDate, endDate} = rec
-    return `${moment(startDate).format('LT')} - ${moment(endDate).format('LT')}`
-}
 
 export const getImage = (value: string): string => {
     if (value && value.length > 0) {
         return value
     }
     return images.everything
-}
-
-export const printDateTime = (value: any): string => {
-    if (isValid(value))
-        return format(value, 'MM/dd/yyyy p')
-    else
-        return ''
-}
-
-export const printBirthday = (value: any): string => {
-    if (isValid(value))
-        return format(value, 'MMM/dd')
-    else
-        return ''
-}
-
-export function isValidDate(value: any) {
-    if (value === null || typeof value !== 'object') {
-        return false;
-    }
-    const dateWrapper = new Date(value);
-    return !isNaN(dateWrapper.getDate());
-}
-
-export function isSQLDate(value: any) {
-    if (typeof value === 'string') {
-        return moment(value, 'YYYY-MM-DD', true).isValid();
-    }
-    return false;
-}
-
-export function isISODate(value: any) {
-    if (typeof value === 'string') {
-        return moment(value, "YYYY-MM-DDTHH:mm:ss.sssZ", true).isValid();
-    }
-    return false;
-}
-
-
-export function isDate(value: any) {
-    return (isValidDate(value) || isSQLDate(value) || isISODate(value));
 }
 
 export function isNullOrEmpty(value: any) {
@@ -92,7 +40,7 @@ export function jsArray2CSV(objArray: any[]) {
                 line += ',';
             }
             const value = obj[key];
-            line += isDate(value) ? moment(value).format('YYYY-MM-DD') : value;
+            line += isDate(value) ? printDate(value) : value;
         });
         str += line + '\r\n';
     });

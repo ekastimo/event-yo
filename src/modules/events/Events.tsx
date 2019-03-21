@@ -5,7 +5,7 @@ import EventItem from "./EventItem";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {localRoutes, remoteRoutes} from "../../data/constants";
 import createStyles from "@material-ui/core/styles/createStyles";
-import {WithStyles} from "@material-ui/core";
+import {List, ListItem, ListItemText, WithStyles} from "@material-ui/core";
 import {RouteComponentProps, withRouter} from 'react-router'
 import {IEvent} from "./types";
 import FormHolder from "../../widgets/FormHolder";
@@ -18,6 +18,8 @@ import {connect} from "react-redux";
 import {fetchData} from "./redux";
 import FabButton from "../../widgets/FabButton";
 import AddIcon from '@material-ui/icons/Add';
+import Loading from "../../widgets/Loading";
+import GridWrapper from "../../widgets/GridWrapper";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -56,26 +58,37 @@ function Events(props: IProps) {
     return (
         <AppBase
             handleSearch={handleSearch}
-            title='People'
+            title='Events'
         >
-            {
-                isLoading ?
-                    <CircularProgress size={50}/> :
-                    <Grid container spacing={24}>
+            <GridWrapper>
+                <Grid container spacing={16} justify='center'>
+                    <Grid item xs={12} sm={10} md={10} >
                         {
-                            data.map((it: IEvent) => {
-                                return (
-                                    <Grid item xs={12} sm={6} lg={4} xl={3} key={it.id}>
-                                        <EventItem
-                                            data={it}
-                                            handleClick={()=>handleEdit({...it})}
-                                        />
-                                    </Grid>
-                                )
-                            })
+                            isLoading ?
+                                <Loading/> :
+                                <Grid container spacing={24}>
+                                    {
+                                        data.map((it: IEvent) => {
+                                            return (
+                                                <Grid item xs={12} sm={6} lg={4} xl={3} key={it.id}>
+                                                    <EventItem
+                                                        data={it}
+                                                        handleClick={()=>handleEdit({...it})}
+                                                    />
+                                                </Grid>
+                                            )
+                                        })
+                                    }
+                                </Grid>
                         }
+                        <FabButton color='primary' onClick={handleNew}>
+                            <AddIcon/>
+                        </FabButton>
                     </Grid>
-            }
+                </Grid>
+            </GridWrapper>
+
+
             <FormHolder
                 title='New Event'
                 open={showDialog}
@@ -89,9 +102,7 @@ function Events(props: IProps) {
             >
                 <EventForm/>
             </FormHolder>
-            <FabButton color='primary' onClick={handleNew}>
-                <AddIcon/>
-            </FabButton>
+
         </AppBase>
     )
 }

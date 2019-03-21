@@ -7,7 +7,7 @@ import Login from "./base/Login";
 import {connect} from "react-redux";
 import Splash from "./base/Splash";
 import {ContentSwitch} from "./base/ContentSwitch";
-
+import "./App.css"
 interface IProps {
     user?: IUser
     splash: boolean
