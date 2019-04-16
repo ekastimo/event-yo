@@ -10,7 +10,7 @@ import Avatar from '@material-ui/core/Avatar';
 import {ITeam} from "../../teams/types";
 import Grid from '@material-ui/core/Grid';
 import ListView from "../../../widgets/lists/ListView";
-import {toOptions} from "../../../utils/TK";
+import {parseAvatar, toOptions} from "../../../utils/TK";
 import {teamMemberCategory, teamMemberSimpleSchema} from "../../teams/config";
 import SelectInput from "../../../widgets/inputs/SelectInput";
 import XRemoteSelect from "../../../widgets/inputs/XRemoteSelect";
@@ -81,7 +81,7 @@ class ContactTeams extends React.Component<IProps, IState> {
                                 onDelete={this.handleDelete}
                                 onEdit={this.handleEdit}
                             >
-                                <Avatar alt={it.name} src={''}/>
+                                <Avatar>{parseAvatar(it.name)}</Avatar>
                                 <ListItemText
                                     primary={it.name}
                                     secondary={it.description}
@@ -163,7 +163,8 @@ class ContactTeams extends React.Component<IProps, IState> {
                 Toast.info(resp.message)
                 this.reloadData()
             })
-        },()=>{});
+        }, () => {
+        });
     }
 }
 

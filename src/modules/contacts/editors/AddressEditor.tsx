@@ -23,13 +23,13 @@ const AddressEditor = (props: IProps) => {
     return (
         <div style={{padding: 12}}>
             <Grid className={props.classes.root} container spacing={24}>
-                <Grid item xs={12} sm={3}>
+                <Grid item xs={12} sm={6}>
                     <SelectInput name='category' label='Type' options={toOptions(addressCategories)}/>
                 </Grid>
-                <Grid item xs={12} sm={3}>
+                <Grid item xs={12} sm={6}>
                     <SelectInput name='country' label='Country' options={countries}/>
                 </Grid>
-                <Grid item xs={12} sm={7}>
+                <Grid item xs={12} sm={10}>
                     <TextInput type="text" name='originalFreeform' label='Address' isFast={true}/>
                 </Grid>
                 <Grid item xs={12} sm={2}>

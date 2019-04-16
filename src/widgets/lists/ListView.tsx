@@ -3,12 +3,9 @@ import {List, ListItem, ListItemText, Theme, WithStyles} from "@material-ui/core
 import Grid from '@material-ui/core/Grid';
 import createStyles from "@material-ui/core/styles/createStyles";
 import {withStyles} from "@material-ui/core/styles";
-import Hidden from '@material-ui/core/Hidden';
 import AddIcon from '@material-ui/icons/Add';
-import XToolBar from "../XToolBar";
 import Loading from "../Loading";
 import FabButton from '../FabButton';
-
 
 const styles = (theme: Theme) =>
     createStyles({

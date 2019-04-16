@@ -186,7 +186,6 @@ export const trimSentence = (data: string, number: number): string => {
 
 
 export const parseAvatar = (value: string): string => {
-
     if (isNullOrEmpty(value)) {
         return ''
     }

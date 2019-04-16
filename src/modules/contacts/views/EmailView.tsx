@@ -1,8 +1,7 @@
 import * as React from 'react';
-import {List, Theme, WithStyles, withStyles} from "@material-ui/core";
+import {List, WithStyles, withStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import EmailIcon from '@material-ui/icons/Email';
@@ -60,25 +59,25 @@ class EmailView extends React.Component<IProps, IState> {
                         }
                         title={
                             <Typography variant="button">
-                                Emails
+                                <EmailIcon fontSize="inherit"/>&nbsp;Emails
                             </Typography>
                         }
                     />
                     <CardContent>
                         <List>
                             {
-                                data.emails&&
+                                data.emails &&
                                 data.emails.map((it: IEmail) => {
                                     return <ItemEditor
                                         key={it.id}
                                         text={it.address}
+                                        secondaryText={it.category}
                                         isPrimary={it.isPrimary}
                                         isLoading={isLoading}
-                                        primary={<EmailIcon fontSize="inherit"/>}
-                                        secondaryIcon={<EmailOutlinedIcon fontSize="inherit"/>}
                                         data={it}
                                         handleEdit={this.handleEdit}
                                         handleDelete={this.handleDelete}
+                                        divider={false}
                                     />
                                 })
                             }
@@ -123,7 +122,8 @@ class EmailView extends React.Component<IProps, IState> {
             }, undefined, () => {
 
             });
-        },()=>{})
+        }, () => {
+        })
     }
 }
 

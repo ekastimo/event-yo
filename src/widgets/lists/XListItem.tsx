@@ -1,4 +1,4 @@
-import React,{Fragment} from 'react';
+import React, {Fragment} from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -19,6 +19,7 @@ interface IProps extends WithWidth {
     isLoading?: boolean
     editOnClick?: boolean
     onDetails?: (data: any) => any
+    divider?: boolean
 }
 
 class XListItem extends React.Component<IProps, any> {
@@ -30,7 +31,7 @@ class XListItem extends React.Component<IProps, any> {
     hideButtons = () => this.setState(() => ({showButtons: false}))
 
     public render() {
-        const {data, onEdit, onDelete, isLoading, width, onDetails, editOnClick = true} = this.props
+        const {data, onEdit, onDelete, isLoading, width, onDetails, editOnClick = true, divider = true} = this.props
         const isSmall = width === 'sm' || width === 'xs'
         const {showButtons} = this.state
         const handleEdit = (e: React.MouseEvent<HTMLElement>) => {
@@ -66,10 +67,10 @@ class XListItem extends React.Component<IProps, any> {
                 >
                     {this.props.children}
                     {
-                        isSmall?
+                        isSmall ?
                             <ListItemSecondaryAction>
                                 <MoreMenu options={items} onItemSelected={handleMenuClick}/>
-                            </ListItemSecondaryAction>:
+                            </ListItemSecondaryAction> :
                             showButtons &&
                             <React.Fragment>
                                 <IconButton aria-label="Edit" onClick={handleEdit} disabled={isLoading}>
@@ -81,7 +82,7 @@ class XListItem extends React.Component<IProps, any> {
                             </React.Fragment>
                     }
                 </ListItem>
-                <Divider/>
+                {divider && <Divider/>}
             </Fragment>
 
         );

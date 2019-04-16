@@ -59,25 +59,25 @@ class PhoneView extends React.Component<IProps, IState> {
                         }
                         title={
                             <Typography variant="button">
-                                Phones
+                                <PhoneIcon fontSize="inherit"/>&nbsp;Phones
                             </Typography>
                         }
                     />
                     <CardContent>
                         <div>
                             {
-                                data.phones&&
+                                data.phones &&
                                 data.phones.map((it: IPhone) => {
                                     return <ItemEditor
                                         key={it.id}
                                         text={it.number}
+                                        secondaryText={it.category}
                                         isPrimary={it.isPrimary}
                                         isLoading={isLoading}
-                                        primary={<PhoneIcon fontSize="inherit"/>}
-                                        secondaryIcon={<PhoneOutlinedIcon fontSize="inherit"/>}
                                         data={it}
                                         handleEdit={this.handleEdit}
                                         handleDelete={this.handleDelete}
+                                        divider={false}
                                     />
                                 })
                             }

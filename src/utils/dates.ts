@@ -44,7 +44,6 @@ export const printDate = (value: any): string => {
         return ''
 }
 
-
 export const parseRange = (rec: any) => {
     const {startDate, endDate} = rec
     return `${moment(startDate).format('LT')} - ${moment(endDate).format('LT')}`

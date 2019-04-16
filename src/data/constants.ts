@@ -1,6 +1,15 @@
 export const AUTH_TOKEN_KEY = '__demo__ecole__token'
 export const AUTH_USER_KEY = '__demo__ecole__user'
 
+
+export const systemRoles = {
+    contacts: {
+        view: 'contacts_view',
+        edit: 'contacts_edit',
+        chc: 'contacts_chc',
+        teams: 'contacts_teams',
+    }
+}
 export const redux = {
     doLogin: 'DO_LOGIN',
     doLogout: 'DO_LOGOUT',
@@ -29,7 +38,7 @@ export const localRoutes = {
 }
 
 const debug = process.env.NODE_ENV !== 'production'
-export const url = debug ? 'http://localhost:9001' :'https://event-yo-server.herokuapp.com'
+export const url = debug ? 'http://localhost:9001' : 'https://event-yo-server.herokuapp.com'
 
 export const remoteRoutes = {
     authServer: url,

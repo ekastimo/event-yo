@@ -16,7 +16,7 @@ import NavProfile from "./NavProfile";
 import {WithStyles, WithTheme} from "@material-ui/core";
 import XToolBar from "../widgets/XToolBar";
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const styles = (theme: Theme) =>
     createStyles({

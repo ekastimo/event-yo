@@ -8,7 +8,8 @@ const initialState: any = {
     token: getToken(),
     user: getUser(),
     splash: true,
-    searchQuery: ''
+    searchQuery: '',
+    navBar: {}
 }
 
 export default function reducer(state = initialState, action: any) {
@@ -29,6 +30,12 @@ export default function reducer(state = initialState, action: any) {
         case coreActionsDefs.PROFILE_FAILED: {
             console.log("On profiled load failed")
             return {...state, splash: false}
+        }
+
+        case coreActionsDefs.TOGGLE_NAV_BAR: {
+            const name: string = action.payload
+            const navBar = {...state.navBar, [name]: !state.navBar[name]}
+            return {...state, navBar}
         }
 
         case redux.doSearch: {

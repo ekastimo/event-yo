@@ -4,8 +4,7 @@ import createStyles from "@material-ui/core/styles/createStyles";
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import LocationIcon from '@material-ui/icons/LocationCity';
-import LocationOutlinedIcon from '@material-ui/icons/LocationCityOutlined';
+import LocationIcon from '@material-ui/icons/LocationOn';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -59,7 +58,7 @@ class AddressView extends React.Component<IProps, IState> {
                         }
                         title={
                             <Typography variant="button">
-                                Addresses
+                                <LocationIcon fontSize="inherit"/>&nbsp;Addresses
                             </Typography>
                         }
                     />
@@ -71,13 +70,13 @@ class AddressView extends React.Component<IProps, IState> {
                                     return <ItemEditor
                                         key={it.id}
                                         text={it.originalFreeform}
+                                        secondaryText={it.category}
                                         isPrimary={it.isPrimary}
                                         isLoading={isLoading}
-                                        primary={<LocationIcon fontSize="inherit"/>}
-                                        secondaryIcon={<LocationOutlinedIcon fontSize="inherit"/>}
                                         data={it}
                                         handleEdit={this.handleEdit}
                                         handleDelete={this.handleDelete}
+                                        divider={false}
                                     />
                                 })
                             }
@@ -94,7 +93,6 @@ class AddressView extends React.Component<IProps, IState> {
                     url={`${remoteRoutes.contactsAddress}/${data.id}`}
                     isNew={!this.state.data}
                     schema={addressSchema}
-                    debug={true}
                     onAjaxComplete={this.props.handleReload}
                 >
                     <AddressEditor/>
@@ -126,7 +124,8 @@ class AddressView extends React.Component<IProps, IState> {
             }, undefined, () => {
 
             });
-        },()=>{})
+        }, () => {
+        })
     }
 }
 

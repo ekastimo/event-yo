@@ -37,12 +37,9 @@ class FormHolder extends React.Component<IProps> {
         const isMobile = width === 'xs'
         const isSmall = width === 'sm'
         let initialData = {};
-        console.log("Rendering form",{data,dataParserReverse})
         if (dataParserReverse && data) {
-            console.log("Reversing data")
             initialData = dataParserReverse(data)
         } else {
-            console.log("No reverse")
             initialData = data || {}
         }
         return (
