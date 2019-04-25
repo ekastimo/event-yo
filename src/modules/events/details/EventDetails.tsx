@@ -19,6 +19,9 @@ import {get} from "../../../utils/ajax";
 import {IEvent} from "../types";
 import Loading from "../../../widgets/Loading";
 import AppBase from "../../../base/AppBase";
+import {connect} from "react-redux";
+import {doLogout} from "../../../data/coreActions";
+import {IUser} from "../../../data/types";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -28,15 +31,19 @@ const styles = (theme: Theme) =>
             backgroundColor: theme.palette.background.paper,
         },
         tabView: {
-            padding: 0
+            [theme.breakpoints.down("sm")]: {
+                padding: theme.spacing.unit
+            },
+            padding: theme.spacing.unit * 3
+
         }
     });
 
 function TabContainer(props: any) {
     return (
-        <Typography component="div" style={{padding: 8 * 3}}>
+        <div className={props.classes.tabView}>
             {props.children}
-        </Typography>
+        </div>
     );
 }
 
@@ -46,6 +53,7 @@ interface IPrams {
 
 interface IProps extends WithStyles<typeof styles> {
     width?: any
+    user: IUser
 }
 
 interface IState {
@@ -72,7 +80,7 @@ class EventDetails extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const {classes, width} = this.props;
+        const {classes, width, user} = this.props;
         const {value, data} = this.state;
         const isNotMobile = width !== 'xs'
 
@@ -80,6 +88,11 @@ class EventDetails extends React.Component<IProps, IState> {
             return <Loading/>
 
         const eventData = data as IEvent
+
+        const handleCompletion = () => {
+            this.reloadData();
+        };
+
         return (
             <AppBase
                 title={eventData.name}
@@ -100,10 +113,24 @@ class EventDetails extends React.Component<IProps, IState> {
                             <Tab label="Venue" icon={isNotMobile ? <MapIcon/> : undefined}/>
                         </Tabs>
                     </AppBar>
-                    {value === 0 && <TabContainer><InfoView data={eventData}/></TabContainer>}
-                    {value === 1 &&
-                    <TabContainer><Agenda data={eventData} handleClick={this.killEvent}/></TabContainer>}
-                    {value === 2 && <TabContainer>Someting</TabContainer>}
+                    {
+                        value === 0 &&
+                        <TabContainer classes={classes}>
+                            <InfoView data={eventData} user={user} handleCompletion={handleCompletion}/>
+                        </TabContainer>
+                    }
+                    {
+                        value === 1 &&
+                        <TabContainer classes={classes}>
+                            <Agenda data={eventData} handleClick={this.killEvent} user={user}/>
+                        </TabContainer>
+                    }
+                    {
+                        value === 2 &&
+                        <TabContainer classes={classes}>
+                            Someting
+                        </TabContainer>
+                    }
                 </div>
             </AppBase>
         );
@@ -132,5 +159,10 @@ class EventDetails extends React.Component<IProps, IState> {
 }
 
 const Styled = withStyles(styles, {withTheme: true})(EventDetails);
-
-export default withWidth()(Styled)
+export default connect(
+    (store: any) => {
+        return {
+            user: store.core.user
+        }
+    }
+)(withStyles(styles)(withWidth()(Styled)))

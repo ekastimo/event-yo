@@ -3,6 +3,7 @@ import * as yup from "yup";
 import {invalidInputs, nullableString, reqDate, reqString} from "../../data/validations";
 
 export const publicityOptions = ['Private','Public']
+export const eventTags = ["Party", "food", "Money", "Kadanke", "Free", "Family", "educational"].map(it=>it.toLocaleLowerCase())
 
 export const eventSchema = yup.object().shape(
     {

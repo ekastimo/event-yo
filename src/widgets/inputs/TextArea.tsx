@@ -7,10 +7,11 @@ interface IProps {
     label: string
     name: string
     type: string
+    rowsMax?: number
 }
 
 const TextArea = (props: IProps) => {
-    const {label = '', ...rest} = props
+    const {label = '', rowsMax = 4, ...rest} = props
     const render = (fieldProps: FieldProps) => {
         const {field, form} = fieldProps
         const name = field.name;
@@ -24,7 +25,7 @@ const TextArea = (props: IProps) => {
             label={label}
             multiline
             fullWidth
-            rowsMax='4'
+            rowsMax={rowsMax}
             helperText={showError ? error : undefined}
             value={field.value || ''}
         />

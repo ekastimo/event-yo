@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import DoneIcon from '@material-ui/icons/Done';
 import MyLocationIcon from '@material-ui/icons/MyLocation';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import EditIcon from '@material-ui/icons/Edit';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import EventIcon from '@material-ui/icons/Event';
 import Button from '@material-ui/core/Button'
@@ -18,7 +18,13 @@ import moment from 'moment';
 import createStyles from "@material-ui/core/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import {IEvent} from "../types";
-import {printDate, printShortDate} from "../../../utils/dates";
+import {printDayOfMonth, printShortDate} from "../../../utils/dates";
+import Loading from "../../../widgets/Loading";
+import {IUser} from "../../../data/types";
+import {remoteRoutes} from "../../../data/constants";
+import {eventSchema} from "../config";
+import EventForm from "../editors/EventForm";
+import FormHolder from "../../../widgets/FormHolder";
 
 
 const styles = (theme: Theme) =>
@@ -38,7 +44,7 @@ const styles = (theme: Theme) =>
         },
         actions: {
             display: 'flex',
-            backgroundColor: ''
+            paddingBottom: 0
         },
         expand: {
             transform: 'rotate(0deg)',
@@ -66,15 +72,23 @@ const styles = (theme: Theme) =>
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'center'
+        },
+        noBottomPadding: {
+            paddingBottom: 0
+        },
+        noPadding: {
+            padding: 0
         }
     });
 
 interface IProps extends WithStyles<typeof styles> {
     data?: IEvent
+    user: IUser
+    handleCompletion: (data: any) => any
 }
 
 interface IState {
-    expanded: boolean
+    showDialog: boolean
     data?: IEvent
 }
 
@@ -110,7 +124,7 @@ function DateComponent(props: { event: IEvent }) {
                     {printShortDate(props.event.startDate)} - {printShortDate(props.event.endDate)}
                 </Typography>
                 <Typography variant='caption'>
-                    {printShortDate(props.event.startDate)} at {shortTime(props.event.startDate)} - {printShortDate(props.event.endDate)} at {shortTime(props.event.endDate)}
+                    {printDayOfMonth(props.event.startDate)} at {shortTime(props.event.startDate)} - {printDayOfMonth(props.event.endDate)} at {shortTime(props.event.endDate)}
                 </Typography>
             </div>
         </div>
@@ -119,23 +133,36 @@ function DateComponent(props: { event: IEvent }) {
 
 class InfoView extends React.Component<IProps, IState> {
     public state = {
-        open: {},
-        expanded: false,
+        showDialog: false,
         data: undefined
     };
 
 
     public render() {
-        const {classes, data} = this.props;
-
+        const {classes, data, handleCompletion} = this.props;
+        const toEdit: any = {...data}
+        delete toEdit['items']
         if (!data) {
             return (
-                <div>
-                    Loading data
-                </div>
+                <Loading/>
             );
         }
         const event: IEvent = data;
+
+        const renderChip = (it: string) => <Chip
+            key={it}
+            label={`#${it}`}
+            className={classes.chip}
+            clickable
+        />;
+
+        const handleEdit = (e: any) => {
+            this.setState(() => ({showDialog: true}))
+        };
+
+        const handleClose = () => {
+            this.setState(() => ({showDialog: false}))
+        }
         return (
             <div style={{paddingTop: 4}}>
                 <Grid container justify='center' spacing={8}>
@@ -147,42 +174,44 @@ class InfoView extends React.Component<IProps, IState> {
                                 title='Event Image'
                                 component="img"
                             />
-                            <CardContent>
-                                <Typography gutterBottom variant="h5">
+                            <CardContent className={classes.noBottomPadding}>
+                                <Typography gutterBottom variant="h6">
                                     {event.name}
                                 </Typography>
-                                <div className={classes.tags}>
-                                    {event.tags.map(it => <Chip key={it} label={`#${it}`} className={classes.chip}
-                                                                clickable/>)}
-                                </div>
                             </CardContent>
                             <CardActions className={classes.actions} disableActionSpacing>
-                                <Grid container justify='center' spacing={8}>
-                                    <Grid item xs={4} sm={3}>
+                                <Grid container justify='space-evenly' direction="row" spacing={8} alignItems="center">
+                                    <Grid item>
                                         <Button fullWidth size='small' className={classes.button}>
                                             <ThumbUpIcon className={classes.extendedIcon}/>
                                             Like
                                         </Button>
                                     </Grid>
-                                    <Grid item xs={4} sm={3}>
+                                    <Grid item>
                                         <Button fullWidth size='small' className={classes.button}>
                                             <DoneIcon className={classes.extendedIcon}/>
                                             Going
                                         </Button>
                                     </Grid>
-                                    <Grid item xs={4} sm={3}>
-                                        <Button fullWidth size='small' className={classes.button}>
-                                            <MoreVertIcon className={classes.extendedIcon}/>
-                                            More
+                                    <Grid item>
+                                        <Button fullWidth size='small' className={classes.button}
+                                                onClick={handleEdit}>
+                                            <EditIcon className={classes.extendedIcon}/>
+                                            Edit
                                         </Button>
                                     </Grid>
                                 </Grid>
                             </CardActions>
-                            <CardContent>
+                            <CardContent className={classes.noBottomPadding}>
                                 <Grid container justify='center' spacing={8}>
                                     <DateComponent event={event}/>
                                     <Location event={event}/>
                                 </Grid>
+                            </CardContent>
+                            <CardContent className={classes.noPadding}>
+                                <div className={classes.tags}>
+                                    {event.tags.map(renderChip)}
+                                </div>
                             </CardContent>
                             <CardContent>
                                 <Typography variant='body1'>{event.details}</Typography>
@@ -190,8 +219,23 @@ class InfoView extends React.Component<IProps, IState> {
                         </Card>
                     </Grid>
                 </Grid>
+                <FormHolder
+                    title='Edit Event'
+                    open={this.state.showDialog}
+                    onClose={handleClose}
+                    data={toEdit}
+                    url={remoteRoutes.events}
+                    isNew={false}
+                    schema={eventSchema}
+                    onAjaxComplete={handleCompletion}
+                    debug
+                >
+                    <EventForm/>
+                </FormHolder>
             </div>
         );
+
+
     }
 }
 

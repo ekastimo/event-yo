@@ -36,6 +36,13 @@ export const printShortDate = (value: any): string => {
         return ''
 }
 
+export const printDayOfMonth = (value: any): string => {
+    if (isValid(value))
+        return format(value, 'dd')
+    else
+        return ''
+}
+
 
 export const printDate = (value: any): string => {
     if (isValid(value))

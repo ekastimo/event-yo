@@ -5,8 +5,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
 import withWidth from '@material-ui/core/withWidth';
 
 import {handleError, post, put} from '../utils/ajax';
@@ -50,7 +48,7 @@ class FormHolder extends React.Component<IProps> {
                 onSubmit={this.onSubmit}
                 enableReinitialize={true}
             >
-                {(formState) => (
+                {({isSubmitting,values,initialValues,errors}) => (
                     <Form>
                         <div>
                             <Dialog
@@ -68,14 +66,14 @@ class FormHolder extends React.Component<IProps> {
                                 {
                                     debug &&
                                     <DialogContent>
-                                        <div>{JSON.stringify(formState, null, 2)}</div>
+                                        <pre style={{height: 200}}>{JSON.stringify({values,errors,initialValues}, null, 2)}</pre>
                                     </DialogContent>
                                 }
                                 <DialogActions>
                                     <Button
                                         onClick={onClose}
                                         color='default'
-                                        disabled={formState.isSubmitting}
+                                        disabled={isSubmitting}
                                         variant='contained'
                                         size='small'
                                     >Cancel</Button>
@@ -83,7 +81,7 @@ class FormHolder extends React.Component<IProps> {
                                         color='primary'
                                         type='submit'
                                         aria-label='Save'
-                                        disabled={formState.isSubmitting}
+                                        disabled={isSubmitting}
                                         onClick={this.submitForm}
                                         variant='contained'
                                         size='small'

@@ -38,8 +38,9 @@ export const localRoutes = {
 }
 
 const debug = process.env.NODE_ENV !== 'production'
-export const url = debug ? 'http://localhost:9001' : 'https://event-yo-server.herokuapp.com'
-
+export const url = /*debug ? 'http://localhost:9001' : */'https://event-yo-server.herokuapp.com'
+export const googleKey = 'AIzaSyC0hVunyllacL30Yl4weMs2YZAErtrApr0'
+export const googleKey2 = 'AIzaSyCoq4_-BeKtYRIs-3FjJL721G1eP5DaU0g'
 export const remoteRoutes = {
     authServer: url,
     login: url + '/api/auth/login',
@@ -71,4 +72,5 @@ export const remoteRoutes = {
 
     locations: url + '/api/chc/location',
     cellGroups: url + '/api/chc/cellgroup',
+    googleMaps: url + '/api/maps',
 }

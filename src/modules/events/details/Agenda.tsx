@@ -16,6 +16,7 @@ import {IEvent, IEventItem} from "../types";
 import {getImage} from "../../../utils/TK";
 import {parseRange} from "../../../utils/dates";
 import FabButton from '../../../widgets/FabButton';
+import {IUser} from "../../../data/types";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -35,6 +36,7 @@ const styles = (theme: Theme) =>
 interface IProps extends WithStyles<typeof styles> {
     data: IEvent
     handleClick: () => any
+    user: IUser
 }
 
 

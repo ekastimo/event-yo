@@ -60,7 +60,7 @@ const NavBar = (props: IProps) => {
         {
             menu.map(it => {
                 if (it.items) {
-                    return <Fragment>
+                    return <Fragment  key={it.name}>
                         <ListItem button onClick={handleExpand(it.name)}>
                             <ListItemIcon>
                                 {it.icon}

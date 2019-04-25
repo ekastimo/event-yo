@@ -184,13 +184,17 @@ interface IProps extends WithStyles<typeof styles>, WithTheme {
     isMulti?: boolean
     parser?: (data: any) => IOption
     filter?: (data: IOption) => boolean
+    createQuery?: (data: string) => any
+    minQueryString?: number
+    getOptionLabel?:(option: {}) => string
+    getOptionValue?:(option: {}) => string
 }
 
 class XRemoteSelect extends React.Component<IProps> {
     state = {
         single: null,
         multi: null,
-        textIn: undefined,
+        textIn: '',
     };
 
     handleInputChange = (textIn: any) => {
@@ -200,10 +204,23 @@ class XRemoteSelect extends React.Component<IProps> {
     }
 
     fetchData = (textIn: any, callback: any) => {
+        const {createQuery, minQueryString} = this.props
         const url = this.props.remote
-        const query = this.state.textIn;
+        const query: string = this.state.textIn || '';
+        if (minQueryString && minQueryString > query.length) {
+            // No need to search
+            callback([])
+            return;
+        }
+        let searchQuery = {query}
+        if (createQuery) {
+            searchQuery = createQuery(query)
+        }
+
         const {parser, filter} = this.props
-        search(url, {query}, data => {
+
+        search(url, searchQuery, data => {
+            console.log("data")
             const fine = parser ? data.map(parser) : data
             const options = filter ? fine.filter(filter) : fine
             callback(options)
@@ -214,7 +231,7 @@ class XRemoteSelect extends React.Component<IProps> {
     }
 
     render() {
-        const {classes, theme, label = '',isMulti, ...rest} = this.props;
+        const {classes, theme, label = '', isMulti,getOptionValue,getOptionLabel, ...rest} = this.props;
         const selectStyles = {
             input: (base: any) => ({
                 ...base,
@@ -247,8 +264,8 @@ class XRemoteSelect extends React.Component<IProps> {
             const extraProps = {...props, error: showError}
             return <div className={classes.root}>
                 <AsyncSelect
-                    formatOptionLabel={(option: any, context: any ) => {
-                        return option.label|| option.value
+                    formatOptionLabel={(option: any, context: any) => {
+                        return option.label || option.value
                     }}
                     cacheOptions
                     loadOptions={this.fetchData}
@@ -262,6 +279,8 @@ class XRemoteSelect extends React.Component<IProps> {
                     placeholder='Select..'
                     isMulti={isMulti}
                     isClearable={true}
+                    getOptionLabel={getOptionLabel}
+                    getOptionValue={getOptionValue}
                     {...extraProps}
                 />
                 {showError && <FormHelperText error={true}>{error}</FormHelperText>}

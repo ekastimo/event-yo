@@ -3,7 +3,6 @@ import Toast from './Toast'
 import {AUTH_TOKEN_KEY, AUTH_USER_KEY} from "../data/constants";
 import * as validate from "validate.js";
 
-
 export const getToken = (): string | undefined => {
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
     if (token && validate.isDefined(token)) {

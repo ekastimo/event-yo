@@ -9,7 +9,7 @@ import {List, ListItem, ListItemText, WithStyles} from "@material-ui/core";
 import {RouteComponentProps, withRouter} from 'react-router'
 import {IEvent} from "./types";
 import FormHolder from "../../widgets/FormHolder";
-import EventForm from "./EventForm";
+import EventForm from "./editors/EventForm";
 import {eventSchema} from "./config";
 import {IStore} from "../../data/types";
 import AppBase from "../../base/AppBase";
