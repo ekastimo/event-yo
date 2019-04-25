@@ -150,6 +150,11 @@ export const renderName = (person: IPerson): string => {
     return name.trim().replace(/\s+/g, ' ')
 }
 
+export const renderSimpleName = (person: IPerson): string => {
+    const name: string = `${person.firstName || ''} ${person.middleName || ''} ${person.lastName || ''}`
+    return name.trim().replace(/\s+/g, ' ')
+}
+
 export const contactChcFormDataParser = (data: any) => {
     const {churchLocation, cellGroup} = data
     return {...data, churchLocation: churchLocation.value, cellGroup: cellGroup.value}

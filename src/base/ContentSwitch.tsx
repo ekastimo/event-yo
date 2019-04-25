@@ -3,7 +3,7 @@ import {Route, Switch} from 'react-router-dom'
 import {localRoutes} from "../data/constants";
 import Home from "../modules/home/Home";
 import NoMatch from "./NoMatch";
-import Contacts from "../modules/contacts/Contacts";
+import Contacts from "../modules/contacts/ContactsGrid";
 import Details from "../modules/contacts/Details";
 import Events from "../modules/events/Events";
 import Teams from "../modules/teams/Teams";

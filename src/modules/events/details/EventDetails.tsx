@@ -2,7 +2,6 @@ import * as React from 'react';
 import {Theme, withStyles} from '@material-ui/core/styles';
 import createStyles from "@material-ui/core/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
-import Typography from '@material-ui/core/Typography';
 import withWidth from "@material-ui/core/withWidth/index";
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -20,7 +19,6 @@ import {IEvent} from "../types";
 import Loading from "../../../widgets/Loading";
 import AppBase from "../../../base/AppBase";
 import {connect} from "react-redux";
-import {doLogout} from "../../../data/coreActions";
 import {IUser} from "../../../data/types";
 
 const styles = (theme: Theme) =>

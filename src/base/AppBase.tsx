@@ -24,20 +24,20 @@ const styles = (theme: Theme) =>
             display: 'flex',
         },
         drawer: {
-            [theme.breakpoints.up('sm')]: {
+            [theme.breakpoints.up('md')]: {
                 width: drawerWidth,
                 flexShrink: 0,
             },
         },
         appBar: {
             marginLeft: drawerWidth,
-            [theme.breakpoints.up('sm')]: {
+            [theme.breakpoints.up('md')]: {
                 width: `calc(100% - ${drawerWidth}px)`,
             },
         },
         menuButton: {
             marginRight: 20,
-            [theme.breakpoints.up('sm')]: {
+            [theme.breakpoints.up('md')]: {
                 display: 'none',
             },
         },
@@ -94,35 +94,36 @@ function AppBase(props: IProps) {
     return (
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerToggle}
-                        className={classes.menuButton}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    {
-                        handleSearch ?
-                            <XToolBar
-                                onFilter={handleSearch}
-                                title={title}
-                                handleNew={killIt}
-                                filter={filter}
-                                advancedForm={advancedForm}
-                                dataParser={dataParser}
-                                dataParserReverse={dataParserReverse}
-                            /> :
+                {
+                    handleSearch ?
+                        <XToolBar
+                            onFilter={handleSearch}
+                            title={title}
+                            handleNew={killIt}
+                            filter={filter}
+                            advancedForm={advancedForm}
+                            dataParser={dataParser}
+                            dataParserReverse={dataParserReverse}
+                            handleDrawerToggle={handleDrawerToggle}
+                            menuButtonClass={classes.menuButton}
+                        /> :
+                        <Toolbar>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerToggle}
+                                className={classes.menuButton}
+                            >
+                                <MenuIcon/>
+                            </IconButton>
                             <Typography variant="h6" color="inherit" className={classes.grow} noWrap>
                                 {title}
                             </Typography>
-                    }
-
-                </Toolbar>
+                        </Toolbar>
+                }
             </AppBar>
             <nav className={classes.drawer}>
-                <Hidden smUp implementation="css">
+                <Hidden mdUp implementation="css">
                     <SwipeableDrawer
                         variant="temporary"
                         anchor={theme.direction === "rtl" ? "right" : "left"}
@@ -136,7 +137,7 @@ function AppBase(props: IProps) {
                         <DrawerBody closeDrawer={closeDrawer}/>
                     </SwipeableDrawer>
                 </Hidden>
-                <Hidden xsDown implementation="css">
+                <Hidden smDown implementation="css">
                     <Drawer
                         classes={{
                             paper: classes.drawerPaper,

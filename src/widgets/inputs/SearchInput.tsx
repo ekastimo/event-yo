@@ -66,7 +66,7 @@ function SearchInput(props: IProps) {
             <IconButton className={classes.iconButton} aria-label="Back" onClick={onBack}>
                 <ArrowBackIcon/>
             </IconButton>
-            <InputBase className={classes.input} placeholder={placeholder} onChange={handleQueryChange}/>
+            <InputBase className={classes.input} placeholder={placeholder} onChange={handleQueryChange} autoFocus/>
             <IconButton className={classes.iconButton} aria-label="Advanced" onClick={handleOpen}>
                 <SettingsIcon/>
             </IconButton>

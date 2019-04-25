@@ -1,48 +1,23 @@
-import React, {Fragment} from 'react';
-import {Divider, Theme, WithStyles} from "@material-ui/core";
+import React, {Fragment, useState} from 'react';
+import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
-import {lighten} from '@material-ui/core/styles/colorManipulator';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import SearchIcon from '@material-ui/icons/Search';
-import AddIcon from '@material-ui/icons/Add';
 import SearchInput from "./inputs/SearchInput";
 import {withStyles} from "@material-ui/core/styles";
+import MenuIcon from '@material-ui/icons/Menu';
 
 const styles = (theme: Theme) =>
     createStyles({
-        root: {
-            paddingRight: theme.spacing.unit,
-            width: '100%'
-        },
-        highlight:
-            theme.palette.type === 'light'
-                ? {
-                    color: theme.palette.secondary.main,
-                    backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-                }
-                : {
-                    color: theme.palette.text.primary,
-                    backgroundColor: theme.palette.secondary.dark,
-                },
         spacer: {
             flex: '1 1 100%',
         },
         actions: {
             color: theme.palette.text.secondary,
         },
-        title: {
-            flex: '0 0 auto',
-        },
-        toolBar: {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end'
-        }
-        , toolBarButton: {},
         grow: {
             flexGrow: 1,
         },
@@ -52,62 +27,58 @@ interface IProps extends WithStyles<typeof styles> {
     onFilter: (data: any) => any
     title: string
     handleNew: () => any
-
+    menuButtonClass: any
+    handleDrawerToggle: any
     filter?: any
     advancedForm?: any
     dataParser?: (data: any) => any
     dataParserReverse?: (data: any) => any
 }
 
-class XToolBar extends React.Component<IProps, any> {
-    public state = {
-        isSearching: false
-    }
+const XToolBar = (props: IProps) => {
+    const {classes, menuButtonClass, handleDrawerToggle, title, ...rest} = props
+    const [isSearching, setSearching] = useState(false)
 
-    public render() {
-        const {classes, onFilter, handleNew, title, ...rest} = this.props;
-        const {isSearching} = this.state;
-        return (
-            <Toolbar
-                className={classes.root}
-            >
-                {
-                    isSearching ?
-                        <SearchInput onFilter={onFilter} onBack={this.handleEndSearch} withBack={true} {...rest}/>
-                        :
-                        <Fragment>
-                            <div className={classes.title}>
-                                <Typography variant="h6" color="inherit" className={classes.grow}>
-                                    {title}
-                                </Typography>
-                            </div>
-                            <div className={classes.spacer}/>
-                            <div className={classes.actions}>
-                                <div className={classes.toolBar}>
-                                    <Tooltip title="Search">
-                                        <IconButton aria-label="Search" onClick={this.handleStartSearch}>
-                                            <SearchIcon/>
-                                        </IconButton>
-                                    </Tooltip>
-                                </div>
-                            </div>
-                            <Divider/>
-                        </Fragment>
-                }
-            </Toolbar>
-        );
+    const handleStartSearch = () => {
+        setSearching(true)
     }
-
-    private handleStartSearch = () => {
-        this.setState(() => ({
-            isSearching: true
-        }))
+    const handleEndSearch = () => {
+        setSearching(false)
     }
-    private handleEndSearch = () => {
-        this.setState(() => ({
-            isSearching: false
-        }))
-    }
+    return (
+        <Toolbar
+        >
+            {
+                isSearching ?
+                    <SearchInput
+                        onBack={handleEndSearch}
+                        withBack={true}
+                        {...rest}
+                    />
+                    :
+                    <Fragment>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerToggle}
+                            className={menuButtonClass}
+                        >
+                            <MenuIcon/>
+                        </IconButton>
+                        <Typography variant="h6" color="inherit" className={classes.grow}>
+                            {title}
+                        </Typography>
+                        <div className={classes.spacer}/>
+                        <div className={classes.actions}>
+                            <Tooltip title="Search">
+                                <IconButton aria-label="Search" onClick={handleStartSearch}>
+                                    <SearchIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+                    </Fragment>
+            }
+        </Toolbar>
+    );
 }
-
 export default withStyles(styles)(XToolBar)

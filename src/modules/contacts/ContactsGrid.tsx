@@ -1,76 +1,67 @@
 import * as React from 'react';
-import {Theme, withStyles} from '@material-ui/core/styles';
-
-import EventItem from "./EventItem";
 import {localRoutes, remoteRoutes} from "../../data/constants";
-import createStyles from "@material-ui/core/styles/createStyles";
-import {WithStyles} from "@material-ui/core";
 import {RouteComponentProps, withRouter} from 'react-router'
-import {IEvent} from "./types";
+import {IContact} from "./types";
+import {
+    contactChcFilterDataParser,
+    contactChcFilterDataParserReverse,
+    contactChcFormDataParser,
+    newPersonSchema
+} from "./config";
 import FormHolder from "../../widgets/FormHolder";
-import EventForm from "./editors/EventForm";
-import {eventSchema} from "./config";
-import {IStore} from "../../data/types";
-import AppBase from "../../base/AppBase";
-import {useDataManipulator} from "../../data/hooks";
+import NewPersonEditor from "./editors/NewPersonEditor";
 import {connect} from "react-redux";
+import {IStore} from "../../data/types";
 import {fetchData} from "./redux";
+import {useDataManipulator} from "../../data/hooks";
+import AppBase from "../../base/AppBase";
+import {ChcForm} from "./views/ChcView";
 import FabButton from "../../widgets/FabButton";
 import AddIcon from '@material-ui/icons/Add';
 import Loading from "../../widgets/Loading";
 import GridWrapper from "../../widgets/GridWrapper";
 import Grid from '@material-ui/core/Grid';
-const styles = (theme: Theme) =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-            [theme.breakpoints.only('xs')]: {
-                padding: theme.spacing.unit * 2,
-            },
-        },
-        paper: {
-            padding: theme.spacing.unit * 2,
-            textAlign: 'center',
-            color: theme.palette.text.secondary,
-        }
-    });
+import ContactItem from "./ContactItemGrid";
 
-interface IProps extends WithStyles<typeof styles>, RouteComponentProps<any> {
+interface IProps extends RouteComponentProps<any> {
     isLoading: boolean,
-    data: IEvent[],
+    data: IContact[],
     loadData: (data: any) => any,
 }
 
-
-function Events(props: IProps) {
+export function Contacts(props: IProps) {
     const {
-        toEdit, showDialog,
+        toEdit, showDialog, filter,
         handleSearch, handleClose, handleDelete,
         handleNew, handleCompletion
     } = useDataManipulator({deleteUrl: remoteRoutes.contacts, loadData: props.loadData})
     const {data, isLoading} = props
     const handleEdit = (data: any) => {
-        const path = `${localRoutes.events}/${data.id}`
+        const path = `${localRoutes.contacts}/${data.id}`
         const {history} = props
         history.push(path)
     }
     return (
         <AppBase
+            title='People'
+            filter={filter}
             handleSearch={handleSearch}
-            title='Events'
+            dataParser={contactChcFilterDataParser}
+            dataParserReverse={contactChcFilterDataParserReverse}
+            advancedForm={<ChcForm/>}
         >
             <GridWrapper>
                 <Grid container spacing={16} justify='center'>
-                    <Grid item xs={12} sm={10} md={10} >
+                    <Grid item xs={12} sm={11} md={10} >
                         {
                             isLoading ?
                                 <Loading/> :
-                                <Grid container spacing={24}>
+                                <Grid container spacing={16}>
                                     {
-                                        data.map((it: IEvent) => {
+                                        data.map((it: IContact) => {
                                             return (
-                                                <Grid item xs={12} sm={6} lg={4} xl={3} key={it.id}>
-                                                    <EventItem
+                                                <Grid item xs={12} sm={6} lg={4} xl={4} key={it.id}>
+                                                    <ContactItem
                                                         data={it}
                                                         handleClick={()=>handleEdit({...it})}
                                                     />
@@ -86,31 +77,29 @@ function Events(props: IProps) {
                     </Grid>
                 </Grid>
             </GridWrapper>
-
-
             <FormHolder
-                title='New Event'
+                title='New Contact'
+                data={toEdit ? {...toEdit} : {}}
+                url={remoteRoutes.contactsPerson}
+                isNew={true}
+                schema={newPersonSchema}
                 open={showDialog}
                 onClose={handleClose}
-                data={{}}
-                url={remoteRoutes.events}
-                isNew={true}
-                schema={eventSchema}
                 onAjaxComplete={handleCompletion}
-                debug
+                dataParser={contactChcFormDataParser}
             >
-                <EventForm/>
+                <NewPersonEditor/>
             </FormHolder>
-
         </AppBase>
     )
 }
 
+
 export default connect(
-    ({events}: IStore) => {
+    ({contacts}: IStore) => {
         return {
-            data: events.data,
-            isLoading: events.isFetching
+            data: contacts.data,
+            isLoading: contacts.isFetching
         }
     },
     (dispatch: any) => {
@@ -118,7 +107,4 @@ export default connect(
             loadData: (data: any) => dispatch(fetchData(data))
         }
     }
-)(withRouter(withStyles(styles)(Events)))
-
-
-
+)(withRouter(Contacts))
