@@ -69,7 +69,7 @@ class AddressView extends React.Component<IProps, IState> {
                                 data.addresses.map((it: IAddress) => {
                                     return <ItemEditor
                                         key={it.id}
-                                        text={it.originalFreeform}
+                                        text={it.freeForm || ""}
                                         secondaryText={it.category}
                                         isPrimary={it.isPrimary}
                                         isLoading={isLoading}

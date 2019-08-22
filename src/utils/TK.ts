@@ -190,6 +190,7 @@ export const parseAvatar = (value: string): string => {
         return ''
     }
     const parts = value.trim().split(" ");
+
     if (parts.length > 1) {
         const part1 = parts[0].trim();
         const part2 = parts[1].trim();

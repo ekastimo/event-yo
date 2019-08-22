@@ -12,28 +12,56 @@ export interface IPerson {
 
 export interface IEmail {
     id: string
-    address: string
+    value: string
     category: string
     isPrimary: boolean
 }
 
 export interface IPhone {
     id: string
-    number: string
+    value: string
     category: string
     isPrimary: boolean
+}
+
+export interface IIdentification {
+    id: string
+    value: string
+    category: string
+    isPrimary: boolean
+}
+
+export interface IContactEvent {
+    id: string
+    value: string
+    category: string
 }
 
 export interface IAddress {
     id: string
     category: string
     isPrimary: boolean
-    originalFreeform: string
-    latLon: string
+    country: string
+    district: string
+    county: string
+    subCounty?: string
+    village?: string
+    parish?: string
+    postalCode?: string
+    street?: string
+
+    freeForm?: string
+    latLon?: string
+    placeId?: string
 }
 
 export interface ICompany {
     name: string
+}
+
+export interface IMetaData {
+    churchLocation: string
+    cellGroup: string
 }
 
 export interface IContact {
@@ -42,18 +70,17 @@ export interface IContact {
     person: IPerson
     emails: IEmail[]
     phones: IPhone[]
-    addresses?: IAddress[]
+    events: IContactEvent[]
+    addresses: IAddress[]
     company?: ICompany
-    tags: string[]
-    churchLocation: string
-    cellGroup: string
-    cellGroupName: string
-    churchLocationName: string
+    tags?: string[]
+    metaData: IMetaData
 }
 
-
 export interface IContactQuery {
-    name: string,
+    name?: string
+    limit?: number
+    skip?: number
 }
 
 export interface IContactReduxState {

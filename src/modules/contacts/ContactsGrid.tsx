@@ -12,7 +12,7 @@ import FormHolder from "../../widgets/FormHolder";
 import NewPersonEditor from "./editors/NewPersonEditor";
 import {connect} from "react-redux";
 import {IStore} from "../../data/types";
-import {fetchData} from "./redux";
+import {fetchContacts} from "./contactsRedux";
 import {useDataManipulator} from "../../data/hooks";
 import AppBase from "../../base/AppBase";
 import {ChcForm} from "./views/ChcView";
@@ -52,7 +52,7 @@ export function Contacts(props: IProps) {
         >
             <GridWrapper>
                 <Grid container spacing={16} justify='center'>
-                    <Grid item xs={12} sm={11} md={10} >
+                    <Grid item xs={12} sm={11} md={10}>
                         {
                             isLoading ?
                                 <Loading/> :
@@ -63,7 +63,7 @@ export function Contacts(props: IProps) {
                                                 <Grid item xs={12} sm={6} lg={4} xl={4} key={it.id}>
                                                     <ContactItem
                                                         data={it}
-                                                        handleClick={()=>handleEdit({...it})}
+                                                        handleClick={() => handleEdit({...it})}
                                                     />
                                                 </Grid>
                                             )
@@ -99,12 +99,14 @@ export default connect(
     ({contacts}: IStore) => {
         return {
             data: contacts.data,
-            isLoading: contacts.isFetching
+            isLoading: contacts.isFetchingMultiple
         }
     },
     (dispatch: any) => {
         return {
-            loadData: (data: any) => dispatch(fetchData(data))
+            loadData: (data: any) => {
+                dispatch(fetchContacts(data))
+            }
         }
     }
 )(withRouter(Contacts))

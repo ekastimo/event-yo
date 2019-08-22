@@ -1,4 +1,6 @@
 import * as faker from 'faker';
+import moment from 'moment'
+
 const uuidv1 = require('uuid/v1');
 export const fakeRecord = (index: number): any => {
     return {
@@ -108,6 +110,30 @@ export const createData = () => {
 
 
 it('renders without crashing', () => {
-console.log(JSON.stringify(createData(),null,2))
+    console.log(JSON.stringify(createData(), null, 2))
+});
+
+
+export const parseDate = (date: any) => {
+    if (typeof date === 'string') {
+        return moment(date).isValid() ? moment(date).toDate() : undefined
+    }
+    if (date instanceof moment) {
+        // @ts-ignore
+        return date.toDate()
+    }
+
+    if (date instanceof Date) {
+        // @ts-ignore
+        return date
+    }
+}
+
+it('Parse date', () => {
+    console.log(parseDate(""))
+    console.log(parseDate("2019-05-07T21:00:00.000Z"))
+    console.log(parseDate(undefined))
+    console.log(parseDate(moment()))
+    console.log(parseDate(new Date()))
 });
 

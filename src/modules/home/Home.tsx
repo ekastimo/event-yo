@@ -3,6 +3,7 @@ import GridWrapper from "../../widgets/GridWrapper";
 import {Grid} from "@material-ui/core";
 import HomeWidget from "./HomeWidget";
 import AppBase from "../../base/AppBase";
+import SelectInputs from "../../widgets/play/SelectInputs";
 
 
 function Home() {
@@ -17,6 +18,9 @@ function Home() {
                         chipText='LIVE'
                         content='2000 adults, 570 children'
                     />
+                </Grid>
+                <Grid item sm={12} md={3}>
+                    <SelectInputs data={{}}/>
                 </Grid>
             </Grid>
         </GridWrapper>

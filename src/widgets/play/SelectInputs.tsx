@@ -9,6 +9,7 @@ import XMultiSelect from "../inputs/XMultiSelect";
 import * as yup from "yup";
 import XRemoteSelect from "../inputs/XRemoteSelect";
 import {remoteRoutes} from "../../data/constants";
+import XAutoComplete from "../inputs/XAutoComplete";
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -37,6 +38,7 @@ interface IProps extends WithStyles<typeof styles> {
 export const inputSchema = yup.object().shape(
     {
         countries: yup.array().min(1).required("Countries required").nullable(false),
+        state: yup.string().required("State is required").nullable(false),
     }
 )
 
@@ -47,7 +49,7 @@ class TextFields extends React.Component<IProps> {
         return (
             <div>
                 <Formik
-                    initialValues={{}}
+                    initialValues={{state:'Afghanistan'}}
                     onSubmit={this.onSubmit}
                     enableReinitialize={true}
                     validationSchema={inputSchema}
@@ -65,7 +67,9 @@ class TextFields extends React.Component<IProps> {
                                     parser={(it: any) => ({label: it.fullName, value: it.id})}
                                     isMulti={true}
                                 />
-                                <div>{JSON.stringify(formState, null, 2)}</div>
+                                <XAutoComplete name='state' label='Countries'
+                                               options={suggestions}/>
+                                <pre>{JSON.stringify(formState, null, 2)}</pre>
                                 <Button
                                     type='submit'
                                     aria-label='Save'

@@ -42,32 +42,32 @@ const ContactItem = (props: IProps) => {
                 }
                 secondary={
                     <div>
-                        <Grid container spacing={8} direction="row" >
-                            <Grid item >
+                        <Grid container spacing={8} direction="row">
+                            <Grid item>
                                 <Typography variant="caption" inline>
-                                    <EmailIcon fontSize="inherit"/>&nbsp;{email.address}
+                                    <EmailIcon fontSize="inherit"/>&nbsp;{email.value}
                                 </Typography>
                             </Grid>
-                            <Grid item >
+                            <Grid item>
                                 <Typography variant="caption" inline>
-                                    <PhoneIcon fontSize="inherit"/>&nbsp;{phone.number}
+                                    <PhoneIcon fontSize="inherit"/>&nbsp;{phone.value}
                                 </Typography>
                             </Grid>
                         </Grid>
-                        <Grid container spacing={8} direction="row" >
-                            <Grid item >
+                        <Grid container spacing={8} direction="row">
+                            <Grid item>
                                 <Typography variant="caption" inline>
-                                    <PinDropIcon fontSize="inherit"/>&nbsp;{data.churchLocation}
+                                    <PinDropIcon fontSize="inherit"/>&nbsp;{data.metaData.churchLocation}
                                 </Typography>
                             </Grid>
-                            <Grid item >
+                            <Grid item>
                                 <Typography variant="caption" inline>
-                                    <NaturePeopleIcon fontSize="inherit"/>&nbsp;{data.cellGroup}
+                                    <NaturePeopleIcon fontSize="inherit"/>&nbsp;{data.metaData.cellGroup}
                                 </Typography>
                             </Grid>
                         </Grid>
                     </div>
-                    }
+                }
             />
         </XListItem>
     );

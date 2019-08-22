@@ -70,7 +70,7 @@ class EmailView extends React.Component<IProps, IState> {
                                 data.emails.map((it: IEmail) => {
                                     return <ItemEditor
                                         key={it.id}
-                                        text={it.address}
+                                        text={it.value }
                                         secondaryText={it.category}
                                         isPrimary={it.isPrimary}
                                         isLoading={isLoading}

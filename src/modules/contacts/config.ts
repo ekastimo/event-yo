@@ -151,8 +151,11 @@ export const renderName = (person: IPerson): string => {
 }
 
 export const renderSimpleName = (person: IPerson): string => {
-    const name: string = `${person.firstName || ''} ${person.middleName || ''} ${person.lastName || ''}`
-    return name.trim().replace(/\s+/g, ' ')
+    if (person) {
+        const name: string = `${person.firstName || ''} ${person.middleName || ''} ${person.lastName || ''}`
+        return name.trim().replace(/\s+/g, ' ')
+    }
+    return ""
 }
 
 export const contactChcFormDataParser = (data: any) => {
@@ -168,11 +171,11 @@ export const contactChcFilterDataParser = (data: any) => {
 export const contactChcFilterDataParserReverse = (data: any) => {
     const {churchLocation = '', cellGroup = ''} = data
     const toReturn = {...data}
-    if(churchLocation.length>0){
-        toReturn.churchLocation = {value:churchLocation}
+    if (churchLocation.length > 0) {
+        toReturn.churchLocation = {value: churchLocation}
     }
-    if(cellGroup.length>0){
-        toReturn.cellGroup = {value:cellGroup}
+    if (cellGroup.length > 0) {
+        toReturn.cellGroup = {value: cellGroup}
     }
     return toReturn
 }

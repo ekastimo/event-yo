@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Popper from '@material-ui/core/Popper';
 import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -155,7 +156,7 @@ function MultiValue(props: any) {
 
 function Menu(props: any) {
     return (
-        <Paper square className={props.selectProps.classes.paper} {...props.innerProps} >
+        <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
             {props.children}
         </Paper>
     );

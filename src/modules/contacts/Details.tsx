@@ -4,8 +4,6 @@ import createStyles from "@material-ui/core/styles/createStyles";
 import {withStyles} from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 import {IContact} from "./types";
-import {get} from "../../utils/ajax";
-import {remoteRoutes} from "../../data/constants";
 import * as validate from "validate.js";
 import {RouteComponentProps} from "react-router";
 import Loading from "../../widgets/Loading";
@@ -14,7 +12,7 @@ import ImageView from "./views/ImageView";
 import PersonView from "./views/PersonView";
 import TabbedDetails from "./TabbedDetails";
 import GridWrapper from "../../widgets/GridWrapper";
-import {fetchContact} from "./redux";
+import {fetchContact} from "./contactsRedux";
 import {connect} from "react-redux";
 import {IStore} from "../../data/types";
 import Toast from "../../utils/Toast";
@@ -37,7 +35,9 @@ interface IState {
 }
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<IPrams> {
-
+    loadData: (id: string) => any
+    data: IContact
+    isLoading: boolean
 }
 
 class Details extends React.Component<IProps, IState> {
@@ -49,11 +49,11 @@ class Details extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const {isLoading, data, error} = this.state
+        const {isLoading, data} = this.props
         if (isLoading) {
             return <Loading/>
         }
-        if (error || !data) {
+        if (!isLoading && !data) {
             return <Error message='Failed to load contact!'/>
         }
         return (
@@ -84,33 +84,29 @@ class Details extends React.Component<IProps, IState> {
     }
 
     private reloadData = () => {
-        const {match} = this.props
+        const {match, loadData} = this.props
         const {params: {contactId}} = match
         if (validate.isDefined(contactId)) {
-            const url = `${remoteRoutes.contactById}/${contactId}`
-            get(url, (data: IContact) => {
-                console.log("Fetched contact", data)
-                this.setState(() => ({data}))
-            }, undefined, () => {
-                this.setState(() => ({isLoading: false}))
-            })
+            loadData(contactId)
         } else {
-            Toast.error("Oops Invalid contact data")
+            Toast.error("Oops Invalid contact ID")
         }
     }
 }
 
 
 export default connect(
-    ({contacts:{contact}}: IStore) => {
+    ({contacts: {cache,isFetchingSingle}}: IStore, ownProps: IProps) => {
+        const {match} = ownProps
+        const {params: {contactId}} = match
         return {
-            data: contact.data,
-            isLoading:contact.isLoading
+            data: cache[contactId],
+            isLoading: isFetchingSingle
         }
     },
     (dispatch: any) => {
         return {
-            loadData: (data: string) => dispatch(fetchContact(data))
+            loadData: (id: string) => dispatch(fetchContact(id))
         }
     }
 )(withStyles(styles)(Details))

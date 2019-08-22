@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react';
 import {WithStyles, withStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/styles/createStyles";
-import {IAddress, IContact} from "../types";
+import {IAddress, IContact, IMetaData} from "../types";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import IconButton from '@material-ui/core/IconButton';
@@ -40,13 +40,14 @@ class ChcView extends React.Component<IProps, IState> {
 
     public render() {
         const {classes, data} = this.props
-        const {id, cellGroup, cellGroupName, churchLocation, churchLocationName} = data
+        const {id, metaData} = data
+        const {cellGroup, churchLocation} = metaData || {} as IMetaData
         const chcData = isNullOrEmpty(churchLocation) ?
             {contactId: id} :
             {
                 contactId: id,
-                cellGroup: {value: cellGroup, label: cellGroupName},
-                churchLocation: {value: churchLocation, label: churchLocationName}
+                cellGroup: {value: cellGroup, label: cellGroup},
+                churchLocation: {value: churchLocation, label: churchLocation}
             }
         return (
             <div className={classes.root}>
@@ -56,13 +57,13 @@ class ChcView extends React.Component<IProps, IState> {
                             <Grid item xs={5}>
                                 <MobileDisplayRow
                                     label='Location'
-                                    value={data.churchLocation}
+                                    value={churchLocation}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <MobileDisplayRow
                                     label='Mc'
-                                    value={data.cellGroup}
+                                    value={cellGroup}
                                 />
                             </Grid>
                             <Grid item xs={1}>

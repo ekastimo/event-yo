@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import PhoneIcon from '@material-ui/icons/Phone';
-import PhoneOutlinedIcon from '@material-ui/icons/PhoneOutlined';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -18,6 +17,7 @@ import ItemEditor from "./ItemEditor";
 import Toast from "../../../utils/Toast";
 import {del} from "../../../utils/ajax";
 import uiConfirm from "../../../widgets/confirm";
+import List from "@material-ui/core/List";
 
 const styles = () =>
     createStyles({
@@ -64,13 +64,13 @@ class PhoneView extends React.Component<IProps, IState> {
                         }
                     />
                     <CardContent>
-                        <div>
+                        <List>
                             {
                                 data.phones &&
                                 data.phones.map((it: IPhone) => {
                                     return <ItemEditor
                                         key={it.id}
-                                        text={it.number}
+                                        text={it.value}
                                         secondaryText={it.category}
                                         isPrimary={it.isPrimary}
                                         isLoading={isLoading}
@@ -81,7 +81,7 @@ class PhoneView extends React.Component<IProps, IState> {
                                     />
                                 })
                             }
-                        </div>
+                        </List>
                     </CardContent>
                     <FormHolder
                         title='Edit Phone'
