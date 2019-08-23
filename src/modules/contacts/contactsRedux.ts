@@ -8,7 +8,7 @@ const actions = {
     CONTACTS_FETCH_COMMIT: 'CONTACTS_FETCH_COMMIT',
 
     CONTACT_FETCH_START: 'CONTACT_FETCH_START',
-    CONTACT_FETCH_COMMIT: 'CONTACTS_FETCH_COMMIT',
+    CONTACT_FETCH_COMMIT: 'CONTACT_FETCH_COMMIT',
 
     CONTACT_UPDATE_START: 'CONTACT_UPDATE_START',
     CONTACT_UPDATE_COMMIT: 'CONTACT_UPDATE_COMMIT',
@@ -67,6 +67,7 @@ export const updatePerson = (dispatch: any)=>(contactId: string, data: IPerson) 
         dispatch({type: actions.CONTACT_FETCH_START})
         return get(`${remoteRoutes.contacts}/${contactId}`,
             (data: any) => {
+            console.log("Contact fetched")
                 dispatch({
                     type: actions.CONTACT_FETCH_COMMIT,
                     payload: data

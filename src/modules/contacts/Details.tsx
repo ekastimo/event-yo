@@ -96,11 +96,11 @@ class Details extends React.Component<IProps, IState> {
 
 
 export default connect(
-    ({contacts: {cache,isFetchingSingle}}: IStore, ownProps: IProps) => {
+    ({contacts: {selected,isFetchingSingle}}: IStore, ownProps: IProps) => {
         const {match} = ownProps
         const {params: {contactId}} = match
         return {
-            data: cache[contactId],
+            data: selected,
             isLoading: isFetchingSingle
         }
     },
